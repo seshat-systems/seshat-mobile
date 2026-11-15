@@ -6,10 +6,10 @@ import { secureGet, secureSet } from './secure';
 // Android builds are shared as a direct APK download (no Play Store yet). The newest
 // APK sits next to a small manifest on the website; this compares it with the installed
 // build so Home can offer "Get the latest version".
-//   https://seshat.site/downloads/android.json
-//   { "versionCode": 7, "versionName": "1.1.0", "url": "https://seshat.site/downloads/seshat.apk",
+//   https://ledger.seshat.site/downloads/android.json
+//   { "versionCode": 7, "versionName": "1.1.0", "url": "https://ledger.seshat.site/downloads/seshat.apk",
 //     "notes": "…", "notesAr": "…" }
-const MANIFEST_URL = 'https://seshat.site/downloads/android.json';
+const MANIFEST_URL = 'https://ledger.seshat.site/downloads/android.json';
 const DISMISSED_KEY = 'android_update_dismissed';
 
 export type AndroidUpdate = {

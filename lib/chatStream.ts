@@ -34,7 +34,7 @@ function resolveApiBase(): string {
     const host = String(hostUri).split(':')[0];
     if (host) return `http://${host}:4000/api/v1`;
   }
-  return 'https://api.seshat.site/api/v1';
+  return 'https://ledger.api.seshat.site/api/v1';
 }
 
 const API_BASE = resolveApiBase();

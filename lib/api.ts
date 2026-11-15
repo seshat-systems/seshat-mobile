@@ -22,7 +22,7 @@ function resolveApiBase(): string {
     if (host) return `http://${host}:4000/api/v1`;
   }
   // Release builds must never point at localhost if the env var is ever missing.
-  return __DEV__ ? 'http://localhost:4000/api/v1' : 'https://api.seshat.site/api/v1';
+  return __DEV__ ? 'http://localhost:4000/api/v1' : 'https://ledger.api.seshat.site/api/v1';
 }
 
 const API_BASE = resolveApiBase();

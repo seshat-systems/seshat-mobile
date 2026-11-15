@@ -16,7 +16,7 @@ type Status = 'pending' | 'success' | 'error' | 'needs-auth';
  * /orgs/accept?token=<token>
  *
  * Deep-link target for the invite email. The email links to
- * https://seshat.site/orgs/accept?token=... which on mobile resolves
+ * https://ledger.seshat.site/orgs/accept?token=... which on mobile resolves
  * through the seshat:// scheme to this screen.
  *
  * Flow:
