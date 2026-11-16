@@ -25,8 +25,14 @@ set -euo pipefail
 # The Sentry build phase uploads debug symbols and fails without an org/auth token.
 export SENTRY_DISABLE_AUTO_UPLOAD=true
 
+# The app calls the Seshat Ledger API address. EAS builds get it from eas.json; a local build would otherwise
+# read whatever a local .env file says, so set it here (a value already in the environment still wins).
+export EXPO_PUBLIC_API_BASE="${EXPO_PUBLIC_API_BASE:-https://ledger.api.seshat.site}"
+
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 IOS="$ROOT/ios"
+# The generated Xcode project is named after the app (Seshat before the rename, SeshatLedger after): follow whatever is there.
+APP="$(ls -d "$IOS"/*.xcworkspace 2>/dev/null | head -1 | xargs -I{} basename {} .xcworkspace)"; APP="${APP:-Seshat}"
 TEAM="LTYTC93ARN"
 BUNDLE="com.seshat.mobile"
 PROFILE_NAME="momen_khalled_dis"
@@ -34,14 +40,14 @@ PROFILE_FILE="${PROFILE_FILE:-$HOME/Downloads/momen_khalled_dis.mobileprovision}
 CERT_FILE="${CERT_FILE:-$HOME/Downloads/distribution_momen.cer}"
 PROFILES_DIR="$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"
 BUILD_DIR="$ROOT/build"
-ARCHIVE="$BUILD_DIR/Seshat.xcarchive"
+ARCHIVE="$BUILD_DIR/$APP.xcarchive"
 EXPORT_DIR="$BUILD_DIR/export"
 MODE="${1:-build}"
 WIDGET_BUNDLE="$BUNDLE.widget"
 WIDGET_PROFILE_NAME="${WIDGET_PROFILE_NAME:-}"
 WIDGET_PROFILE_FILE="${WIDGET_PROFILE_FILE:-}"
 HAS_WIDGET=0
-grep -q "SeshatWidgets.appex" "$IOS/Seshat.xcodeproj/project.pbxproj" 2>/dev/null && HAS_WIDGET=1
+grep -q "SeshatWidgets.appex" "$IOS/$APP.xcodeproj/project.pbxproj" 2>/dev/null && HAS_WIDGET=1
 
 say()  { printf '\033[1;33m==>\033[0m %s\n' "$*"; }
 ok()   { printf '  \033[32m✓\033[0m %s\n' "$*"; }
@@ -85,7 +91,7 @@ if [ "$HAS_WIDGET" = 1 ]; then
 fi
 
 say "3/5 Native project"
-[ -d "$IOS/Seshat.xcworkspace" ] || fail "ios/ is missing: run  npx expo prebuild --platform ios  then  cd ios && pod install"
+[ -d "$IOS/$APP.xcworkspace" ] || fail "ios/ is missing: run  npx expo prebuild --platform ios  then  cd ios && pod install"
 if [ -f "$IOS/Pods/Manifest.lock" ] && ! diff -q "$IOS/Podfile.lock" "$IOS/Pods/Manifest.lock" >/dev/null; then
   fail "Pods are out of sync: run  cd ios && pod install"
 fi
@@ -94,13 +100,13 @@ ok "workspace + Pods in sync"
 # Release signing for the app target only (never the Pods): Apple Distribution, the
 # App Store profile, and a production push entitlement. Works on a freshly
 # generated project (which has no manual-signing settings) and is idempotent.
-python3 - "$IOS" "$PROFILE_NAME" "$TEAM" "$BUNDLE" "$WIDGET_PROFILE_NAME" "$HAS_WIDGET" <<'PY'
+python3 - "$IOS" "$PROFILE_NAME" "$TEAM" "$BUNDLE" "$WIDGET_PROFILE_NAME" "$HAS_WIDGET" "$APP" <<'PY'
 import re, sys
-ios, profile, team, bundle, widget_profile, has_widget = sys.argv[1:7]
-ent_dev = f"{ios}/Seshat/Seshat.entitlements"
-ent_rel = f"{ios}/Seshat/SeshatRelease.entitlements"
+ios, profile, team, bundle, widget_profile, has_widget, app = sys.argv[1:8]
+ent_dev = f"{ios}/{app}/{app}.entitlements"
+ent_rel = f"{ios}/{app}/{app}Release.entitlements"
 open(ent_rel, "w").write(open(ent_dev).read().replace("<string>development</string>", "<string>production</string>"))
-p = f"{ios}/Seshat.xcodeproj/project.pbxproj"
+p = f"{ios}/{app}.xcodeproj/project.pbxproj"
 s = open(p).read()
 KEYS = ("CODE_SIGN_STYLE", "DEVELOPMENT_TEAM", "CODE_SIGN_ENTITLEMENTS", 'CODE_SIGN_IDENTITY', '"CODE_SIGN_IDENTITY[sdk=iphoneos*]"', '"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]"', "PROVISIONING_PROFILE_SPECIFIER")
 
@@ -127,7 +133,7 @@ def sign(blk, profile_name, entitlements=None):
 
 changed = False
 blk = release_block(bundle)
-new = sign(blk, profile, "Seshat/SeshatRelease.entitlements")
+new = sign(blk, profile, f"{app}/{app}Release.entitlements")
 if new != blk:
     s = s.replace(blk, new); changed = True
 if has_widget == "1":
@@ -150,8 +156,8 @@ ok "Release = Apple Distribution + $PROFILE_NAME + production push"
 # build settings instead.
 for pair in "CFBundleVersion:\$(CURRENT_PROJECT_VERSION)" "CFBundleShortVersionString:\$(MARKETING_VERSION)"; do
   key="${pair%%:*}"; val="${pair#*:}"
-  /usr/libexec/PlistBuddy -c "Set :$key $val" "$IOS/Seshat/Info.plist" 2>/dev/null \
-    || /usr/libexec/PlistBuddy -c "Add :$key string $val" "$IOS/Seshat/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set :$key $val" "$IOS/$APP/Info.plist" 2>/dev/null \
+    || /usr/libexec/PlistBuddy -c "Add :$key string $val" "$IOS/$APP/Info.plist"
 done
 ok "version + build number come from the build settings"
 
@@ -161,7 +167,7 @@ say "4/5 Archive (this takes several minutes)"
 BUILD_NUMBER="${BUILD_NUMBER:-$(date +%y%m%d%H%M)}"
 VERSION="$(python3 -c "import json;print(json.load(open('$ROOT/app.json'))['expo']['version'])")"
 rm -rf "$ARCHIVE"; mkdir -p "$BUILD_DIR"
-xcodebuild -workspace "$IOS/Seshat.xcworkspace" -scheme Seshat -configuration Release \
+xcodebuild -workspace "$IOS/$APP.xcworkspace" -scheme "$APP" -configuration Release \
   -destination 'generic/platform=iOS' -archivePath "$ARCHIVE" \
   MARKETING_VERSION="$VERSION" CURRENT_PROJECT_VERSION="$BUILD_NUMBER" \
   archive | { command -v xcpretty >/dev/null && xcpretty || cat; }
