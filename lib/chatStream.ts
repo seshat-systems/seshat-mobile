@@ -2,6 +2,7 @@ import { fetch as expoFetch } from 'expo/fetch';
 import Constants from 'expo-constants';
 
 import { secureGet } from './secure';
+import { CLIENT_HEADERS } from './clientInfo';
 /**
  * Live streaming client for POST /chat with { stream: true } (React Native).
  *
@@ -107,6 +108,7 @@ export async function streamChat(
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
+      ...CLIENT_HEADERS,
     },
     body: JSON.stringify({ ...body, stream: true }),
     signal,

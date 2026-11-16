@@ -21,6 +21,7 @@
 import { Platform } from 'react-native';
 
 import { secureGet } from './secure';
+import { CLIENT_HEADERS } from './clientInfo';
 export type PermissionStatus = 'authorized' | 'denied' | 'unknown' | 'unavailable';
 
 /**
@@ -204,7 +205,7 @@ export async function handleBackgroundNotification(raw: unknown): Promise<void> 
     const cfg = JSON.parse(stored) as { token: string; api: string };
     await fetch(`${cfg.api}/capture/auto`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${cfg.token}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${cfg.token}`, ...CLIENT_HEADERS },
       // The channel lets the server tell the bank's SMS and the bank app's push for one event apart.
       body: JSON.stringify({ text: body, source: 'notification', channel: FAST_ACCEPT_PACKAGES.has(event.app) ? 'sms' : 'push' }),
       // The headless task is cut off after 15s; give up before that rather than hold the process open.
