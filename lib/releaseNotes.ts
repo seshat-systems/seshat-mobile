@@ -13,6 +13,17 @@ export type ReleaseNote = {
 
 export const RELEASE_NOTES: ReleaseNote[] = [
   {
+    id: '2026-11-v1.1.7',
+    version: '1.1.7',
+    date: '2026-11-16',
+    title: { en: "Seshat Ledger, and a few fixes", ar: "سيشات ليدجر، وبعض الإصلاحات" },
+    items: [
+      { en: "Seshat is now Seshat Ledger and lives at ledger.seshat.site. Your account, your data and your old links keep working.", ar: "صار اسم التطبيق سيشات ليدجر، وعنوانه ledger.seshat.site. حسابك وبياناتك وروابطك القديمة تعمل كما هي." },
+      { en: "Signing up: when you tick “Someone referred me”, the referral code is now required, so a referral is never lost by mistake.", ar: "التسجيل: عند اختيار «أحالني شخص» صار رمز الإحالة مطلوباً حتى لا تضيع الإحالة بالخطأ." },
+      { en: "The app now shares its version number and platform with our servers (nothing personal), so we know which versions still need support.", ar: "يشارك التطبيق الآن رقم إصداره ونظام تشغيله مع خوادمنا (دون أي بيانات شخصية) لنعرف الإصدارات التي لا تزال بحاجة إلى دعم." },
+    ],
+  },
+  {
     id: '2026-11-v1.1.6',
     version: '1.1.6',
     date: '2026-11-14',
