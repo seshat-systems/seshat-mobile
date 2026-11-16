@@ -157,6 +157,7 @@ export default function AuthRouter() {
     if (pwd !== pwd2) { setErr('Passwords do not match'); return; }
     if (pwd.length < 8) { setErr('Min. 8 characters'); return; }
     if (!agreed) { setErr(lang === 'ar' ? 'يرجى الموافقة على الشروط وسياسة الخصوصية للمتابعة' : 'Please accept the Terms and the Privacy Policy to continue'); return; }
+    if (referred && !refCode.trim()) { setErr(lang === 'ar' ? 'أدخل رمز المُحيل، أو ألغِ تحديد "أحالني شخص إلى سيشات"' : 'Enter the referrer\'s code, or untick "Someone referred me to Seshat"'); return; }
     setErr(''); setBusy(true);
     const r = await registerComplete(sessionId, name || email.split('@')[0], pwd, referred ? refCode.trim() : undefined);
     if (r.success) {
