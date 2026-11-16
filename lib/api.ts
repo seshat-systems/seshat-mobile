@@ -4,6 +4,7 @@ import * as Crypto from 'expo-crypto';
 import Constants from 'expo-constants';
 
 import { secureGet, secureDelete, SECURE_OPTIONS } from './secure';
+import { CLIENT_HEADERS } from './clientInfo';
 // Resolve the API host automatically so it survives the dev machine's LAN IP
 // changing (hotspot, WiFi switch, etc). Order of precedence:
 //   1. EXPO_PUBLIC_API_BASE env var (full URL, no trailing slash)
@@ -104,6 +105,7 @@ export async function apiFetchText(path: string, options: ApiFetchOptions = {}):
   const { idempotencyKey, ledgerId, ...rest } = options;
   const headers: Record<string, string> = {
     Authorization: `Bearer ${token}`,
+    ...CLIENT_HEADERS,
     ...(rest.headers as Record<string, string> | undefined),
   };
   if (idempotencyKey) headers['Idempotency-Key'] = idempotencyKey;
@@ -132,6 +134,7 @@ export async function apiFetch<T = unknown>(
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`,
+    ...CLIENT_HEADERS,
     ...(rest.headers as Record<string, string> | undefined),
   };
   if (idempotencyKey) headers['Idempotency-Key'] = idempotencyKey;

@@ -1,6 +1,7 @@
 import Constants from 'expo-constants';
 import { setToken, clearToken } from './api';
 import { clearPushToken } from './push';
+import { CLIENT_HEADERS } from './clientInfo';
 
 // Mirrors api.ts so auth requests follow the same host-resolution rules.
 function resolveApiBase(): string {
@@ -30,7 +31,7 @@ export async function signInWithGoogle(idToken: string): Promise<AuthResult> {
   try {
     const res = await fetch(`${API_BASE}/auth/google`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...CLIENT_HEADERS },
       body: JSON.stringify({ idToken }),
     });
     const json = await res.json();
@@ -48,7 +49,7 @@ export async function signInWithPassword(identifier: string, password: string): 
   try {
     const res = await fetch(`${API_BASE}/auth/sign-in`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...CLIENT_HEADERS },
       body: JSON.stringify({ identifier, password }),
     });
     const json = await res.json();
@@ -66,7 +67,7 @@ export async function registerSendCode(email: string): Promise<AuthResult> {
   try {
     const res = await fetch(`${API_BASE}/auth/register/send-code`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...CLIENT_HEADERS },
       body: JSON.stringify({ email }),
     });
     const json = await res.json();
@@ -83,7 +84,7 @@ export async function registerVerifyCode(sessionId: string, code: string): Promi
   try {
     const res = await fetch(`${API_BASE}/auth/register/verify-code`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...CLIENT_HEADERS },
       body: JSON.stringify({ sessionId, code }),
     });
     const json = await res.json();
@@ -100,7 +101,7 @@ export async function registerComplete(sessionId: string, username: string, pass
   try {
     const res = await fetch(`${API_BASE}/auth/register/complete`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...CLIENT_HEADERS },
       // Creating the account is the agreement to the Terms and Privacy Policy (the button stays off until the box is ticked).
       body: JSON.stringify({ sessionId, username, password, acceptedTerms: true, ...(referralCode !== undefined ? { referralCode } : {}) }),
     });
@@ -119,7 +120,7 @@ export async function requestPasswordReset(email: string): Promise<AuthResult> {
   try {
     const res = await fetch(`${API_BASE}/auth/password/request-reset`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...CLIENT_HEADERS },
       body: JSON.stringify({ email }),
     });
     const json = await res.json();
@@ -136,7 +137,7 @@ export async function verifyPasswordReset(sessionId: string, code: string): Prom
   try {
     const res = await fetch(`${API_BASE}/auth/password/verify-code`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...CLIENT_HEADERS },
       body: JSON.stringify({ sessionId, code }),
     });
     const json = await res.json();
@@ -153,7 +154,7 @@ export async function completePasswordReset(sessionId: string, password: string)
   try {
     const res = await fetch(`${API_BASE}/auth/password/complete`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...CLIENT_HEADERS },
       body: JSON.stringify({ sessionId, password }),
     });
     const json = await res.json();
