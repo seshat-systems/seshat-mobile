@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Seshat",
+    "name": "Seshat Ledger",
     "slug": "seshat-mobile",
     "version": "1.1.6",
     "orientation": "portrait",
@@ -65,6 +65,16 @@
             "DEFAULT"
           ],
           "data": [
+            {
+              "scheme": "https",
+              "host": "ledger.seshat.site",
+              "pathPrefix": "/orgs/accept"
+            },
+            {
+              "scheme": "https",
+              "host": "ledger.seshat.site",
+              "pathPrefix": "/app"
+            },
             {
               "scheme": "https",
               "host": "seshat.site",

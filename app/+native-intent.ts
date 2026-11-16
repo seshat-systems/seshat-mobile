@@ -1,7 +1,7 @@
 /**
- * Links to https://seshat.site open the app when it is installed (Android App Links, iPhone universal links). The
+ * Links to https://ledger.seshat.site open the app when it is installed (Android App Links, iPhone universal links). The
  * website and the app do not use the same paths, so this maps a website path to the matching screen before the router
- * sees it. Anything that is not a seshat.site web link (seshat:// links, widget links, plain paths) passes through.
+ * sees it. Anything that is not a ledger.seshat.site web link (seshat:// links, widget links, plain paths) passes through.
  */
 const SCREENS: Record<string, string> = {
   '': '/',

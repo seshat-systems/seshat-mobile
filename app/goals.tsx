@@ -178,7 +178,7 @@ function GoalRow({ goal, onPress, onAdd, shared, version }: { goal: Goal; onPres
               // Progress as a sentence to send to a friend: the goal and how far along, never the amounts.
               const name = lang === 'ar' ? goal.nameAr : goal.nameEn;
               trackEvent('share_goal');
-              Share.share({ message: lang === 'ar' ? `وصلت ٪${Math.round(pct)} من هدف «${name}» عبر سيشات. seshat.site` : `I am ${Math.round(pct)}% of the way to “${name}”, tracked with Seshat. seshat.site` }).catch(() => {});
+              Share.share({ message: lang === 'ar' ? `وصلت ٪${Math.round(pct)} من هدف «${name}» عبر سيشات ليدجر. ledger.seshat.site` : `I am ${Math.round(pct)}% of the way to “${name}”, tracked with Seshat Ledger. ledger.seshat.site` }).catch(() => {});
             }}
             style={{ marginStart: 12, alignSelf: 'center' }}
           >

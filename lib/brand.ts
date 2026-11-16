@@ -50,8 +50,8 @@ export type BrandConfig = {
 export const BRAND: BrandConfig = {
   // Product name. The mobile splash, navbar, profile screen, monthly
   // report header all read this.
-  name: 'Seshat',
-  nameAr: 'سيشات',
+  name: 'Seshat Ledger',
+  nameAr: 'سيشات ليدجر',
   // The daily scribe — shares the product name on purpose ("ask Seshat").
   aiName: 'Seshat',
   aiNameAr: 'سيشات',
@@ -60,7 +60,7 @@ export const BRAND: BrandConfig = {
   truthNameAr: 'ماعت',
   tagline: '',
   taglineAr: '',
-  domain: 'seshat.site',
+  domain: 'ledger.seshat.site',
   supportEmail: 'hello@seshat.site',
   whatsapp: '+201501083695',
   legalName: 'Seshat',
