@@ -23,7 +23,7 @@ import { ImageViewer } from '../../components/ImageViewer';
 import { Skeleton } from '../../components/Skeleton';
 import { SetSalarySheet } from '../../components/SalaryBanner';
 import { SetMonthStartSheet } from '../../components/MonthStartSheet';
-import { ManageGrid } from '../../components/ManageGrid';
+import { ToolSections } from '../../components/ToolSections';
 import { WorkspaceCard } from '../../components/WorkspaceSwitcher';
 import * as Updates from 'expo-updates';
 import Constants from 'expo-constants';
@@ -410,8 +410,8 @@ export default function ProfileScreen() {
         {/* An organization has no Dashboard tab (its Home is the dashboard), so its money tools stay here as tiles. */}
         {inOrg ? (
           <View style={{ marginTop: 18, marginHorizontal: -16 }}>
-            <REyebrow style={{ paddingHorizontal: 20, marginBottom: 8, textAlign: lang === 'ar' ? 'right' : 'left' }}>{lang === 'ar' ? 'إدارة' : 'Manage'}</REyebrow>
-            <ManageGrid />
+            <REyebrow style={{ paddingHorizontal: 20, marginBottom: 8, textAlign: lang === 'ar' ? 'right' : 'left' }}>{lang === 'ar' ? 'أدواتك' : 'Your tools'}</REyebrow>
+            <ToolSections />
           </View>
         ) : null}
 

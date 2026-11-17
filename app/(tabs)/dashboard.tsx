@@ -11,7 +11,7 @@ import { RHomeHeader } from '../../components/shell';
 import { ScreenAtmosphere } from '../../components/ScreenAtmosphere';
 import { DashboardBody, type DashboardData } from '../../components/dashboards';
 import { DashboardSkeleton } from '../../components/DashboardSkeleton';
-import { ManageGrid } from '../../components/ManageGrid';
+import { ToolSections } from '../../components/ToolSections';
 import { TodayCard, AccountsOverview, DailyBudgetCard, NetWorthCard } from '../../components/HomeMoney';
 
 /**
@@ -24,7 +24,6 @@ export default function DashboardScreen() {
   const { profile, dataVersion, refresh } = useAppData();
   const inOrg = useInOrg();
   const insets = useSafeAreaInsets();
-  const [view, setView] = useState<'overview' | 'manage'>('overview');
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -50,24 +49,7 @@ export default function DashboardScreen() {
       <ScreenAtmosphere />
       <View style={{ flex: 1, paddingTop: insets.top }}>
         <RHomeHeader userName="" title={lang === 'ar' ? 'لوحتي' : 'Dashboard'} />
-        {/* Overview is the numbers; Manage holds the money tools (budgets, goals, savings, debts ...) as tiles. */}
-        {!inOrg ? (
-          <View style={{ marginHorizontal: 16, marginTop: 4, marginBottom: 10, flexDirection: lang === 'ar' ? 'row-reverse' : 'row', padding: 4, borderRadius: 999, backgroundColor: tok.surface, borderWidth: 1, borderColor: tok.border }}>
-            {(['overview', 'manage'] as const).map((v) => (
-              <Pressable key={v} onPress={() => setView(v)} accessibilityRole="button"
-                style={{ flex: 1, minHeight: 44, borderRadius: 999, alignItems: 'center', justifyContent: 'center', backgroundColor: view === v ? tok.gold : 'transparent' }}>
-                <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: view === v ? '#14110A' : tok.muted }}>
-                  {v === 'overview' ? (lang === 'ar' ? 'نظرة عامة' : 'Overview') : (lang === 'ar' ? 'إدارة' : 'Manage')}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        ) : null}
-        {view === 'manage' && !inOrg ? (
-          <ScreenScroll showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingTop: 2, paddingBottom: insets.bottom + 100 }}>
-            <ManageGrid />
-          </ScreenScroll>
-        ) : loading || !data ? <DashboardSkeleton topPad={6} /> : (
+        {loading || !data ? <DashboardSkeleton topPad={6} /> : (
           <ScreenScroll
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingTop: 6, paddingBottom: insets.bottom + 100, flexGrow: 1 }}
@@ -76,6 +58,7 @@ export default function DashboardScreen() {
             <TodayCard data={data} currency={currency} />
             {!inOrg && <DailyBudgetCard />}
             {inOrg ? <AccountsOverview currency={currency} /> : <NetWorthCard />}
+            <ToolSections />
             <DashboardBody data={data} currency={currency} />
           </ScreenScroll>
         )}
