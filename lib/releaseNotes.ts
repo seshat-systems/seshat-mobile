@@ -13,6 +13,19 @@ export type ReleaseNote = {
 
 export const RELEASE_NOTES: ReleaseNote[] = [
   {
+    id: '2026-11-v1.1.9',
+    version: '1.1.9',
+    date: '2026-11-18',
+    title: { en: "A calmer Home that answers you", ar: "شاشة رئيسية أهدأ تجيبك مباشرة" },
+    items: [
+      { en: "Home now answers one question first: are you on track? Under it, a bar shows where you are against where you should be today, and three numbers: what is left this month, what you can spend today, and the days to payday.", ar: "الشاشة الرئيسية تجيب الآن عن سؤال واحد أولاً: هل أنت على المسار؟ وتحتها شريط يوضح أين أنت مقارنة بأين يجب أن تكون اليوم، وثلاثة أرقام: المتبقي هذا الشهر، وما يمكنك صرفه اليوم، وأيام الراتب." },
+      { en: "A new Dashboard tab holds the detail: today's net, your budget, what you own and where it went. Alerts moved to the bell at the top.", ar: "تبويب جديد باسم لوحتي يضم التفاصيل: صافي اليوم والميزانية وما تملكه وأين ذهب مالك. أما الإشعارات فصارت في الجرس بالأعلى." },
+      { en: "Tell Seshat is always one tap away, pinned above the tab bar.", ar: "حقل «قل لسيشات» ثابت دائماً فوق شريط التبويبات." },
+      { en: "Text is larger and easier to tap across the app, and the language can follow your phone.", ar: "الخط أكبر والأزرار أسهل في اللمس في كل التطبيق، ويمكن للغة أن تتبع لغة هاتفك." },
+      { en: "Signing up now has a Family choice, and every option you tick under “What you have” opens its form.", ar: "التسجيل فيه الآن خيار «عائلة»، وكل خيار تحدده في «ماذا لديك» يفتح نموذجه." },
+    ],
+  },
+  {
     id: '2026-11-v1.1.8',
     version: '1.1.8',
     date: '2026-11-17',

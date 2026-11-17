@@ -1,5 +1,6 @@
 import type { OrgRole, OrgKind } from './orgRoles';
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useI18n } from './i18n';
 import { Platform } from 'react-native';
 import { router } from 'expo-router';
 import { apiFetch, hasToken, setActiveLedger, getActiveLedger } from './api';
@@ -108,6 +109,19 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
   const [dataVersion, setDataVersion] = useState(0);
   const [workspaceSheetOpen, setWorkspaceSheetOpen] = useState(false);
   const [unreadMaatTotal, setUnreadMaatTotal] = useState(0);
+
+  // When the app follows an Arabic phone, the server still says "en" (its default), and the server writes the "Needs you" cards,
+  // reminders and notifications. Tell it once, so those arrive in Arabic too. Never pushes English: a person who chose Arabic on
+  // another device must not be switched back by an English phone.
+  const { lang: appLang, langChoice } = useI18n();
+  const pushedLang = useRef(false);
+  useEffect(() => {
+    if (!profile || pushedLang.current || langChoice !== 'system' || appLang !== 'ar' || profile.language === 'ar') return;
+    pushedLang.current = true;
+    apiFetch('/me', { method: 'PATCH', body: JSON.stringify({ language: 'ar' }) })
+      .then(() => setProfile((p) => (p ? { ...p, language: 'ar' } : p)))
+      .catch(() => { pushedLang.current = false; });
+  }, [profile, appLang, langChoice]);
 
   // Projects only exist on org ledgers in v1. We fetch once at the right
   // moment (refresh + ledger switch + after a mutation calls

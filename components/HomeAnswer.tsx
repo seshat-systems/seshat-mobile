@@ -29,7 +29,7 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
     let alive = true;
     hasToken().then((ok) => {
       if (!ok) return;
-      apiFetch<{ data: DailyBudgetInfo }>('/me/daily-budget').then((r) => { if (alive) setPlan(r.data); }).catch(() => {});
+      apiFetch<{ data: DailyBudgetInfo }>('/me/daily-budget').then((r) => { if (alive) setPlan(r.data); }).catch(() => { if (alive) setPlan((p) => p ?? ({ ready: false, currency: '', savingRate: 0 } as DailyBudgetInfo)); });
     });
     return () => { alive = false; };
   }, [dataVersion]);
@@ -67,7 +67,7 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
       ? (net < 0 ? `أنت متأخر ${amount} هذا الشهر${topName ? `، وأغلبه في ${topName}` : ''}.` : `أنت متقدّم ${amount} هذا الشهر.`)
       : (net < 0 ? `You're ${amount} behind this month${topName ? `, mostly ${topName}` : ''}.` : `You're ${amount} ahead this month.`);
     detail = topName && share > 0
-      ? (ar ? `${topName} تمثّل ${share}% من مصروفاتك.` : `${topName} is ${share}% of what you spent.`)
+      ? (ar ? `${topName} تمثّل ${fmtNum(share)}% من مصروفاتك.` : `${topName} is ${share}% of what you spent.`)
       : (ar ? 'أخبرني بدخلك الشهري لأحسب لك ما تصرفه كل يوم.' : 'Tell me your monthly income and I will work out what you can spend each day.');
   } else if (plan!.overIncome) {
     headline = ar ? 'صرفت دخل هذا الشهر.' : "You've spent this month's income.";
@@ -86,7 +86,7 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
   const fill = ready && plan!.spendableMonth! > 0 ? Math.min(1, plan!.spentSoFar! / plan!.spendableMonth!) : 0;
   const tick = total > 0 ? Math.min(1, day / total) : 0;
   const coach = ready && topName && share >= 25
-    ? (ar ? `${topName} تمثّل ${share}% من مصروفاتك.` : `${topName} is ${share}% of what you spent.`)
+    ? (ar ? `${topName} تمثّل ${fmtNum(share)}% من مصروفاتك.` : `${topName} is ${share}% of what you spent.`)
     : '';
 
   const ask = (q: string) => router.push({ pathname: '/seshat/[id]', params: { id: 'new', text: q } } as never);
@@ -103,6 +103,9 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
       <Text style={{ marginTop: 2, fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, textAlign: align }} numberOfLines={1}>{unit}</Text>
     </View>
   );
+
+  // Until the plan has answered, hold the space instead of showing a sentence that then changes.
+  if (plan === null) return <View style={{ minHeight: 420 }} />;
 
   return (
     <>
@@ -128,7 +131,7 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
               {ar ? `صرفت ${fmtNum(Math.round(plan!.spentSoFar!))} من ${fmtNum(Math.round(plan!.spendableMonth!))}` : `Spent ${fmtNum(Math.round(plan!.spentSoFar!))} of ${fmtNum(Math.round(plan!.spendableMonth!))}`}
             </Text>
             <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted }}>
-              {ar ? `اليوم ${day} من ${total}` : `Day ${day} of ${total}`}
+              {ar ? `اليوم ${fmtNum(day)} من ${fmtNum(total)}` : `Day ${day} of ${total}`}
             </Text>
           </View>
         </View>
@@ -140,7 +143,7 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
           <View style={{ width: 1, backgroundColor: tok.border }} />
           <Stat label={ar ? 'اليوم' : 'Today'} value={fmtNum(Math.round(todayLeft))} unit={todayLeft < 0 ? (ar ? `${cur} فوق الحد` : `${cur} over`) : (ar ? `${cur} آمن` : `${cur} safe`)} bad={todayLeft < 0} />
           <View style={{ width: 1, backgroundColor: tok.border }} />
-          <Stat label={ar ? 'الراتب' : 'Payday'} value={String(plan!.daysLeft)} unit={ar ? 'يوم' : (plan!.daysLeft === 1 ? 'day' : 'days')} />
+          <Stat label={ar ? 'الراتب' : 'Payday'} value={fmtNum(plan!.daysLeft ?? 0)} unit={ar ? 'يوم' : (plan!.daysLeft === 1 ? 'day' : 'days')} />
         </View>
       ) : null}
 
