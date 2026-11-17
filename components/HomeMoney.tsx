@@ -155,7 +155,23 @@ export function TodayNeeds({ extra = [] }: { extra?: NeedsExtra[] } = {}) {
     });
     return () => { alive = false; };
   }, [dataVersion]);
-  if (rows.length === 0 && extra.length === 0) return null;
+  // Several things at once are folded into one calm line ("3 things need you") and open on tap.
+  const [open, setOpen] = useState(false);
+  const total = rows.length + extra.length;
+  if (total === 0) return null;
+  if (total >= 2 && !open) {
+    return (
+      <Pressable onPress={() => setOpen(true)} accessibilityRole="button"
+        style={{ marginHorizontal: 16, marginTop: 6, marginBottom: 12, minHeight: 56, paddingHorizontal: 18, borderRadius: 18, borderWidth: 1, borderColor: tok.borderHi,
+          backgroundColor: tok.surface, flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 12 }}>
+        <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: tok.goldLight }} />
+        <Text style={{ flex: 1, fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
+          {ar ? `${total} أشياء تحتاجك` : `${total} things need you`}
+        </Text>
+        <ChevronRight size={16} color={tok.muted} style={{ transform: [{ scaleX: ar ? -1 : 1 }] }} />
+      </Pressable>
+    );
+  }
   const go = (r: TodayRow) => {
     if (r.screen === 'gam3ya') router.push(`/gam3ya/${r.refId}` as never);
     else if (r.screen === 'reminders') router.push('/reminders' as never);

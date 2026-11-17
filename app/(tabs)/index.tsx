@@ -20,6 +20,7 @@ import { UpdateBanner } from '../../components/UpdateBanner';
 import { WidgetsAnnouncement } from '../../components/WidgetsAnnouncement';
 import { TodayCard, AccountsOverview, DailyBudgetCard, TodayNeeds, NetWorthCard } from '../../components/HomeMoney';
 import { SetupPrompt } from '../../components/SetupPrompt';
+import { HomeAnswer } from '../../components/HomeAnswer';
 import { useRouter } from 'expo-router';
 
 import { secureGet, secureSet } from '../../lib/secure';
@@ -143,6 +144,7 @@ function FullHome() {
               contentContainerStyle={{ paddingTop: 6, paddingBottom: insets.bottom + 100, flexGrow: 1 }}
               refreshControl={refreshCtl}
             >
+              {!isEmpty && !inOrg ? <HomeAnswer data={data!} currency={currency} /> : null}
               {banners}
               {isEmpty ? (
                 <View style={{ flex: 1, minHeight: 400 }}><EmptyState /></View>
