@@ -10,7 +10,7 @@ import { FrostedHeader } from '../../components/FrostedHeader';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
-import { Sun, Moon, Globe, Wallet, Target, CreditCard, ChevronRight, Banknote, Send, Tags, Camera, LifeBuoy, BellRing, FileText, Zap, CalendarClock, KeyRound, MessageCircle, Mail, Info, ShieldCheck, ScrollText, Copy, Check, MessagesSquare, ScanFace, Fingerprint, Sparkles, Users } from 'lucide-react-native';
+import { Sun, Moon, Wallet, Target, CreditCard, ChevronRight, Banknote, Send, Tags, Camera, LifeBuoy, BellRing, FileText, Zap, CalendarClock, KeyRound, MessageCircle, Mail, Info, ShieldCheck, ScrollText, Copy, Check, MessagesSquare, ScanFace, Fingerprint, Sparkles, Users } from 'lucide-react-native';
 import * as Clipboard from 'expo-clipboard';
 import { uploadAvatar } from '../../lib/cloudinary';
 import { apiFetchText, apiFetch, hasToken } from '../../lib/api';
