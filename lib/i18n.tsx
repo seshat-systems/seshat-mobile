@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useRef, createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { isHidden, MASK, useHideNumbers, loadHideNumbers } from './privacy';
 import { I18nManager } from 'react-native';
 import { Mode, tokens, Tokens } from './theme';
@@ -223,6 +223,7 @@ const AR: Strings = {
 type Ctx = {
   lang: Lang;
   setLang: (l: Lang) => void;
+  applyServerLang: (l: Lang) => void;
   mode: Mode;
   setMode: (m: Mode) => void;
   t: (key: keyof typeof EN) => string;
@@ -233,10 +234,16 @@ type Ctx = {
 const I18nContext = createContext<Ctx | null>(null);
 
 const LANG_KEY = 'seshat.lang';
+
+/** The phone's language: Arabic when the device locale is Arabic, English otherwise. */
+export function systemLang(): Lang {
+  try { return /^ar/i.test(Intl.DateTimeFormat().resolvedOptions().locale || '') ? 'ar' : 'en'; } catch { return 'en'; }
+}
 const MODE_KEY = 'seshat.mode';
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>('en');
+  const explicitRef = useRef(false);
   const [mode, setModeState] = useState<Mode>('dark');
   // Hide-numbers mode: subscribing here re-renders every useI18n consumer when it flips, so each screen's
   // formatAmount() call picks up the new state without every screen subscribing itself.
@@ -244,11 +251,19 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => { void loadHideNumbers(); }, []);
 
   useEffect(() => {
-    secureGet(LANG_KEY).then((v) => { if (v === 'en' || v === 'ar') setLangState(v); });
+    // First launch follows the phone's language; a choice made in the app (or on another device) overrides it from then on.
+    secureGet(LANG_KEY).then((v) => {
+      if (v === 'en' || v === 'ar') { explicitRef.current = true; setLangState(v); }
+      else setLangState(systemLang());
+    });
     secureGet(MODE_KEY).then((v) => { if (v === 'dark' || v === 'light') setModeState(v); });
   }, []);
 
+  // The account's saved language comes from the server. English is also the server's default for people who never chose, so it must not
+  // override a phone set to Arabic; Arabic from the server is always a real choice. Once the person has chosen here, the server wins.
+  const applyServerLang = (l: Lang) => { if (explicitRef.current || l === 'ar') setLang(l); };
   const setLang = (l: Lang) => {
+    explicitRef.current = true;
     setLangState(l);
     secureSet(LANG_KEY, l).catch(() => {});
     // RN's I18nManager.forceRTL changes the entire app's flex direction.
@@ -266,6 +281,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     return {
       lang,
       setLang,
+      applyServerLang,
       mode,
       setMode,
       t: (key) => strings[key as string] ?? EN[key as string] ?? String(key),

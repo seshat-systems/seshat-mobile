@@ -52,7 +52,7 @@ export default function ProfileScreen() {
   const router = useRouter();
   const [wa, setWa] = useState<{ configured: boolean; linked: boolean } | null>(null);
   useEffect(() => { apiFetch<{ data: { configured: boolean; linked: boolean } }>('/me/whatsapp').then((r) => setWa(r.data)).catch(() => {}); }, []);
-  const { tok, lang, t, mode, setMode, setLang } = useI18n();
+  const { tok, lang, t, mode, setMode, setLang, applyServerLang } = useI18n();
   const { refresh, profile: appProfile, bumpVersion, openWorkspaceSheet } = useAppData();
   const inOrg = useInOrg();
   const ws = useWorkspace();
@@ -97,7 +97,7 @@ export default function ProfileScreen() {
         setDisplayName(res.data.displayName ?? '');
         setDisplayNameAr(res.data.displayNameAr ?? '');
         setCurrency(res.data.currency);
-        if (res.data.language === 'en' || res.data.language === 'ar') setLang(res.data.language);
+        if (res.data.language === 'en' || res.data.language === 'ar') applyServerLang(res.data.language);
       } catch (err) {
         console.warn('me fetch failed', err);
       }
