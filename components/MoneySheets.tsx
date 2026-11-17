@@ -40,7 +40,7 @@ export function Sheet({ visible, onClose, title, hint, children }: {
         <View style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
           <View style={{ flex: 1 }}>
             <Text style={{ fontFamily: fontHead(lang), fontSize: 21, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{title}</Text>
-            {hint ? <Text style={{ marginTop: 4, fontFamily: fontBody(lang), fontSize: 13, lineHeight: 19, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{hint}</Text> : null}
+            {hint ? <Text style={{ marginTop: 4, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{hint}</Text> : null}
           </View>
           <Pressable onPress={onClose} hitSlop={10}><X size={20} color={tok.muted} /></Pressable>
         </View>
@@ -65,8 +65,8 @@ function AccountPick({ s, on, onPress }: { s: CardSummary; on: boolean; onPress:
       })}
     >
       <Icon size={18} color={on ? tok.gold : tok.muted} />
-      <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontBody(lang, 'semibold'), fontSize: 14.5, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{s.name}</Text>
-      <Text style={{ fontFamily: fontMono('regular'), fontSize: 12.5, color: tok.muted }}>{fmtNum(Math.round(s.balance ?? 0))}</Text>
+      <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{s.name}</Text>
+      <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: tok.muted }}>{fmtNum(Math.round(s.balance ?? 0))}</Text>
       <View style={{ width: 18 }}>{on ? <Check size={17} color={tok.gold} /> : null}</View>
     </Pressable>
   );
@@ -129,7 +129,7 @@ export function MoveMoneySheet({ visible, onClose, sources, initialFrom, onDone 
       {cash && firstBank && (
         <Pressable onPress={withdraw} style={({ pressed }) => ({ alignSelf: ar ? 'flex-end' : 'flex-start', flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 8, paddingHorizontal: 14, paddingVertical: 9, borderRadius: 999, borderWidth: 1, borderColor: tok.border, backgroundColor: tok.elevated, opacity: pressed ? 0.8 : 1 })}>
           <Banknote size={15} color={tok.gold} />
-          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 13, color: tok.bone }}>{ar ? 'سحب كاش من ماكينة' : 'Withdrew cash (ATM)'}</Text>
+          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.bone }}>{ar ? 'سحب كاش من ماكينة' : 'Withdrew cash (ATM)'}</Text>
         </Pressable>
       )}
       <RField label={ar ? 'كم المبلغ؟' : 'How much?'} value={amount} onChange={setAmount} keyboardType="decimal-pad" mono placeholder="0" />
@@ -151,10 +151,10 @@ export function MoveMoneySheet({ visible, onClose, sources, initialFrom, onDone 
 
       {ok && a && b && (
         <View style={{ padding: 12, borderRadius: 12, backgroundColor: tok.elevated, gap: 4 }}>
-          <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+          <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
             {a.name}: {fmtNum(Math.round(a.balance))} → {fmtNum(Math.round(a.balance - value))}
           </Text>
-          <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+          <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
             {b.name}: {fmtNum(Math.round(b.balance))} → {fmtNum(Math.round(b.balance + value))}
           </Text>
         </View>
@@ -222,7 +222,7 @@ export function AddSourceSheet({ visible, onClose, onDone }: { visible: boolean;
           return (
             <Pressable key={x.key} onPress={() => setKind(x.key)} style={({ pressed }) => ({ flex: 1, alignItems: 'center', gap: 8, paddingVertical: 14, borderRadius: 14, borderWidth: 1.5, borderColor: on ? tok.gold : tok.border, backgroundColor: on ? 'rgba(201,168,76,0.10)' : tok.elevated, opacity: pressed ? 0.85 : 1 })}>
               <Icon size={22} color={on ? tok.gold : tok.muted} />
-              <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 12.5, color: tok.bone }}>{ar ? x.ar : x.en}</Text>
+              <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.bone }}>{ar ? x.ar : x.en}</Text>
             </Pressable>
           );
         })}
@@ -233,7 +233,7 @@ export function AddSourceSheet({ visible, onClose, onDone }: { visible: boolean;
         <RField label={ar ? 'آخر 4 أرقام (لربط رسائل البنك)' : 'Last 4 digits (matches bank messages)'} value={digits} onChange={setDigits} keyboardType="number-pad" maxLength={4} mono placeholder="1234" />
       ) : (
         <Pressable onPress={() => setShowDigits(true)} hitSlop={8}>
-          <Text style={{ fontFamily: fontBody(lang), fontSize: 13, color: tok.gold, textAlign: ar ? 'right' : 'left' }}>
+          <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.gold, textAlign: ar ? 'right' : 'left' }}>
             {ar ? '+ لديها رقم؟ أضف آخر 4 أرقام لربط رسائل البنك تلقائياً' : '+ Has card digits? Add them so bank messages match automatically'}
           </Text>
         </Pressable>
@@ -314,7 +314,7 @@ export function MergeAccountSheet({ visible, onClose, account, others, onDone }:
         : `If “${account?.name ?? ''}” is another account you already have under a second number, merge them: all its entries move over, and bank messages with either number land on the one account.`}
     >
       {choices.length === 0 ? (
-        <Text style={{ fontFamily: fontBody(lang), fontSize: 13.5, color: '#8A8A8A', textAlign: ar ? 'right' : 'left' }}>
+        <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: '#8A8A8A', textAlign: ar ? 'right' : 'left' }}>
           {ar ? 'لا يوجد حساب آخر للدمج معه.' : 'There is no other account to merge into.'}
         </Text>
       ) : (
@@ -324,7 +324,7 @@ export function MergeAccountSheet({ visible, onClose, account, others, onDone }:
         </View>
       )}
       {target && (
-        <Text style={{ fontFamily: fontBody(lang), fontSize: 12.5, lineHeight: 18, color: '#8A8A8A', textAlign: ar ? 'right' : 'left' }}>
+        <Text style={{ fontFamily: fontBody(lang), fontSize: 14, lineHeight: 20, color: '#8A8A8A', textAlign: ar ? 'right' : 'left' }}>
           {ar ? `سيختفي «${account?.name}» وتنتقل عملياته إلى «${target.name}».` : `“${account?.name}” will disappear and its entries move to “${target.name}”.`}
         </Text>
       )}
@@ -378,11 +378,11 @@ export function DailyBudgetSheet({ visible, onClose, info, onDone }: {
   useEffect(() => { if (visible) setIncome(''); }, [visible]);
   const cur = info?.currency ?? '';
   const num = (n: number) => fmtNum(Math.round(n));
-  const muted = { fontFamily: fontBody(lang), fontSize: 13, lineHeight: 19, color: '#9C9A92', textAlign: ar ? 'right' : 'left' } as const;
+  const muted = { fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: '#9C9A92', textAlign: ar ? 'right' : 'left' } as const;
   const row = (label: string, value: string, strong?: boolean) => (
     <View key={label} style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between', gap: 12 }}>
       <Text style={{ flex: 1, ...muted }}>{label}</Text>
-      <Text style={{ fontFamily: fontMono('regular'), fontSize: 13, color: strong ? '#C9A84C' : '#E8E6DD' }}>{value}</Text>
+      <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: strong ? '#C9A84C' : '#E8E6DD' }}>{value}</Text>
     </View>
   );
 

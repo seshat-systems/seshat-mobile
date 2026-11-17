@@ -78,7 +78,7 @@ export function AddOptionsSheet({ visible, onClose, onPickManual, onPickReceipt 
             marginBottom: 4,
           }}>
             <Text style={{
-              fontFamily: fontHead(lang), fontSize: 18, color: tok.bone, letterSpacing: -0.3,
+              fontFamily: fontHead(lang), fontSize: 19, color: tok.bone, letterSpacing: -0.3,
               writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
             }}>
               {lang === 'ar' ? 'إضافة معاملة' : 'Add a transaction'}
@@ -134,7 +134,7 @@ function OptionRow({
           </View>
           <View style={{ flex: 1 }}>
             <Text style={{
-              fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.bone,
+              fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone,
               textAlign: lang === 'ar' ? 'right' : 'left',
               writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
             }}>
@@ -144,10 +144,10 @@ function OptionRow({
               numberOfLines={2}
               style={{
                 marginTop: 2,
-                fontFamily: fontBody(lang), fontSize: 12, color: tok.muted,
+                fontFamily: fontBody(lang), fontSize: 14, color: tok.muted,
                 textAlign: lang === 'ar' ? 'right' : 'left',
                 writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
-                lineHeight: 17,
+                lineHeight: 19,
               }}
             >
               {subtitle}

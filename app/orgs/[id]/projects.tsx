@@ -168,7 +168,7 @@ export default function OrgProjectsScreen() {
           {!onCorrectLedger ? (
             <View style={{ padding: 18 }}>
               <Text style={{
-                color: tok.muted, fontFamily: fontBody(lang), fontSize: 13,
+                color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
                 textAlign: lang === 'ar' ? 'right' : 'left',
               }}>
                 {lang === 'ar'
@@ -222,7 +222,7 @@ export default function OrgProjectsScreen() {
                 <Pressable onPress={() => setShowArchived((s) => !s)} hitSlop={6}>
                   <Text style={{
                     color: tok.muted, fontFamily: fontMono('regular'),
-                    fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase',
+                    fontSize: 12, letterSpacing: 1.2, textTransform: 'uppercase',
                   }}>
                     {showArchived
                       ? (lang === 'ar' ? 'عرض النشط' : 'Show active')
@@ -241,7 +241,7 @@ export default function OrgProjectsScreen() {
                     <Layers size={22} color={tok.muted} strokeWidth={1.4} />
                     <Text style={{
                       color: tok.muted, fontFamily: fontBody(lang),
-                      fontSize: 13, textAlign: 'center',
+                      fontSize: 14, textAlign: 'center',
                     }}>
                       {showArchived
                         ? (lang === 'ar' ? 'مفيش مشاريع مؤرشفة.' : 'No archived projects yet.')
@@ -270,7 +270,7 @@ export default function OrgProjectsScreen() {
                         <Text
                           numberOfLines={1}
                           style={{
-                            fontFamily: fontHead(lang), fontSize: 15, color: tok.bone,
+                            fontFamily: fontHead(lang), fontSize: 16, color: tok.bone,
                             textAlign: lang === 'ar' ? 'right' : 'left',
                           }}
                         >
@@ -280,7 +280,7 @@ export default function OrgProjectsScreen() {
                           <Text
                             style={{
                               marginTop: 2,
-                              fontFamily: fontMono('regular'), fontSize: 10,
+                              fontFamily: fontMono('regular'), fontSize: 12,
                               color: tok.muted, letterSpacing: 1.2,
                               textAlign: lang === 'ar' ? 'right' : 'left',
                             }}
@@ -293,7 +293,7 @@ export default function OrgProjectsScreen() {
                       </View>
                       {ws.canManage ? (
                         <Pressable onPress={() => setAccessFor(p)} hitSlop={8} style={{ padding: 6 }}>
-                          <Text style={{ color: p.visibility === 'restricted' ? tok.gold : tok.muted, fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 1.2 }}>
+                          <Text style={{ color: p.visibility === 'restricted' ? tok.gold : tok.muted, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2 }}>
                             {p.visibility === 'restricted' ? (lang === 'ar' ? 'مقيّد' : 'RESTRICTED') : (lang === 'ar' ? 'الوصول' : 'ACCESS')}
                           </Text>
                         </Pressable>
@@ -303,7 +303,7 @@ export default function OrgProjectsScreen() {
                           ? <Archive size={16} color={tok.muted} strokeWidth={1.5} />
                           : <Text style={{
                               color: tok.gold, fontFamily: fontMono('regular'),
-                              fontSize: 10, letterSpacing: 1.2,
+                              fontSize: 12, letterSpacing: 1.2,
                             }}>
                               {lang === 'ar' ? 'استرجع' : 'RESTORE'}
                             </Text>}
@@ -353,22 +353,22 @@ function ProjectAccessSheet({ project, orgId, onClose, onSaved }: { project: Pro
         <Text style={{ fontFamily: fontHead(lang), fontSize: 20, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{project?.name}</Text>
         <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 12 }}>
           <View style={{ flex: 1 }}>
-            <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? 'تقييد الوصول' : 'Restrict access'}</Text>
-            <Text style={{ marginTop: 2, fontFamily: fontBody(lang), fontSize: 12, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{ar ? 'يراه المختارون والمالك والمديرون فقط، مع كل ما سُجّل عليه.' : 'Only the people you choose, plus owners and admins, see it and everything logged on it.'}</Text>
+            <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? 'تقييد الوصول' : 'Restrict access'}</Text>
+            <Text style={{ marginTop: 2, fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{ar ? 'يراه المختارون والمالك والمديرون فقط، مع كل ما سُجّل عليه.' : 'Only the people you choose, plus owners and admins, see it and everything logged on it.'}</Text>
           </View>
           <Switch value={restricted} onValueChange={setRestricted} trackColor={{ true: tok.gold, false: tok.border }} />
         </View>
         {restricted ? (
           <ScrollView style={{ maxHeight: 280 }}>
-            {selectable.length === 0 ? <Text style={{ fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, paddingVertical: 8 }}>{ar ? 'لا أعضاء آخرون لاختيارهم.' : 'There are no other members to choose.'}</Text> : selectable.map((m) => {
+            {selectable.length === 0 ? <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, paddingVertical: 8 }}>{ar ? 'لا أعضاء آخرون لاختيارهم.' : 'There are no other members to choose.'}</Text> : selectable.map((m) => {
               const on = chosen.includes(m.userId);
               return (
                 <Pressable key={m.userId} onPress={() => setChosen((c) => (on ? c.filter((x) => x !== m.userId) : [...c, m.userId]))} style={{ paddingVertical: 10, flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 12 }}>
                   <View style={{ width: 22, height: 22, borderRadius: 6, borderWidth: 1, borderColor: on ? tok.gold : tok.border, backgroundColor: on ? tok.gold : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
-                    {on ? <Text style={{ color: tok.void, fontSize: 13 }}>✓</Text> : null}
+                    {on ? <Text style={{ color: tok.void, fontSize: 14 }}>✓</Text> : null}
                   </View>
-                  <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{m.displayName ?? m.email}</Text>
-                  <Text style={{ fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted }}>{roleLabel(m.role, 'team', ar).toUpperCase()}</Text>
+                  <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{m.displayName ?? m.email}</Text>
+                  <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted }}>{roleLabel(m.role, 'team', ar).toUpperCase()}</Text>
                 </Pressable>
               );
             })}

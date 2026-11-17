@@ -117,7 +117,7 @@ function SeshatInsightCard({ data, currency }: { data: DashboardData; currency: 
       }}>
         <SeshatMark size={16} gold={tok.gold} lightRing animate={false} />
         <Text style={{
-          fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 2,
+          fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 2,
           color: tok.gold, textTransform: 'uppercase',
         }}>
           {lang === 'ar' ? 'سيشات لاحظت' : 'Seshat noticed'}
@@ -127,7 +127,7 @@ function SeshatInsightCard({ data, currency }: { data: DashboardData; currency: 
       <Text style={{
         fontFamily: fontBody(lang),
         fontSize: lang === 'ar' ? 14.5 : 14,
-        lineHeight: 21, color: tok.bone,
+        lineHeight: 24, color: tok.bone,
         textAlign: lang === 'ar' ? 'right' : 'left',
         writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
       }}>
@@ -222,7 +222,7 @@ export function DashboardNumbers({ data, currency}: { data: DashboardData; curre
                     justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6,
                   }}>
                     <Text style={{
-                      color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 13,
+                      color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 14,
                     }}>{catLabel(cat, lang)}</Text>
                     <RAmount value={-cat.total} size={12} currency={currency} weight="regular" decimals={0} />
                   </View>
@@ -259,7 +259,7 @@ export function DashboardNumbers({ data, currency}: { data: DashboardData; curre
                       }} />
                       <Text
                         numberOfLines={1}
-                        style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 13, flex: 1 }}
+                        style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 14, flex: 1 }}
                       >{p.name}</Text>
                     </View>
                     <RAmount value={-p.expense} size={12} currency={currency} weight="regular" decimals={0} />
@@ -273,7 +273,7 @@ export function DashboardNumbers({ data, currency}: { data: DashboardData; curre
                       />
                       <Text style={{
                         marginTop: 4,
-                        color: tok.muted, fontFamily: fontMono('regular'), fontSize: 10,
+                        color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12,
                         letterSpacing: 1.2, textTransform: 'uppercase',
                         textAlign: lang === 'ar' ? 'right' : 'left',
                       }}>
@@ -389,11 +389,11 @@ export function DashboardHud({ data, currency}: { data: DashboardData; currency:
             ) : (
               <View style={{ alignItems: 'center', paddingHorizontal: 40 }}>
                 <Text style={{
-                  fontFamily: fontMono('regular'), fontSize: 13, color: tok.bone, letterSpacing: 0.4,
+                  fontFamily: fontMono('regular'), fontSize: 14, color: tok.bone, letterSpacing: 0.4,
                 }}>{t('notEnoughData')}</Text>
                 <Text style={{
-                  marginTop: 8, fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted,
-                  letterSpacing: 0.8, lineHeight: 16, textAlign: 'center',
+                  marginTop: 8, fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted,
+                  letterSpacing: 0.8, lineHeight: 18, textAlign: 'center',
                 }}>{t('notEnoughDataSub')}</Text>
               </View>
             )}
@@ -423,10 +423,10 @@ export function DashboardHud({ data, currency}: { data: DashboardData; currency:
             <REyebrow>{t('detected')}</REyebrow>
             <Text style={{
               marginTop: 2,
-              fontFamily: fontMono('medium'), fontSize: 14, color: tok.gold,
+              fontFamily: fontMono('medium'), fontSize: 16, color: tok.gold,
             }}>
               {data.categoryBreakdown.length}
-              <Text style={{ fontSize: 10, color: tok.muted }}>  cat.</Text>
+              <Text style={{ fontSize: 12, color: tok.muted }}>  cat.</Text>
             </Text>
           </View>
         </View>
@@ -510,7 +510,7 @@ export function DashboardBento({ data, currency}: { data: DashboardData; currenc
                 : <ArrowDown size={11} color={tok.alertText} strokeWidth={2} />}
               <Text style={{
                 color: incomeDelta >= 0 ? tok.posText : tok.alertText,
-                fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 0.6,
+                fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 0.6,
               }}>{incomeDelta >= 0 ? '+' : ''}{incomeDelta.toFixed(0)}% mom</Text>
             </View>
           )}
@@ -530,7 +530,7 @@ export function DashboardBento({ data, currency}: { data: DashboardData; currenc
                 : <ArrowDown size={11} color={tok.posText} strokeWidth={2} />}
               <Text style={{
                 color: expenseDelta >= 0 ? tok.alertText : tok.posText,
-                fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 0.6,
+                fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 0.6,
               }}>{expenseDelta >= 0 ? '+' : ''}{expenseDelta.toFixed(0)}% mom</Text>
             </View>
           )}
@@ -714,7 +714,7 @@ function ChartRadar({ data, currency }: { data: DashboardData; currency: string 
               </View>
             </>
           ) : (
-            <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.bone, letterSpacing: 0.4, textAlign: 'center', paddingHorizontal: 24 }}>
+            <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: tok.bone, letterSpacing: 0.4, textAlign: 'center', paddingHorizontal: 24 }}>
               {t('notEnoughData')}
             </Text>
           )}
@@ -733,10 +733,10 @@ function ChartRadar({ data, currency }: { data: DashboardData; currency: string 
               backgroundColor: tok.elevated, borderWidth: 1, borderColor: tok.gold,
             }}
           >
-            <Text numberOfLines={1} style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 13, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{catLabel(sel.cat, lang)}</Text>
+            <Text numberOfLines={1} style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{catLabel(sel.cat, lang)}</Text>
             <View style={{ marginTop: 3, flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 }}>
               <RAmount value={-sel.cat.total} currency={currency} size={14} decimals={0} />
-              <Text style={{ fontFamily: fontMono('regular'), fontSize: 11, color: tok.gold }}>{Math.round((sel.cat.total / spent) * 100)}%</Text>
+              <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.gold }}>{Math.round((sel.cat.total / spent) * 100)}%</Text>
             </View>
           </View>
         )}
@@ -824,7 +824,7 @@ export function DashboardBody({ data, currency }: { data: DashboardData; currenc
           {incomeDelta !== null && (
             <View style={{ marginTop: 8, flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 4 }}>
               {incomeDelta >= 0 ? <ArrowUp size={11} color={tok.posText} strokeWidth={2} /> : <ArrowDown size={11} color={tok.alertText} strokeWidth={2} />}
-              <Text style={{ color: incomeDelta >= 0 ? tok.posText : tok.alertText, fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 0.6 }}>{incomeDelta >= 0 ? '+' : ''}{incomeDelta.toFixed(0)}% mom</Text>
+              <Text style={{ color: incomeDelta >= 0 ? tok.posText : tok.alertText, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 0.6 }}>{incomeDelta >= 0 ? '+' : ''}{incomeDelta.toFixed(0)}% mom</Text>
             </View>
           )}
         </RCard>
@@ -836,7 +836,7 @@ export function DashboardBody({ data, currency }: { data: DashboardData; currenc
           {expenseDelta !== null && (
             <View style={{ marginTop: 8, flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 4 }}>
               {expenseDelta >= 0 ? <ArrowUp size={11} color={tok.alertText} strokeWidth={2} /> : <ArrowDown size={11} color={tok.posText} strokeWidth={2} />}
-              <Text style={{ color: expenseDelta >= 0 ? tok.alertText : tok.posText, fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 0.6 }}>{expenseDelta >= 0 ? '+' : ''}{expenseDelta.toFixed(0)}% mom</Text>
+              <Text style={{ color: expenseDelta >= 0 ? tok.alertText : tok.posText, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 0.6 }}>{expenseDelta >= 0 ? '+' : ''}{expenseDelta.toFixed(0)}% mom</Text>
             </View>
           )}
         </RCard>

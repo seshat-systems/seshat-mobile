@@ -135,12 +135,12 @@ function EmptyState({ text, sub, cta, onCta }: { text: string; sub: string; cta?
   return (
     <View style={{ paddingTop: 40, alignItems: 'center' }}>
       <Text style={{
-        color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 16,
+        color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 17,
         textAlign: 'center',
       }}>{text}</Text>
       <Text style={{
-        marginTop: 6, color: tok.muted, fontFamily: fontBody(lang), fontSize: 13,
-        textAlign: 'center', maxWidth: 280, lineHeight: 19,
+        marginTop: 6, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
+        textAlign: 'center', maxWidth: 280, lineHeight: 21,
       }}>{sub}</Text>
       {cta && onCta ? <View style={{ marginTop: 14 }}><RButton onPress={onCta}>{cta}</RButton></View> : null}
     </View>
@@ -164,11 +164,11 @@ function GoalRow({ goal, onPress, onAdd, shared, version }: { goal: Goal; onPres
           justifyContent: 'space-between', alignItems: 'baseline',
         }}>
           <Text style={{
-            flex: 1, color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 15,
+            flex: 1, color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 16,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}>{lang === 'ar' ? goal.nameAr : goal.nameEn}</Text>
           <Text style={{
-            color: tok.gold, fontFamily: fontMono('medium'), fontSize: 13, writingDirection: 'ltr',
+            color: tok.gold, fontFamily: fontMono('medium'), fontSize: 14, writingDirection: 'ltr',
           }}>
             {pct.toFixed(0)}%
           </Text>
@@ -186,7 +186,7 @@ function GoalRow({ goal, onPress, onAdd, shared, version }: { goal: Goal; onPres
           </Pressable>
         </View>
         <Text style={{
-          marginTop: 4, color: tok.muted, fontFamily: fontMono('regular'), fontSize: 11,
+          marginTop: 4, color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12,
           textAlign: lang === 'ar' ? 'right' : 'left', writingDirection: 'ltr',
         }}>
           {formatAmount(progress, { decimals: 0 })} / {formatAmount(goal.targetAmount, { decimals: 0 })} {currencyLabel(goal.currency, lang)}
@@ -195,18 +195,18 @@ function GoalRow({ goal, onPress, onAdd, shared, version }: { goal: Goal; onPres
           <RProgress value={pct} max={100} color={tok.gold} height={3} />
         </View>
         {goal.deadline ? (
-          <Text style={{ marginTop: 8, color: tok.muted, fontFamily: fontMono('regular'), fontSize: 11, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+          <Text style={{ marginTop: 8, color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12, textAlign: lang === 'ar' ? 'right' : 'left' }}>
             {lang === 'ar' ? 'حتى ' : 'By '}{goal.deadline.slice(0, 10)}
           </Text>
         ) : null}
         {who.length > 0 ? (
-          <Text style={{ marginTop: 8, color: tok.muted, fontFamily: fontBody(lang), fontSize: 12, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+          <Text style={{ marginTop: 8, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14, textAlign: lang === 'ar' ? 'right' : 'left' }}>
             {who.map((w) => `${w.name} ${Math.round(w.total).toLocaleString('en-US')}`).join(' · ')}
           </Text>
         ) : null}
         {onAdd ? (
           <Pressable onPress={onAdd} hitSlop={8} style={{ marginTop: 10, alignSelf: lang === 'ar' ? 'flex-end' : 'flex-start' }}>
-            <Text style={{ color: tok.gold, fontFamily: fontBody(lang, 'semibold'), fontSize: 13 }}>{lang === 'ar' ? 'أضف مبلغاً' : 'Add money'}</Text>
+            <Text style={{ color: tok.gold, fontFamily: fontBody(lang, 'semibold'), fontSize: 14 }}>{lang === 'ar' ? 'أضف مبلغاً' : 'Add money'}</Text>
           </Pressable>
         ) : null}
       </RCard>
@@ -315,7 +315,7 @@ function EditGoalSheet({
                 ))}
                 {deadline !== '' && <RPill onPress={() => setDeadline('')}>{lang === 'ar' ? 'بدون موعد' : 'No date'}</RPill>}
               </View>
-              {!deadlineOk && <Text style={{ color: tok.alertText, fontFamily: fontBody(lang), fontSize: 12 }}>{lang === 'ar' ? 'اكتب التاريخ هكذا: 2027-03-15' : 'Write the date like 2027-03-15'}</Text>}
+              {!deadlineOk && <Text style={{ color: tok.alertText, fontFamily: fontBody(lang), fontSize: 14 }}>{lang === 'ar' ? 'اكتب التاريخ هكذا: 2027-03-15' : 'Write the date like 2027-03-15'}</Text>}
             </View>
           </View>
           <View style={{ paddingHorizontal: 18, paddingTop: 18, gap: 10 }}>

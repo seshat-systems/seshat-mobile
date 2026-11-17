@@ -34,14 +34,14 @@ export function ReviewBanner() {
             <HelpCircle size={18} color={tok.gold} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 14, textAlign: ar ? 'right' : 'left' }}>
+            <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 16, textAlign: ar ? 'right' : 'left' }}>
               {ar ? `عندي ${count} ${count === 1 ? 'سؤال' : 'أسئلة'} عمّا رصدته` : `I have ${count} question${count === 1 ? '' : 's'} about what I captured`}
             </Text>
-            <Text style={{ marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 12, textAlign: ar ? 'right' : 'left' }}>
+            <Text style={{ marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14, textAlign: ar ? 'right' : 'left' }}>
               {ar ? 'اضغط لتجيب في ثوانٍ.' : 'Tap to answer in a few seconds.'}
             </Text>
           </View>
-          <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 14 }}>{ar ? '←' : '→'}</Text>
+          <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 16 }}>{ar ? '←' : '→'}</Text>
         </View>
       </RCard>
     </Pressable>

@@ -247,7 +247,7 @@ export function RPill({
         style={{
           color: active ? tok.void : tok.bone,
           fontFamily: fontBody(lang, 'semibold'),
-          fontSize: 13,
+          fontSize: 14,
         }}
       >
         {children}
@@ -354,7 +354,7 @@ export function RField({
               minHeight: multiline ? (minHeight ?? 120) : 48,
               color: tok.bone,
               fontFamily: mono ? fontMono('regular') : fontBody(lang),
-              fontSize: 15,
+              fontSize: 16,
               writingDirection: forceLtr ? 'ltr' : (lang === 'ar' ? 'rtl' : 'ltr'),
               textAlign: forceLtr ? 'left' : (lang === 'ar' ? 'right' : 'left'),
             }}
@@ -383,7 +383,7 @@ export function RChip({
     }}>
       {icon}
       <Text style={{
-        color: tok.gold, fontFamily: fontMono('regular'), fontSize: 11, letterSpacing: 0.6,
+        color: tok.gold, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 0.6,
       }}>{label}</Text>
       {onRemove ? (
         <Pressable onPress={onRemove} hitSlop={8}><X size={12} color={tok.gold} strokeWidth={2.4} /></Pressable>
@@ -423,7 +423,7 @@ export function RSegmented<T extends string>({
             <Text style={{
               color: a ? tok.void : tok.bone,
               fontFamily: fontBody(lang, 'semibold'),
-              fontSize: 13,
+              fontSize: 14,
             }}>{o.label}</Text>
           </Pressable>
         );
@@ -457,7 +457,7 @@ export function RStatus({
     }}>
       <View style={{ width: 5, height: 5, borderRadius: 3, backgroundColor: fg }} />
       <Text style={{
-        color: fg, fontFamily: fontMono('regular'), fontSize: 9,
+        color: fg, fontFamily: fontMono('regular'), fontSize: 12,
         letterSpacing: 1.4, textTransform: 'uppercase',
       }}>{children}</Text>
     </View>
@@ -538,7 +538,7 @@ export function RButton({
       <Text style={{
         color: fg,
         fontFamily: fontBody(lang, 'semibold'),
-        fontSize: 14,
+        fontSize: 16,
       }}>{children}</Text>
     </Pressable>
   );
@@ -574,7 +574,7 @@ export function RToast({ visible, children, bottomOffset = 110 }: { visible: boo
       }}
     >
       <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: tok.gold }} />
-      <Text style={{ flex: 1, color: tok.bone, fontFamily: fontBody(lang), fontSize: 13 }}>{children}</Text>
+      <Text style={{ flex: 1, color: tok.bone, fontFamily: fontBody(lang), fontSize: 14 }}>{children}</Text>
     </Animated.View>
   );
 }

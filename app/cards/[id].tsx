@@ -88,7 +88,7 @@ export default function CardDetailScreen() {
     );
   };
 
-  const para = { fontFamily: fontMono('regular'), fontSize: 11, color: tok.muted, textAlign: ar ? 'right' : 'left' } as const;
+  const para = { fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, textAlign: ar ? 'right' : 'left' } as const;
 
   return (
     <PlanScreen title={card?.name ?? (ar ? 'بطاقة' : 'Card')} subtitle={card ? `${card.total.count} ${ar ? 'عملية' : 'operations'}` : undefined}>
@@ -117,7 +117,7 @@ export default function CardDetailScreen() {
 
             {card.reportedBalance != null && Math.abs(card.reportedBalance - (card.balance ?? 0)) >= 1 && (
               <RCard padding={14} style={{ marginBottom: 12 }}>
-                <Text style={{ fontFamily: fontBody(lang), fontSize: 13.5, lineHeight: 20, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
+                <Text style={{ fontFamily: fontBody(lang), fontSize: 14, lineHeight: 22, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
                   {ar
                     ? `آخر رسالة من البنك تقول إن رصيده ${Math.round(card.reportedBalance).toLocaleString()} ${currency}، وسيشات يحسب ${Math.round(card.balance ?? 0).toLocaleString()}.`
                     : `Your last bank message says this holds ${Math.round(card.reportedBalance).toLocaleString()} ${currency}; Seshat has ${Math.round(card.balance ?? 0).toLocaleString()}.`}
@@ -162,11 +162,11 @@ export default function CardDetailScreen() {
                       <View style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between', marginBottom: 4 }}>
                         <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 8 }}>
                           <CategoryIconByKey iconKey={iconKeyForCategory(c)} size={15} color={tok.gold} />
-                          <Text style={{ fontFamily: fontBody(lang), fontSize: 13.5, color: tok.bone }}>
+                          <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.bone }}>
                             {ar && c.nameAr ? c.nameAr : c.nameEn}
                           </Text>
                         </View>
-                        <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted }}>
+                        <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: tok.muted }}>
                           {Math.round(c.total).toLocaleString()} {currency} · {pct}%
                         </Text>
                       </View>
@@ -183,7 +183,7 @@ export default function CardDetailScreen() {
               <RCard padding={16} style={{ marginBottom: 12 }}>
                 <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 12 }}>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ fontFamily: fontHead(lang), fontSize: 15, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? 'حساب خاص' : 'Private account'}</Text>
+                    <Text style={{ fontFamily: fontHead(lang), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? 'حساب خاص' : 'Private account'}</Text>
                     <Text style={[para, { marginTop: 3 }]}>{ar ? 'أنت وحدك ترى هذا الحساب وما يُسجَّل عليه. لا يراه بقية أفراد العائلة.' : 'Only you see this account and what is logged on it. Nobody else in the household does.'}</Text>
                   </View>
                   <Switch
@@ -200,7 +200,7 @@ export default function CardDetailScreen() {
 
             <RCard padding={16} style={{ marginBottom: 12 }}>
               <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={{ fontFamily: fontHead(lang), fontSize: 15, color: tok.bone }}>{ar ? 'العمليات' : 'Operations'}</Text>
+                <Text style={{ fontFamily: fontHead(lang), fontSize: 16, color: tok.bone }}>{ar ? 'العمليات' : 'Operations'}</Text>
                 <Pressable onPress={() => { setLabel(card.label ?? ''); setRenaming((r) => !r); }} hitSlop={10} accessibilityLabel={ar ? 'إعادة تسمية' : 'Rename'}>
                   <Pencil size={16} color={tok.muted} />
                 </Pressable>
@@ -222,11 +222,11 @@ export default function CardDetailScreen() {
 
             {card.kind !== 'cash' && (
               <Pressable onPress={() => setMerging(true)} style={{ alignSelf: 'center', padding: 10 }}>
-                <Text style={{ fontFamily: fontBody(lang), fontSize: 13, color: tok.gold }}>{ar ? 'هل هو نفس حساب آخر؟ ادمجهما' : 'Same account as another one? Merge them'}</Text>
+                <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.gold }}>{ar ? 'هل هو نفس حساب آخر؟ ادمجهما' : 'Same account as another one? Merge them'}</Text>
               </Pressable>
             )}
             <Pressable onPress={remove} style={{ alignSelf: 'center', padding: 10 }}>
-              <Text style={{ fontFamily: fontBody(lang), fontSize: 12.5, color: tok.muted }}>{ar ? 'إخفاء هذه البطاقة' : 'Hide this card'}</Text>
+              <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted }}>{ar ? 'إخفاء هذه البطاقة' : 'Hide this card'}</Text>
             </Pressable>
           </>
         )}

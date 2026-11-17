@@ -20,7 +20,7 @@ export function HeaderBack({ onPress, label }: { onPress: () => void; label?: st
       accessibilityRole="button"
       accessibilityLabel={label ?? (lang === 'ar' ? 'رجوع' : 'Back')}
       style={({ pressed }) => ({
-        width: 36, height: 36, borderRadius: radius.btn,
+        width: 44, height: 44, borderRadius: radius.btn,
         backgroundColor: isLiquid() ? 'transparent' : (pressed ? tok.elevated : tok.surface),
         alignItems: 'center', justifyContent: 'center',
       })}
@@ -41,7 +41,7 @@ export function HeaderAdd({ onPress, label }: { onPress: () => void; label?: str
       accessibilityRole="button"
       accessibilityLabel={label ?? (lang === 'ar' ? 'إضافة' : 'Add')}
       style={({ pressed }) => ({
-        width: 32, height: 32, borderRadius: 16,
+        width: 44, height: 44, borderRadius: 22,
         backgroundColor: isLiquid() ? 'transparent' : (pressed ? tok.glowShellBorder : tok.glowShellBg),
         borderWidth: isLiquid() ? 0 : 1, borderColor: tok.glowShellBorder,
         alignItems: 'center', justifyContent: 'center', alignSelf: 'center',
@@ -65,7 +65,7 @@ export function HeaderPill({ onPress, icon, children, label }: { onPress: () => 
       accessibilityLabel={label}
       style={({ pressed }) => ({
         flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 6, alignSelf: 'center',
-        paddingHorizontal: 12, height: 32, borderRadius: 999,
+        paddingHorizontal: 14, height: 44, borderRadius: 999,
         backgroundColor: isLiquid() ? 'transparent' : (pressed ? tok.glowShellBorder : tok.glowShellBg),
         borderWidth: isLiquid() ? 0 : 1, borderColor: tok.glowShellBorder,
         opacity: pressed ? 0.85 : 1,
@@ -73,7 +73,7 @@ export function HeaderPill({ onPress, icon, children, label }: { onPress: () => 
     >
       <LiquidBackdrop radius={999} tint={GOLD_TINT} fallback="transparent" />
       {icon}
-      <Text style={{ fontFamily: fontMono('regular'), fontSize: 10, color: tok.gold, letterSpacing: 1.2, textTransform: 'uppercase' }}>{children}</Text>
+      <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.gold, letterSpacing: 1.2, textTransform: 'uppercase' }}>{children}</Text>
     </Pressable>
   );
 }

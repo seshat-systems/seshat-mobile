@@ -68,10 +68,10 @@ export function WidgetsAnnouncement() {
                 <LayoutGrid size={18} color={tok.gold} />
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 14, textAlign: ar ? 'right' : 'left' }}>
+                <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 16, textAlign: ar ? 'right' : 'left' }}>
                   {ar ? 'جديد: ودجت سيشات' : 'New: Seshat widgets'}
                 </Text>
-                <Text style={{ marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 12, textAlign: ar ? 'right' : 'left' }}>
+                <Text style={{ marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14, textAlign: ar ? 'right' : 'left' }}>
                   {ANDROID
                     ? (ar ? 'أضف وصولاً سريعاً للتسجيل على شاشتك الرئيسية.' : 'Add a one-tap way to log from your Home screen.')
                     : (ar ? 'شهرك وميزانياتك وحكم ماعت على شاشتك الرئيسية وشاشة القفل.' : 'Your month, budgets and Maat’s verdict on your Home and Lock Screen.')}
@@ -80,7 +80,7 @@ export function WidgetsAnnouncement() {
               <Pressable onPress={seen} hitSlop={10} accessibilityLabel={ar ? 'إغلاق' : 'Dismiss'}>
                 <X size={16} color={tok.muted} />
               </Pressable>
-              <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 14 }}>{ar ? '←' : '→'}</Text>
+              <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 16 }}>{ar ? '←' : '→'}</Text>
             </View>
           </RCard>
         </Pressable>
@@ -90,16 +90,16 @@ export function WidgetsAnnouncement() {
         <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.72)', justifyContent: 'flex-end' }]}>
           <Pressable style={StyleSheet.absoluteFill} onPress={() => setOpen(false)} />
           <View style={{ backgroundColor: tok.void, borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 22, paddingBottom: 34, borderWidth: StyleSheet.hairlineWidth, borderColor: tok.border }}>
-            <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 18, textAlign: ar ? 'right' : 'left' }}>
+            <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 19, textAlign: ar ? 'right' : 'left' }}>
               {ar ? 'أضف ودجت سيشات' : 'Add a Seshat widget'}
             </Text>
             <View style={{ marginTop: 16, gap: 12 }}>
               {steps.map((s, i) => (
                 <View key={i} style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 12, alignItems: 'flex-start' }}>
                   <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: tok.elevated, alignItems: 'center', justifyContent: 'center', marginTop: 1 }}>
-                    <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 12 }}>{i + 1}</Text>
+                    <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 14 }}>{i + 1}</Text>
                   </View>
-                  <Text style={{ flex: 1, color: tok.bone, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, textAlign: ar ? 'right' : 'left' }}>{s}</Text>
+                  <Text style={{ flex: 1, color: tok.bone, fontFamily: fontBody(lang), fontSize: 16, lineHeight: 24, textAlign: ar ? 'right' : 'left' }}>{s}</Text>
                 </View>
               ))}
             </View>

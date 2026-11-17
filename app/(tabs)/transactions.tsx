@@ -262,11 +262,11 @@ export default function TransactionsScreen() {
         ) : txs.length === 0 ? (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40 }}>
             <Text style={{
-              color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 16,
-              textAlign: 'center', lineHeight: 24,
+              color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 17,
+              textAlign: 'center', lineHeight: 27,
             }}>{t('noRecords')}</Text>
             <Text style={{
-              marginTop: 8, color: tok.muted, fontFamily: fontBody(lang), fontSize: 13,
+              marginTop: 8, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
               textAlign: 'center',
             }}>{t('noRecordsSub')}</Text>
           </View>

@@ -109,9 +109,9 @@ function Row({ step, index, busy }: { step: ActivityStep; index: number; busy?: 
         <Animated.Text
           style={{
             fontFamily: fontMono('regular'),
-            fontSize: 11,
+            fontSize: 12,
             letterSpacing: 0.3,
-            lineHeight: 16,
+            lineHeight: 18,
             color: busy ? tok.gold : tok.muted,
             opacity: busy ? pulse : 1,
             textAlign: lang === 'ar' ? 'right' : 'left',
@@ -124,7 +124,7 @@ function Row({ step, index, busy }: { step: ActivityStep; index: number; busy?: 
           <Text
             style={{
               fontFamily: fontMono('regular'),
-              fontSize: 10,
+              fontSize: 12,
               letterSpacing: 0.2,
               marginTop: 1,
               color: tok.muted,
@@ -160,9 +160,9 @@ function PendingRow() {
       <Text
         style={{
           fontFamily: fontMono('regular'),
-          fontSize: 11,
+          fontSize: 12,
           letterSpacing: 0.3,
-          lineHeight: 16,
+          lineHeight: 18,
           color: tok.gold,
           textAlign: lang === 'ar' ? 'right' : 'left',
           writingDirection: lang === 'ar' ? 'rtl' : 'ltr',

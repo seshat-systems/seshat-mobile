@@ -314,7 +314,7 @@ function TabLabel({ focused, color, children }: { focused: boolean; color: Color
         // Crisp color swap instead of an opacity dim (no flicker on switch).
         color: focused ? tok.gold : color,
         fontFamily: fontMono('regular'),
-        fontSize: 9.5,
+        fontSize: 12,
         letterSpacing: lang === 'ar' ? 0 : 1.2,
         textTransform: lang === 'ar' ? 'none' : 'uppercase',
         marginTop: 4,

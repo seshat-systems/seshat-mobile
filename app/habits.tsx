@@ -98,7 +98,7 @@ export default function RemindersScreen() {
           </REyebrow>
           <Text style={{
             fontFamily: fontBody(lang),
-            fontSize: 13.5, lineHeight: 20, color: tok.muted,
+            fontSize: 14, lineHeight: 22, color: tok.muted,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}>
             {lang === 'ar'
@@ -107,10 +107,10 @@ export default function RemindersScreen() {
           </Text>
           <View style={{ marginTop: 14, flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 12 }}>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+              <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>
                 {lang === 'ar' ? 'تذكير يومي بالتسجيل' : 'Daily logging reminder'}
               </Text>
-              <Text style={{ marginTop: 2, fontFamily: fontBody(lang), fontSize: 12, color: tok.muted, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+              <Text style={{ marginTop: 2, fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: lang === 'ar' ? 'right' : 'left' }}>
                 {lang === 'ar' ? 'مرتان يومياً (١ ظهراً و٨ مساءً) إن لم تسجّل شيئاً.' : 'Twice a day (1 PM and 8 PM) if you have not logged anything.'}
               </Text>
             </View>
@@ -161,7 +161,7 @@ export default function RemindersScreen() {
                     }}>
                       <Text style={{
                         fontFamily: fontBody(lang),
-                        fontSize: 15, color: muted ? tok.muted : tok.bone,
+                        fontSize: 16, color: muted ? tok.muted : tok.bone,
                         textAlign: lang === 'ar' ? 'right' : 'left',
                         writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
                         textDecorationLine: muted ? 'line-through' : 'none',
@@ -178,13 +178,13 @@ export default function RemindersScreen() {
                       <Clock size={12} color={tok.muted} />
                       <Text style={{
                         fontFamily: fontMono(),
-                        fontSize: 11, color: tok.muted,
+                        fontSize: 12, color: tok.muted,
                       }}>
                         {formatHour(h.hour)}
                       </Text>
                       <Text style={{
                         fontFamily: fontBody(lang),
-                        fontSize: 11, color: tok.muted,
+                        fontSize: 12, color: tok.muted,
                         textAlign: lang === 'ar' ? 'right' : 'left',
                         writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
                       }}>
@@ -224,7 +224,7 @@ function EmptyState({ tok, lang }: { tok: any; lang: 'en' | 'ar' }) {
     <RCard padding={20}>
       <Text style={{
         fontFamily: fontBody(lang),
-        fontSize: 14.5, lineHeight: 21, color: tok.muted,
+        fontSize: 16, lineHeight: 24, color: tok.muted,
         textAlign: 'center',
       }}>
         {lang === 'ar'

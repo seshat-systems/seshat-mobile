@@ -278,7 +278,7 @@ export default function SeshatSessionsScreen() {
             autoCorrect={false}
             returnKeyType="search"
             style={{
-              flex: 1, color: tok.bone, fontFamily: fontBody(lang), fontSize: 14,
+              flex: 1, color: tok.bone, fontFamily: fontBody(lang), fontSize: 16,
               paddingVertical: 0,
               textAlign: lang === 'ar' ? 'right' : 'left',
               writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
@@ -307,7 +307,7 @@ export default function SeshatSessionsScreen() {
                 backgroundColor: on ? 'rgba(201,168,76,0.14)' : 'transparent',
               }}
             >
-              <Text style={{ fontFamily: fontMono('regular'), fontSize: 11, letterSpacing: 1.1, color: on ? tok.gold : tok.muted, textTransform: 'uppercase' }}>
+              <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.1, color: on ? tok.gold : tok.muted, textTransform: 'uppercase' }}>
                 {label}
               </Text>
             </Pressable>
@@ -346,13 +346,13 @@ export default function SeshatSessionsScreen() {
                     <Search size={20} color={tok.muted} />
                   </View>
                   <Text style={{
-                    fontFamily: fontHead(lang), fontSize: 16, color: tok.bone,
+                    fontFamily: fontHead(lang), fontSize: 17, color: tok.bone,
                     textAlign: 'center', letterSpacing: -0.2,
                   }}>
                     {lang === 'ar' ? 'لا توجد نتائج' : 'No matches'}
                   </Text>
                   <Text style={{
-                    fontFamily: fontBody(lang), fontSize: 13, lineHeight: 19, color: tok.muted,
+                    fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: tok.muted,
                     textAlign: 'center', paddingHorizontal: 6,
                   }}>
                     {lang === 'ar'
@@ -378,7 +378,7 @@ export default function SeshatSessionsScreen() {
                     {lang === 'ar' ? 'لا توجد محادثات بعد' : 'No conversations yet'}
                   </Text>
                   <Text style={{
-                    fontFamily: fontBody(lang), fontSize: 13.5, lineHeight: 20, color: tok.muted,
+                    fontFamily: fontBody(lang), fontSize: 14, lineHeight: 22, color: tok.muted,
                     textAlign: 'center', paddingHorizontal: 6,
                   }}>
                     {filter === 'maat'
@@ -403,7 +403,7 @@ export default function SeshatSessionsScreen() {
             groups.map((group) => (
               <View key={group.key} style={{ marginBottom: 12 }}>
                 <Text style={{
-                  fontFamily: fontMono(), fontSize: 10, letterSpacing: 1.2,
+                  fontFamily: fontMono(), fontSize: 12, letterSpacing: 1.2,
                   color: tok.muted, textTransform: 'uppercase',
                   marginBottom: 6, marginHorizontal: 4,
                   textAlign: lang === 'ar' ? 'right' : 'left',
@@ -436,7 +436,7 @@ export default function SeshatSessionsScreen() {
 
           {sessions.length > 0 && (
             <Text style={{
-              marginTop: 6, fontFamily: fontMono(), fontSize: 10, color: tok.muted,
+              marginTop: 6, fontFamily: fontMono(), fontSize: 12, color: tok.muted,
               textAlign: 'center',
             }}>
               {lang === 'ar' ? 'اضغط مطولاً على محادثة للمزيد' : 'Long-press a chat for more'}
@@ -514,7 +514,7 @@ function SessionRow({
               placeholder={lang === 'ar' ? 'عنوان المحادثة' : 'Chat title'}
               placeholderTextColor={tok.muted}
               style={{
-                fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: tok.bone,
+                fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone,
                 padding: 0, paddingVertical: 2,
                 borderBottomWidth: 1, borderBottomColor: tok.gold,
                 textAlign: lang === 'ar' ? 'right' : 'left',
@@ -526,7 +526,7 @@ function SessionRow({
               <Text
                 numberOfLines={1}
                 style={{
-                  fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: tok.bone,
+                  fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone,
                   textAlign: lang === 'ar' ? 'right' : 'left',
                 }}
               >
@@ -534,7 +534,7 @@ function SessionRow({
               </Text>
               <Text style={{
                 marginTop: 2,
-                fontFamily: fontMono(), fontSize: 10.5, color: tok.muted,
+                fontFamily: fontMono(), fontSize: 12, color: tok.muted,
                 textAlign: lang === 'ar' ? 'right' : 'left',
               }}>
                 {formatRelative(s.lastMessageAt, lang)} · {s.messageCount} {lang === 'ar' ? 'رسالة' : 'msgs'}

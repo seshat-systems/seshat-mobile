@@ -44,8 +44,8 @@ export default function HoldingScreen() {
   };
   const row = (label: string, value: string, color?: string) => (
     <View key={label} style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between' }}>
-      <Text style={{ fontFamily: fontBody(lang), fontSize: 13, color: tok.muted }}>{label}</Text>
-      <Text style={{ fontFamily: fontMono('regular'), fontSize: 13, color: color ?? tok.bone }}>{value}</Text>
+      <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted }}>{label}</Text>
+      <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: color ?? tok.bone }}>{value}</Text>
     </View>
   );
 
@@ -54,8 +54,8 @@ export default function HoldingScreen() {
       <ScreenScroll contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: insets.bottom + 40, paddingTop: 8, gap: 12 }} showsVerticalScrollIndicator={false}>
         <RCard accent padding={18}>
           <REyebrow style={{ marginBottom: 6, textAlign: ar ? 'right' : 'left' }}>{ar ? 'القيمة الآن' : 'Worth now'}</REyebrow>
-          <Text style={{ fontFamily: fontMono('medium'), fontSize: 28, color: tok.bone, textAlign: ar ? 'right' : 'left', writingDirection: 'ltr' }}>{h.value !== null ? n0(h.value) : '—'} <Text style={{ fontSize: 14, color: tok.muted }}>{h.currency}</Text></Text>
-          {h.gain !== null && <Text style={{ marginTop: 6, fontFamily: fontMono('regular'), fontSize: 15, color: g >= 0 ? '#6FCF97' : tok.alertText, textAlign: ar ? 'right' : 'left' }}>
+          <Text style={{ fontFamily: fontMono('medium'), fontSize: 28, color: tok.bone, textAlign: ar ? 'right' : 'left', writingDirection: 'ltr' }}>{h.value !== null ? n0(h.value) : '—'} <Text style={{ fontSize: 16, color: tok.muted }}>{h.currency}</Text></Text>
+          {h.gain !== null && <Text style={{ marginTop: 6, fontFamily: fontMono('regular'), fontSize: 16, color: g >= 0 ? '#6FCF97' : tok.alertText, textAlign: ar ? 'right' : 'left' }}>
             {g >= 0 ? (ar ? 'مكسب ' : 'Gain ') : (ar ? 'خسارة ' : 'Loss ')}{g >= 0 ? '+' : '−'}{n0(Math.abs(g))}{h.gainPct !== null ? `  (${g >= 0 ? '+' : '−'}${Math.abs(h.gainPct)}%)` : ''}</Text>}
           <RangeChart path={`/savings/${h.id}/history`} refreshKey={`${h.cost}-${h.quantity}`} />
           <View style={{ marginTop: 14, gap: 6 }}>
@@ -94,8 +94,8 @@ export default function HoldingScreen() {
           <View style={{ gap: 8 }}>
             {[...h.lots].reverse().map((l, i) => (
               <View key={i} style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between' }}>
-                <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted }}>{l.date.slice(0, 10)}</Text>
-                <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: l.kind === 'buy' ? tok.bone : '#6FCF97' }}>
+                <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: tok.muted }}>{l.date.slice(0, 10)}</Text>
+                <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: l.kind === 'buy' ? tok.bone : '#6FCF97' }}>
                   {l.kind === 'buy' ? (ar ? 'شراء' : 'Bought') : (ar ? 'بيع' : 'Sold')} {l.quantity} {h.unit} @ {n0(l.unitPrice)}{l.fees > 0 ? ` + ${n0(l.fees)} ${h.type === 'gold' && l.kind === 'buy' ? (ar ? 'مصنعية' : 'masna3ya') : (ar ? 'رسوم' : 'fees')}` : ''}
                 </Text>
               </View>

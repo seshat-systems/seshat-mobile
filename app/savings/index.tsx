@@ -60,8 +60,8 @@ export default function SavingsScreen() {
         {ov && ov.holdings.length === 0 ? (
           <View style={{ paddingTop: 40, alignItems: 'center', gap: 8 }}>
             <Coins size={28} color={tok.muted} />
-            <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 16 }}>{ar ? 'لا مدخرات بعد.' : 'Nothing saved here yet.'}</Text>
-            <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 13, textAlign: 'center', maxWidth: 290, lineHeight: 19 }}>
+            <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 17 }}>{ar ? 'لا مدخرات بعد.' : 'Nothing saved here yet.'}</Text>
+            <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 14, textAlign: 'center', maxWidth: 290, lineHeight: 21 }}>
               {ar ? 'اشتريت ذهباً أو دولاراً أو استثمرت في شيء؟ أضفه ليتتبّع سيشات قيمته ومكسبك أو خسارتك.' : 'Bought gold or dollars, or invested in something? Add it and Seshat tracks its value and what you gained or lost.'}
             </Text>
             <View style={{ marginTop: 14, alignSelf: 'center' }}><RButton onPress={() => router.push('/savings/new' as never)}>{ar ? 'أضف ادخاراً' : 'Add a saving'}</RButton></View>
@@ -70,15 +70,15 @@ export default function SavingsScreen() {
           <>
             <RCard accent padding={18}>
               <REyebrow style={{ marginBottom: 6, textAlign: ar ? 'right' : 'left' }}>{ar ? 'القيمة الآن' : 'Worth now'}</REyebrow>
-              <Text style={{ fontFamily: fontMono('medium'), fontSize: 30, color: tok.bone, textAlign: ar ? 'right' : 'left', writingDirection: 'ltr' }}>{n0(ov.value)} <Text style={{ fontSize: 14, color: tok.muted }}>{ov.currency}</Text></Text>
+              <Text style={{ fontFamily: fontMono('medium'), fontSize: 30, color: tok.bone, textAlign: ar ? 'right' : 'left', writingDirection: 'ltr' }}>{n0(ov.value)} <Text style={{ fontSize: 16, color: tok.muted }}>{ov.currency}</Text></Text>
               <View style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 16, marginTop: 10 }}>
-                <View><REyebrow>{ar ? 'المستثمَر' : 'Invested'}</REyebrow><Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: tok.bone }}>{n0(ov.cost)}</Text></View>
+                <View><REyebrow>{ar ? 'المستثمَر' : 'Invested'}</REyebrow><Text style={{ fontFamily: fontMono('regular'), fontSize: 16, color: tok.bone }}>{n0(ov.cost)}</Text></View>
                 <View><REyebrow>{up ? (ar ? 'مكسب' : 'Gain') : (ar ? 'خسارة' : 'Loss')}</REyebrow>
-                  <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: gainColor }}>{up ? '+' : '−'}{n0(Math.abs(ov.gain))}{ov.gainPct !== null ? `  (${up ? '+' : '−'}${Math.abs(ov.gainPct)}%)` : ''}</Text></View>
-                {ov.realized !== 0 && <View><REyebrow>{ar ? 'محقَّق' : 'Realised'}</REyebrow><Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: ov.realized >= 0 ? '#6FCF97' : tok.alertText }}>{ov.realized >= 0 ? '+' : '−'}{n0(Math.abs(ov.realized))}</Text></View>}
+                  <Text style={{ fontFamily: fontMono('regular'), fontSize: 16, color: gainColor }}>{up ? '+' : '−'}{n0(Math.abs(ov.gain))}{ov.gainPct !== null ? `  (${up ? '+' : '−'}${Math.abs(ov.gainPct)}%)` : ''}</Text></View>
+                {ov.realized !== 0 && <View><REyebrow>{ar ? 'محقَّق' : 'Realised'}</REyebrow><Text style={{ fontFamily: fontMono('regular'), fontSize: 16, color: ov.realized >= 0 ? '#6FCF97' : tok.alertText }}>{ov.realized >= 0 ? '+' : '−'}{n0(Math.abs(ov.realized))}</Text></View>}
               </View>
               <RangeChart path="/savings/history/portfolio" refreshKey={`${ov.cost}-${ov.holdings.length}`} />
-              {ov.stale && <Text style={{ marginTop: 8, fontFamily: fontBody(lang), fontSize: 12, color: tok.alertText, textAlign: ar ? 'right' : 'left' }}>{ar ? 'بعض الأسعار غير متاحة الآن، ويُحسب ما دفعته.' : 'Some prices are not available right now; those are counted at what you paid.'}</Text>}
+              {ov.stale && <Text style={{ marginTop: 8, fontFamily: fontBody(lang), fontSize: 14, color: tok.alertText, textAlign: ar ? 'right' : 'left' }}>{ar ? 'بعض الأسعار غير متاحة الآن، ويُحسب ما دفعته.' : 'Some prices are not available right now; those are counted at what you paid.'}</Text>}
             </RCard>
 
             {ov.allocation.length > 1 && (
@@ -88,7 +88,7 @@ export default function SavingsScreen() {
                   {ov.allocation.map((a, i) => <View key={a.type} style={{ width: `${a.share}%`, backgroundColor: ['#C9A84C', '#8FB8DE', '#B58FDE', '#9C9A92'][i % 4] }} />)}
                 </View>
                 <View style={{ flexDirection: ar ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: 14, marginTop: 10 }}>
-                  {ov.allocation.map((a, i) => <Text key={a.type} style={{ fontFamily: fontMono('regular'), fontSize: 11, color: tok.muted }}><Text style={{ color: ['#C9A84C', '#8FB8DE', '#B58FDE', '#9C9A92'][i % 4] }}>● </Text>{typeName(a.type, ar)} {a.share}%</Text>)}
+                  {ov.allocation.map((a, i) => <Text key={a.type} style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted }}><Text style={{ color: ['#C9A84C', '#8FB8DE', '#B58FDE', '#9C9A92'][i % 4] }}>● </Text>{typeName(a.type, ar)} {a.share}%</Text>)}
                 </View>
               </RCard>
             )}
@@ -97,8 +97,8 @@ export default function SavingsScreen() {
               <Pressable onPress={() => { const next = !alerts; setAlerts(next); apiFetch('/me', { method: 'PATCH', body: JSON.stringify({ savingsAlerts: next }) }).catch(() => setAlerts(!next)); }}
                 style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? 'تنبيه أسبوعي عند تغيّر مدخراتك' : 'Weekly alert when your savings move'}</Text>
-                  <Text style={{ fontFamily: fontBody(lang), fontSize: 12, color: tok.muted, marginTop: 2, textAlign: ar ? 'right' : 'left' }}>{ar ? 'عند تغيّر القيمة ٥٪ أو أكثر' : 'When the total moves 5% or more'}</Text>
+                  <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? 'تنبيه أسبوعي عند تغيّر مدخراتك' : 'Weekly alert when your savings move'}</Text>
+                  <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, marginTop: 2, textAlign: ar ? 'right' : 'left' }}>{ar ? 'عند تغيّر القيمة ٥٪ أو أكثر' : 'When the total moves 5% or more'}</Text>
                 </View>
                 <View style={{ width: 46, height: 26, borderRadius: 13, backgroundColor: alerts ? tok.gold : tok.elevated, padding: 3, alignItems: alerts ? 'flex-end' : 'flex-start' }}>
                   <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: alerts ? tok.void : tok.muted }} />
@@ -115,12 +115,12 @@ export default function SavingsScreen() {
                 <Pressable key={h.id} onPress={() => router.push(`/savings/${h.id}` as never)} style={({ pressed }) => ({ opacity: pressed ? 0.9 : 1 })}>
                   <RCard padding={16}>
                     <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>
-                      <Text style={{ flex: 1, fontFamily: fontBody(lang, 'medium'), fontSize: 15, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{h.name}</Text>
-                      <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: tok.bone }}>{h.value !== null ? n0(h.value) : '—'} {ov.currency}</Text>
+                      <Text style={{ flex: 1, fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{h.name}</Text>
+                      <Text style={{ fontFamily: fontMono('regular'), fontSize: 16, color: tok.bone }}>{h.value !== null ? n0(h.value) : '—'} {ov.currency}</Text>
                     </View>
                     <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 4 }}>
-                      <Text style={{ fontFamily: fontMono('regular'), fontSize: 11, color: tok.muted }}>{h.quantity} {h.unit}</Text>
-                      {h.gain !== null && <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: g >= 0 ? '#6FCF97' : tok.alertText }}>{g >= 0 ? '+' : '−'}{n0(Math.abs(g))}{h.gainPct !== null ? `  (${g >= 0 ? '+' : '−'}${Math.abs(h.gainPct)}%)` : ''}</Text>}
+                      <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted }}>{h.quantity} {h.unit}</Text>
+                      {h.gain !== null && <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: g >= 0 ? '#6FCF97' : tok.alertText }}>{g >= 0 ? '+' : '−'}{n0(Math.abs(g))}{h.gainPct !== null ? `  (${g >= 0 ? '+' : '−'}${Math.abs(h.gainPct)}%)` : ''}</Text>}
                     </View>
                   </RCard>
                 </Pressable>

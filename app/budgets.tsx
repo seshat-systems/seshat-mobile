@@ -88,7 +88,7 @@ export default function BudgetsScreen() {
           <View style={{ gap: 10 }}>
             {categories.length === 0 ? (
               <Text style={{
-                color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
+                color: tok.muted, fontFamily: fontBody(lang), fontSize: 16,
                 textAlign: 'center', marginTop: 40,
               }}>
                 {lang === 'ar' ? 'لا توجد فئات بعد.' : 'No categories yet.'}
@@ -157,20 +157,20 @@ function BudgetRow({
             <Text
               numberOfLines={1}
               style={{
-                fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: tok.bone,
+                fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone,
                 textAlign: lang === 'ar' ? 'right' : 'left',
               }}
             >{lang === 'ar' && cat.nameAr ? cat.nameAr : cat.nameEn}</Text>
             {set ? (
               <Text style={{
-                marginTop: 3, color: tok.muted, fontFamily: fontMono('regular'), fontSize: 11,
+                marginTop: 3, color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12,
                 textAlign: lang === 'ar' ? 'right' : 'left', writingDirection: 'ltr',
               }}>
                 {formatAmount(budget!.spent ?? 0, { decimals: 0 })} / {formatAmount(budget!.amount, { decimals: 0 })} {currencyLabel(budget!.currency, lang)}
               </Text>
             ) : (
               <Text style={{
-                marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 12,
+                marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
                 textAlign: lang === 'ar' ? 'right' : 'left',
               }}>{lang === 'ar' ? 'لم تُحدّد' : 'Not set. Tap to add'}</Text>
             )}
@@ -282,7 +282,7 @@ function EditSheet({
               onChange={(v) => setAmount(v.replace(/[^0-9.]/g, ''))}
               placeholder="0"
               secondary={
-                <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 13 }}>
+                <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 14 }}>
                   {currencyLabel(currency, lang)}
                 </Text>
               }

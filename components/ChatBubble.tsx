@@ -173,7 +173,7 @@ function ChatBubbleInner({
           }}>
             <View style={{ width: 5, height: 5, borderRadius: 3, backgroundColor: tok.gold }} />
             <Text style={{
-              fontFamily: fontMono('regular'), fontSize: 9.5, letterSpacing: 1.6,
+              fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.6,
               color: tok.gold, textTransform: 'uppercase',
             }}>
               {lang === 'ar' ? 'سيشات' : 'Seshat'}
@@ -209,7 +209,7 @@ function ChatBubbleInner({
             <Text style={{
               flexShrink: 1,
               color: isAssistant ? tok.bone : tok.void,
-              fontFamily: fontBody(lang), fontSize: lang === 'ar' ? 15 : 14, lineHeight: 22,
+              fontFamily: fontBody(lang), fontSize: lang === 'ar' ? 15 : 14, lineHeight: 25,
               textAlign: lang === 'ar' ? 'right' : 'left',
               writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
             }}>

@@ -341,7 +341,7 @@ export default function ProfileScreen() {
                     placeholder={lang === 'ar' ? 'الاسم بالعربي (للترحيب)' : 'Arabic name (for greetings)'}
                     placeholderTextColor={tok.muted}
                     style={{
-                      fontFamily: fontBody(lang), fontSize: 13, color: tok.muted,
+                      fontFamily: fontBody(lang), fontSize: 14, color: tok.muted,
                       padding: 0, marginTop: 6, textAlign: 'right', writingDirection: 'rtl',
                     }}
                   />
@@ -681,7 +681,7 @@ export default function ProfileScreen() {
           <Text style={{
             color: tok.muted,
             fontFamily: fontMono('regular'),
-            fontSize: 10,
+            fontSize: 12,
             letterSpacing: 1.4,
           }}>
             {dangerOpen
@@ -694,13 +694,13 @@ export default function ProfileScreen() {
           <RCard accent style={{ marginTop: 4, marginBottom: 24 }}>
             <View style={{ gap: 12 }}>
               <Text style={{
-                color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 14,
+                color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 16,
                 textAlign: lang === 'ar' ? 'right' : 'left',
               }}>
                 {lang === 'ar' ? 'حذف الحساب نهائياً' : 'Delete account permanently'}
               </Text>
               <Text style={{
-                color: tok.muted, fontFamily: fontBody(lang), fontSize: 12, lineHeight: 18,
+                color: tok.muted, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 20,
                 textAlign: lang === 'ar' ? 'right' : 'left',
                 writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
               }}>
@@ -809,15 +809,15 @@ function AccountCard({ profile }: { profile: Profile }) {
               borderBottomColor: tok.shellBorder,
             }}
           >
-            <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 11, letterSpacing: 1.2, textTransform: ar ? 'none' : 'uppercase' }}>
+            <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2, textTransform: ar ? 'none' : 'uppercase' }}>
               {r.label}
             </Text>
-            <Text style={{ color: tok.bone, fontFamily: fontBody(lang), fontSize: 14 }}>{r.value}</Text>
+            <Text style={{ color: tok.bone, fontFamily: fontBody(lang), fontSize: 16 }}>{r.value}</Text>
           </View>
         ))}
         {profile.referralCode ? (
           <View style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 14 }}>
-            <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 11, letterSpacing: 1.2, textTransform: ar ? 'none' : 'uppercase' }}>
+            <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2, textTransform: ar ? 'none' : 'uppercase' }}>
               {ar ? 'رمز الإحالة' : 'Referral code'}
             </Text>
             <Pressable
@@ -827,7 +827,7 @@ function AccountCard({ profile }: { profile: Profile }) {
               accessibilityLabel={ar ? 'نسخ رمز الإحالة' : 'Copy referral code'}
               style={({ pressed }) => ({ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 8, opacity: pressed ? 0.6 : 1 })}
             >
-              <Text style={{ color: tok.gold, fontFamily: fontMono('medium'), fontSize: 14, letterSpacing: 2.4 }}>
+              <Text style={{ color: tok.gold, fontFamily: fontMono('medium'), fontSize: 16, letterSpacing: 2.4 }}>
                 {profile.referralCode}
               </Text>
               {copied === 'code' ? <Check size={15} color={tok.gold} /> : <Copy size={15} color={tok.muted} />}
@@ -836,7 +836,7 @@ function AccountCard({ profile }: { profile: Profile }) {
         ) : null}
         {link ? (
           <View style={{ paddingVertical: 14, borderTopWidth: 1, borderTopColor: tok.shellBorder }}>
-            <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 11, letterSpacing: 1.2, textTransform: ar ? 'none' : 'uppercase', textAlign: ar ? 'right' : 'left' }}>
+            <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2, textTransform: ar ? 'none' : 'uppercase', textAlign: ar ? 'right' : 'left' }}>
               {ar ? 'رابط الإحالة' : 'Referral link'}
             </Text>
             <Pressable
@@ -848,7 +848,7 @@ function AccountCard({ profile }: { profile: Profile }) {
                 borderRadius: 12, backgroundColor: tok.elevated, opacity: pressed ? 0.7 : 1,
               })}
             >
-              <Text numberOfLines={1} style={{ flex: 1, color: tok.gold, fontFamily: fontMono('regular'), fontSize: 12.5, textAlign: 'left', writingDirection: 'ltr' }}>
+              <Text numberOfLines={1} style={{ flex: 1, color: tok.gold, fontFamily: fontMono('regular'), fontSize: 14, textAlign: 'left', writingDirection: 'ltr' }}>
                 {link.replace('https://', '')}
               </Text>
               {copied === 'link' ? <Check size={16} color={tok.gold} /> : <Copy size={16} color={tok.muted} />}
@@ -885,7 +885,7 @@ function BuildFooter() {
       <Text style={{
         color: tok.muted,
         fontFamily: fontMono('regular'),
-        fontSize: 10, letterSpacing: 1.4,
+        fontSize: 12, letterSpacing: 1.4,
         textTransform: lang === 'ar' ? 'none' : 'uppercase',
       }}>
         {BRAND.name} · v{appVersion}
@@ -893,7 +893,7 @@ function BuildFooter() {
       <Text style={{
         color: tok.muted,
         fontFamily: fontMono('regular'),
-        fontSize: 9, letterSpacing: 0.6, opacity: 0.7,
+        fontSize: 12, letterSpacing: 0.6, opacity: 0.7,
       }}>
         {channel} · {updateShort}{createdAt ? ` · ${createdAt}` : ''}
       </Text>
@@ -934,14 +934,14 @@ function PlanRow({
         <Text
           numberOfLines={1}
           style={{
-            color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 14,
+            color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 16,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}
         >{title}</Text>
         <Text
           numberOfLines={1}
           style={{
-            marginTop: 2, color: tok.muted, fontFamily: fontBody(lang), fontSize: 12,
+            marginTop: 2, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}
         >{hint}</Text>
@@ -1109,7 +1109,7 @@ function ToggleHalf({
       <Icon size={14} color={active ? tok.void : tok.bone} strokeWidth={1.6} />
       <Text style={{
         color: active ? tok.void : tok.bone,
-        fontFamily: fontBody(lang, 'semibold'), fontSize: 12,
+        fontFamily: fontBody(lang, 'semibold'), fontSize: 14,
       }}>{label}</Text>
     </Pressable>
   );
@@ -1129,7 +1129,7 @@ function LangToggle({ lang, onChange }: { lang: 'en' | 'ar'; onChange: (l: 'en' 
     >
       <Globe size={14} color={tok.gold} strokeWidth={1.6} />
       <Text style={{
-        color: tok.bone, fontFamily: fontMono('medium'), fontSize: 12, letterSpacing: 1.2,
+        color: tok.bone, fontFamily: fontMono('medium'), fontSize: 14, letterSpacing: 1.2,
       }}>{lang === 'ar' ? 'العربية' : 'EN'}</Text>
     </Pressable>
   );

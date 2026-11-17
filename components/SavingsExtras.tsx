@@ -40,7 +40,7 @@ export function PriceTargets() {
         <REyebrow>{ar ? 'أسعار مستهدفة' : 'Price targets'}</REyebrow>
         <Pressable onPress={() => setAdding((v) => !v)} hitSlop={8} style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 6 }}>
           <BellRing size={14} color={tok.gold} />
-          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 13, color: tok.gold }}>{ar ? 'نبّهني عندما…' : 'Tell me when…'}</Text>
+          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.gold }}>{ar ? 'نبّهني عندما…' : 'Tell me when…'}</Text>
         </Pressable>
       </View>
       {adding && (
@@ -51,18 +51,18 @@ export function PriceTargets() {
             <RPill active={dir === 'below'} onPress={() => setDir('below')}>{ar ? 'ينخفض إلى' : 'goes down to'}</RPill>
           </View>
           <RField label={ar ? 'السعر' : 'Price'} value={target} onChange={(v) => setTarget(v.replace(/[^0-9.]/g, ''))} keyboardType="decimal-pad" mono />
-          {err ? <Text style={{ fontFamily: fontBody(lang), fontSize: 12, color: tok.alertText }}>{err}</Text> : null}
+          {err ? <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.alertText }}>{err}</Text> : null}
           <RButton full onPress={add} disabled={!(num(target) > 0)}>{ar ? 'احفظ' : 'Save'}</RButton>
         </View>
       )}
       {alerts.length === 0 && !adding ? (
-        <Text style={{ fontFamily: fontBody(lang), fontSize: 13, lineHeight: 19, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{ar ? 'لا أسعار مستهدفة بعد. اختر الذهب أو عملة وسعراً، وسيخبرك سيشات عند بلوغه.' : 'No targets yet. Pick gold or a currency and a price, and Seshat tells you when it is reached.'}</Text>
+        <Text style={{ fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{ar ? 'لا أسعار مستهدفة بعد. اختر الذهب أو عملة وسعراً، وسيخبرك سيشات عند بلوغه.' : 'No targets yet. Pick gold or a currency and a price, and Seshat tells you when it is reached.'}</Text>
       ) : null}
       {alerts.map((a) => (
         <View key={a.id} style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 10, paddingVertical: 6 }}>
           <View style={{ flex: 1 }}>
-            <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{name(a.label)} · {a.direction === 'above' ? (ar ? 'ارتفاع إلى' : 'up to') : (ar ? 'انخفاض إلى' : 'down to')} {n2(a.target)} {a.currency}</Text>
-            <Text style={{ fontFamily: fontMono('regular'), fontSize: 11.5, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+            <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{name(a.label)} · {a.direction === 'above' ? (ar ? 'ارتفاع إلى' : 'up to') : (ar ? 'انخفاض إلى' : 'down to')} {n2(a.target)} {a.currency}</Text>
+            <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
               {a.firedAt ? (ar ? `بلغ ${n2(a.firedPrice ?? 0)}` : `Reached at ${n2(a.firedPrice ?? 0)}`) : a.price !== null ? (ar ? `الآن ${n2(a.price)}` : `Now ${n2(a.price)}`) : ''}
             </Text>
           </View>
@@ -89,26 +89,26 @@ export function ZakatCard() {
       <REyebrow style={{ marginBottom: 8, textAlign: ar ? 'right' : 'left' }}>{ar ? 'تقدير الزكاة' : 'Zakat estimate'}</REyebrow>
       {z.nisab > 0 ? (
         <>
-          <Text style={{ fontFamily: fontBody(lang), fontSize: 14, lineHeight: 20, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
+          <Text style={{ fontFamily: fontBody(lang), fontSize: 16, lineHeight: 22, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
             {z.reached
               ? (ar ? `نحو ${n(z.due)} ${z.currency} إذا مرّ على ما تملكه عام هجري كامل.` : `About ${n(z.due)} ${z.currency} if you have held this for a full lunar year.`)
               : (ar ? 'ما تملكه دون النصاب، فلا زكاة عليه الآن.' : 'What you hold is below the nisab, so no zakat is due on it now.')}
           </Text>
           <Pressable onPress={() => setOpen((v) => !v)} hitSlop={8} style={{ marginTop: 8 }}>
-            <Text style={{ fontFamily: fontMono('regular'), fontSize: 11, letterSpacing: 0.8, color: tok.gold, textAlign: ar ? 'right' : 'left' }}>{open ? (ar ? 'إخفاء الحساب' : 'HIDE THE WORKING') : (ar ? 'كيف حُسب هذا؟' : 'HOW IS THIS WORKED OUT?')}</Text>
+            <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 0.8, color: tok.gold, textAlign: ar ? 'right' : 'left' }}>{open ? (ar ? 'إخفاء الحساب' : 'HIDE THE WORKING') : (ar ? 'كيف حُسب هذا؟' : 'HOW IS THIS WORKED OUT?')}</Text>
           </Pressable>
           {open && (
             <View style={{ marginTop: 10, gap: 6 }}>
               <Row label={ar ? 'النصاب (٨٥ جراماً من الذهب)' : 'Nisab (85 g of gold)'} value={`${n(z.nisab)} ${z.currency}`} />
               <Row label={ar ? 'ما تملكه (الحسابات والكاش والمدخرات، ناقص الديون)' : 'What you hold (accounts, cash, savings, minus debts)'} value={`${n(z.wealth)} ${z.currency}`} />
-              <Text style={{ fontFamily: fontBody(lang), fontSize: 11.5, lineHeight: 17, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+              <Text style={{ fontFamily: fontBody(lang), fontSize: 12, lineHeight: 19, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
                 {ar ? 'تقدير مما يعرفه سيشات اليوم. لا يعرف إن كان قد مرّ على المال عام هجري كامل، فتأكد من ذلك ومن التفاصيل مع من تثق به.' : 'An estimate from what Seshat knows today. It cannot tell whether you have held this for a full lunar year, so confirm that and the details with someone you trust.'}
               </Text>
             </View>
           )}
         </>
       ) : (
-        <Text style={{ fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{ar ? 'سعر الذهب غير متاح الآن، فلا يمكن حساب النصاب.' : 'The gold price is not available right now, so the nisab cannot be worked out.'}</Text>
+        <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{ar ? 'سعر الذهب غير متاح الآن، فلا يمكن حساب النصاب.' : 'The gold price is not available right now, so the nisab cannot be worked out.'}</Text>
       )}
     </RCard>
   );
@@ -119,8 +119,8 @@ function Row({ label, value }: { label: string; value: string }) {
   const ar = lang === 'ar';
   return (
     <View style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between', gap: 12 }}>
-      <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{label}</Text>
-      <Text style={{ fontFamily: fontMono('regular'), fontSize: 13, color: tok.bone }}>{value}</Text>
+      <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{label}</Text>
+      <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: tok.bone }}>{value}</Text>
     </View>
   );
 }

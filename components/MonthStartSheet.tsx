@@ -76,7 +76,7 @@ export function SetMonthStartSheet({
         </View>
 
         <Text style={{
-          fontFamily: fontBody(lang), fontSize: 13, lineHeight: 19, color: tok.muted,
+          fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: tok.muted,
           textAlign: ar ? 'right' : 'left',
         }}>
           {ar
@@ -99,7 +99,7 @@ export function SetMonthStartSheet({
                 })}
               >
                 <Text style={{
-                  fontFamily: fontMono(on ? 'medium' : 'regular'), fontSize: 12.5,
+                  fontFamily: fontMono(on ? 'medium' : 'regular'), fontSize: 14,
                   color: on ? tok.void : tok.muted,
                 }}>{d}</Text>
               </Pressable>
@@ -108,7 +108,7 @@ export function SetMonthStartSheet({
         </View>
 
         <Text style={{
-          textAlign: 'center', fontFamily: fontMono('regular'), fontSize: 12,
+          textAlign: 'center', fontFamily: fontMono('regular'), fontSize: 14,
         }}>
           <Text style={{ color: tok.muted }}>{ar ? 'شهرك: ' : 'Your month: '}</Text>
           <Text style={{ color: tok.gold }}>

@@ -105,7 +105,7 @@ export function HoldingForm({ onDone }: { onDone: () => void }) {
           <RPill active={!owned} onPress={() => { setOwned(false); setDate(today()); }}>{ar ? 'أشتريه الآن' : 'I am buying it now'}</RPill>
           <RPill active={owned} onPress={() => { setOwned(true); setPrice(''); }}>{ar ? 'أملكه من قبل' : 'I already own it'}</RPill>
         </View>
-        {owned && <Text style={{ fontFamily: fontBody(lang), fontSize: 12, color: '#9C9A92', lineHeight: 18, textAlign: ar ? 'right' : 'left' }}>{ar ? 'يُحسب من تاريخ شرائه ولا يتغير أي رصيد حساب. إن اشتريته على دفعات بأسعار مختلفة فأضف كل دفعة على حدة.' : 'It is counted from the date you bought it, and no account balance changes. If you bought it in several parts at different prices, add each part separately.'}</Text>}
+        {owned && <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: '#9C9A92', lineHeight: 20, textAlign: ar ? 'right' : 'left' }}>{ar ? 'يُحسب من تاريخ شرائه ولا يتغير أي رصيد حساب. إن اشتريته على دفعات بأسعار مختلفة فأضف كل دفعة على حدة.' : 'It is counted from the date you bought it, and no account balance changes. If you bought it in several parts at different prices, add each part separately.'}</Text>}
       </View>
       <View style={{ flexDirection: ar ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: 8 }}>
         {TYPES.map((t) => <RPill key={t} active={type === t} onPress={() => { setType(t); if (t === 'stock') setSymbol('COMI.CA'); else if (t === 'crypto') setSymbol('BTC'); else if (t === 'currency') setSymbol('USD'); }}>{typeLabel(t)}</RPill>)}
@@ -143,7 +143,7 @@ export function HoldingForm({ onDone }: { onDone: () => void }) {
         <RField label={type === 'gold' ? (ar ? 'سعر جرام الذهب عند الشراء (بدون المصنعية)' : 'Gold price per gram when you bought (without masna3ya)') : (ar ? `سعر الوحدة عند الشراء` : 'Price per unit when you bought')} value={price} onChange={(v) => setPrice(v.replace(/[^0-9.]/g, ''))} keyboardType="decimal-pad" mono />
         {quote !== null && (
           <Pressable onPress={() => setPrice(String(quote))}>
-            <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 13, color: '#C9A84C', textAlign: ar ? 'right' : 'left' }}>
+            <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: '#C9A84C', textAlign: ar ? 'right' : 'left' }}>
               {owned ? (ar ? `السعر يوم ${date}: ${quote.toLocaleString('en-US')} (اضغط للاستخدام)` : `Price on ${date}: ${quote.toLocaleString('en-US')} (tap to use)`) : (ar ? `سعر اليوم ${quote.toLocaleString('en-US')} (اضغط للاستخدام)` : `Today's price ${quote.toLocaleString('en-US')} (tap to use)`)}
             </Text>
           </Pressable>
@@ -158,7 +158,7 @@ export function HoldingForm({ onDone }: { onDone: () => void }) {
           {accts.filter((a) => a.kind !== 'cash').map((a) => <RPill key={a.id} active={move && acct === a.id} onPress={() => { setMove(true); setAcct(a.id); }}>{a.name}</RPill>)}
         </View>
       </View>}
-      {ok && <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: '#9C9A92', textAlign: ar ? 'right' : 'left' }}>
+      {ok && <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: '#9C9A92', textAlign: ar ? 'right' : 'left' }}>
         {ar ? `التكلفة ${Math.round(num(qty) * num(price) + fees).toLocaleString('en-US')}${fees > 0 ? ` · منها مصنعية ${Math.round(fees).toLocaleString('en-US')}` : ''}` : `Cost ${Math.round(num(qty) * num(price) + fees).toLocaleString('en-US')}${fees > 0 ? ` · masna3ya ${Math.round(fees).toLocaleString('en-US')} of it` : ''}`}
       </Text>}
       <RButton full onPress={save} disabled={!ok} loading={busy}>{ar ? 'احفظ' : 'Save'}</RButton>
@@ -210,7 +210,7 @@ export function TradeSheet({ visible, kind, holding, onClose, onDone }: { visibl
         <RField label={ar ? 'سعر الوحدة' : 'Price per unit'} value={price} onChange={(v) => setPrice(v.replace(/[^0-9.]/g, ''))} keyboardType="decimal-pad" mono />
         {old && pastQuote !== null && (
           <Pressable onPress={() => setPrice(String(pastQuote))}>
-            <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 13, color: '#C9A84C', textAlign: ar ? 'right' : 'left' }}>{ar ? `السعر يوم ${date}: ${pastQuote.toLocaleString('en-US')} (اضغط للاستخدام)` : `Price on ${date}: ${pastQuote.toLocaleString('en-US')} (tap to use)`}</Text>
+            <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: '#C9A84C', textAlign: ar ? 'right' : 'left' }}>{ar ? `السعر يوم ${date}: ${pastQuote.toLocaleString('en-US')} (اضغط للاستخدام)` : `Price on ${date}: ${pastQuote.toLocaleString('en-US')} (tap to use)`}</Text>
           </Pressable>
         )}
       </View>

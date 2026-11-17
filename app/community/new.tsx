@@ -46,7 +46,7 @@ export default function NewQuestionScreen() {
             {TAGS.map((t) => <RPill key={t} active={tag === t} onPress={() => setTag(t)}>{tagLabel(t, ar)}</RPill>)}
           </View>
         </View>
-        <Text style={{ fontFamily: fontBody(lang), fontSize: 12.5, lineHeight: 18, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+        <Text style={{ fontFamily: fontBody(lang), fontSize: 14, lineHeight: 20, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
           {ar ? 'يراه كل أعضاء سيشات باسمك المعروض. لا تضع أرقام حسابات أو بطاقات أو هواتف أو روابط.' : 'Every Seshat member sees it with your display name. Keep account, card and phone numbers, and links, out of it.'}
         </Text>
         <RButton full onPress={post} loading={busy} disabled={busy || title.trim().length < 8}>{ar ? 'انشر السؤال' : 'Post question'}</RButton>

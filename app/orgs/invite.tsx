@@ -84,7 +84,7 @@ export default function InviteScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Text style={{
-          fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, lineHeight: 19,
+          fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, lineHeight: 21,
           marginBottom: 24,
           textAlign: lang === 'ar' ? 'right' : 'left',
           writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
@@ -115,8 +115,8 @@ export default function InviteScreen() {
                 const on = role === r;
                 return (
                   <Pressable key={r} onPress={() => setRole(r)} style={{ padding: 12, borderRadius: 14, borderWidth: 1, borderColor: on ? tok.gold : tok.border, backgroundColor: on ? tok.glowShellBg : 'transparent' }}>
-                    <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{roleLabel(r, kind, ar)}</Text>
-                    <Text style={{ marginTop: 2, fontFamily: fontBody(lang), fontSize: 12, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{roleHint(r, kind, ar)}</Text>
+                    <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{roleLabel(r, kind, ar)}</Text>
+                    <Text style={{ marginTop: 2, fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{roleHint(r, kind, ar)}</Text>
                   </Pressable>
                 );
               })}
@@ -132,8 +132,8 @@ export default function InviteScreen() {
 
         <Text style={{
           marginTop: 18,
-          fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted, letterSpacing: 1.2,
-          textAlign: 'center', lineHeight: 16,
+          fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, letterSpacing: 1.2,
+          textAlign: 'center', lineHeight: 18,
           writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
         }}>
           {lang === 'ar'

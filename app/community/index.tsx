@@ -55,7 +55,7 @@ export default function CommunityScreen() {
   const Stat = ({ icon: Icon, n, hot }: { icon: typeof ChevronUp; n: number; hot?: boolean }) => (
     <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 4 }}>
       <Icon size={14} color={hot ? tok.gold : tok.muted} />
-      <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: hot ? tok.gold : tok.muted }}>{n}</Text>
+      <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: hot ? tok.gold : tok.muted }}>{n}</Text>
     </View>
   );
 
@@ -94,10 +94,10 @@ export default function CommunityScreen() {
         ) : items.length === 0 ? (
           <View style={{ paddingTop: 40, alignItems: 'center', gap: 8 }}>
             <Users size={28} color={tok.muted} />
-            <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 16, textAlign: 'center' }}>
+            <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 17, textAlign: 'center' }}>
               {q || tag || mine ? (ar ? 'لا نتائج.' : 'Nothing here.') : (ar ? 'لا أسئلة بعد.' : 'No questions yet.')}
             </Text>
-            <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 13, textAlign: 'center', maxWidth: 290, lineHeight: 19 }}>
+            <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 14, textAlign: 'center', maxWidth: 290, lineHeight: 21 }}>
               {ar ? 'كن أول من يسأل. سؤالك قد يفيد غيرك أيضاً.' : 'Be the first to ask. Your question may help someone else too.'}
             </Text>
             <View style={{ marginTop: 14, alignSelf: 'center' }}><RButton onPress={() => router.push('/community/new' as never)}>{ar ? 'اطرح سؤالاً' : 'Ask a question'}</RButton></View>
@@ -105,27 +105,27 @@ export default function CommunityScreen() {
         ) : items.map((it) => (
           <Pressable key={it.id} onPress={() => router.push(`/community/${it.id}` as never)} style={({ pressed }) => ({ opacity: pressed ? 0.9 : 1 })}>
             <RCard padding={16}>
-              <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15.5, lineHeight: 22, color: tok.bone, textAlign: it.lang === 'ar' ? 'right' : 'left', writingDirection: it.lang === 'ar' ? 'rtl' : 'ltr' }}>{it.title}</Text>
+              <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, lineHeight: 25, color: tok.bone, textAlign: it.lang === 'ar' ? 'right' : 'left', writingDirection: it.lang === 'ar' ? 'rtl' : 'ltr' }}>{it.title}</Text>
               {it.body ? (
-                <Text numberOfLines={3} style={{ marginTop: 6, fontFamily: fontBody(lang), fontSize: 13.5, lineHeight: 20, color: tok.muted, textAlign: it.lang === 'ar' ? 'right' : 'left', writingDirection: it.lang === 'ar' ? 'rtl' : 'ltr' }}>{it.body}</Text>
+                <Text numberOfLines={3} style={{ marginTop: 6, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 22, color: tok.muted, textAlign: it.lang === 'ar' ? 'right' : 'left', writingDirection: it.lang === 'ar' ? 'rtl' : 'ltr' }}>{it.body}</Text>
               ) : null}
               <View style={{ marginTop: 10, flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 14 }}>
                 <Stat icon={ChevronUp} n={it.votes} hot={it.myVote} />
                 <Stat icon={MessageCircle} n={it.answers} />
                 {it.accepted ? <CheckCircle2 size={15} color="#6FCF97" /> : null}
-                <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontMono('regular'), fontSize: 11, color: tok.muted, textAlign: ar ? 'left' : 'right' }}>
+                <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, textAlign: ar ? 'left' : 'right' }}>
                   {tagLabel(it.tag, ar)} · {it.mine ? (ar ? 'أنت' : 'You') : it.authorName} · {timeAgo(it.createdAt, ar)}
                 </Text>
               </View>
               {it.status === 'hidden' ? (
-                <Text style={{ marginTop: 8, fontFamily: fontBody(lang), fontSize: 12, color: tok.alertText, textAlign: ar ? 'right' : 'left' }}>{ar ? 'مخفي حتى تراجعه الإدارة.' : 'Hidden until the team reviews it.'}</Text>
+                <Text style={{ marginTop: 8, fontFamily: fontBody(lang), fontSize: 14, color: tok.alertText, textAlign: ar ? 'right' : 'left' }}>{ar ? 'مخفي حتى تراجعه الإدارة.' : 'Hidden until the team reviews it.'}</Text>
               ) : null}
             </RCard>
           </Pressable>
         ))}
         {busy && items && items.length > 0 ? <ActivityIndicator color={tok.gold} /> : null}
         <Pressable onPress={() => router.push('/community/blocked' as never)} style={{ alignSelf: 'center', paddingVertical: 8 }}>
-          <Text style={{ fontFamily: fontBody(lang), fontSize: 12.5, color: tok.muted }}>{ar ? 'الأعضاء المحظورون' : 'Blocked members'}</Text>
+          <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted }}>{ar ? 'الأعضاء المحظورون' : 'Blocked members'}</Text>
         </Pressable>
       </ScreenScroll>
     </PlanScreen>

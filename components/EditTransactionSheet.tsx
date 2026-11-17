@@ -138,7 +138,7 @@ export function EditTransactionSheet({ visible, editing, categories, onClose, on
         {/* Category */}
         <View>
           <Text style={{
-            fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted, letterSpacing: 1.4, marginBottom: 6,
+            fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, letterSpacing: 1.4, marginBottom: 6,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}>{lang === 'ar' ? 'التصنيف' : 'CATEGORY'}</Text>
           <ScrollView
@@ -163,7 +163,7 @@ export function EditTransactionSheet({ visible, editing, categories, onClose, on
                 >
                   <CategoryIconByKey iconKey={iconKeyForCategory(c)} size={16} color={active ? tok.void : tok.bone} />
                   <Text style={{
-                    fontFamily: fontBody(lang, active ? 'semibold' : 'medium'), fontSize: 13,
+                    fontFamily: fontBody(lang, active ? 'semibold' : 'medium'), fontSize: 14,
                     color: active ? tok.void : tok.bone,
                   }}>
                     {lang === 'ar' ? (c.nameAr ?? c.nameEn) : c.nameEn}
@@ -178,7 +178,7 @@ export function EditTransactionSheet({ visible, editing, categories, onClose, on
         {sources.length > 0 && (
           <View>
             <Text style={{
-              fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted, letterSpacing: 1.4, marginBottom: 6,
+              fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, letterSpacing: 1.4, marginBottom: 6,
               textAlign: lang === 'ar' ? 'right' : 'left',
             }}>{type === 'income' ? (lang === 'ar' ? 'استُلم في' : 'RECEIVED IN') : (lang === 'ar' ? 'دُفع من' : 'PAID FROM')}</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, flexDirection: lang === 'ar' ? 'row-reverse' : 'row' }}>
@@ -190,7 +190,7 @@ export function EditTransactionSheet({ visible, editing, categories, onClose, on
                     onPress={() => setCardId(active ? '' : c.id)}
                     style={{ paddingVertical: 8, paddingHorizontal: 12, borderRadius: 999, backgroundColor: active ? tok.gold : tok.elevated }}
                   >
-                    <Text style={{ fontFamily: fontBody(lang, active ? 'semibold' : 'medium'), fontSize: 13, color: active ? tok.void : tok.bone }}>{c.name}</Text>
+                    <Text style={{ fontFamily: fontBody(lang, active ? 'semibold' : 'medium'), fontSize: 14, color: active ? tok.void : tok.bone }}>{c.name}</Text>
                   </Pressable>
                 );
               })}
@@ -208,7 +208,7 @@ export function EditTransactionSheet({ visible, editing, categories, onClose, on
 
         {err ? (
           <Text style={{
-            fontFamily: fontBody(lang), fontSize: 13, color: tok.alertText, textAlign: 'center', marginTop: -4,
+            fontFamily: fontBody(lang), fontSize: 14, color: tok.alertText, textAlign: 'center', marginTop: -4,
           }}>{err}</Text>
         ) : null}
 

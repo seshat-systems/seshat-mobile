@@ -38,15 +38,15 @@ export function SalaryBanner({ onPress }: { onPress: () => void }) {
           </View>
           <View style={{ flex: 1 }}>
             <Text style={{
-              color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 14,
+              color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 16,
               textAlign: lang === 'ar' ? 'right' : 'left',
             }}>{headline}</Text>
             <Text style={{
-              marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 12,
+              marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
               textAlign: lang === 'ar' ? 'right' : 'left',
             }}>{sub}</Text>
           </View>
-          <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 14 }}>
+          <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 16 }}>
             {lang === 'ar' ? '←' : '→'}
           </Text>
         </View>
@@ -136,14 +136,14 @@ export function SetSalarySheet({
             <Text style={{
               fontFamily: fontHead(lang),
               fontSize: T.h5, color: tok.bone,
-              letterSpacing: lang === 'ar' ? 0 : -0.4, lineHeight: 28,
+              letterSpacing: lang === 'ar' ? 0 : -0.4, lineHeight: 31,
               textAlign: lang === 'ar' ? 'right' : 'left',
             }}>
               {lang === 'ar' ? 'كم يصلك شهرياً؟' : 'How much do you earn monthly?'}
             </Text>
             <Text style={{
-              marginTop: 6, color: tok.muted, fontFamily: fontBody(lang), fontSize: 13,
-              textAlign: lang === 'ar' ? 'right' : 'left', lineHeight: 19,
+              marginTop: 6, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
+              textAlign: lang === 'ar' ? 'right' : 'left', lineHeight: 21,
             }}>
               {lang === 'ar'
                 ? 'ستقارن سيشات صرفك بهذا الرقم. تقدر تعدّله متى ما شئت.'
@@ -168,7 +168,7 @@ export function SetSalarySheet({
                   writingDirection: 'ltr',
                 }}
               />
-              <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 18 }}>
+              <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 19 }}>
                 {currencyLabel(defaultCurrency, lang)}
               </Text>
             </View>

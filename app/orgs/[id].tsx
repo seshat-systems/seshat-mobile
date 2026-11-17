@@ -254,7 +254,7 @@ export default function OrgDetailScreen() {
                       <Image source={{ uri: m.avatarUrl }} style={{ width: 36, height: 36 }} />
                     ) : (
                       <Text style={{
-                        color: tok.gold, fontFamily: fontHead(lang), fontSize: 14,
+                        color: tok.gold, fontFamily: fontHead(lang), fontSize: 16,
                       }}>
                         {(m.displayName ?? m.email ?? '?')[0]?.toUpperCase()}
                       </Text>
@@ -264,7 +264,7 @@ export default function OrgDetailScreen() {
                     <Text
                       numberOfLines={1}
                       style={{
-                        fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: tok.bone,
+                        fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone,
                         textAlign: lang === 'ar' ? 'right' : 'left',
                       }}
                     >
@@ -274,7 +274,7 @@ export default function OrgDetailScreen() {
                       numberOfLines={1}
                       style={{
                         marginTop: 2,
-                        fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted, letterSpacing: 1.2,
+                        fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, letterSpacing: 1.2,
                         textAlign: lang === 'ar' ? 'right' : 'left',
                       }}
                     >
@@ -286,17 +286,17 @@ export default function OrgDetailScreen() {
                   </View>
                   {manage && org && invitableRoles(org.role, kind).some((r) => r !== m.role && canAssignRole(org.role, m.role, r)) && (
                     <Pressable onPress={() => changeRole(m)} hitSlop={8} style={{ paddingHorizontal: 8, paddingVertical: 6 }}>
-                      <Text style={{ fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 1.2, color: tok.gold }}>{ar ? 'الدور' : 'ROLE'}</Text>
+                      <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2, color: tok.gold }}>{ar ? 'الدور' : 'ROLE'}</Text>
                     </Pressable>
                   )}
                   {manage && kind === 'team' && m.role === 'member' && (
                     <Pressable onPress={() => setLimitFor(m)} hitSlop={8} style={{ paddingHorizontal: 8, paddingVertical: 6 }}>
-                      <Text style={{ fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 1.2, color: tok.gold }}>{ar ? 'الحد' : 'LIMIT'}</Text>
+                      <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2, color: tok.gold }}>{ar ? 'الحد' : 'LIMIT'}</Text>
                     </Pressable>
                   )}
                   {manage && kind === 'family' && m.role === 'child' && (
                     <Pressable onPress={() => { setAllowPeriod(allowances.find((a) => a.childId === m.userId)?.period ?? 'week'); setAllowFor(m); }} hitSlop={8} style={{ paddingHorizontal: 8, paddingVertical: 6 }}>
-                      <Text style={{ fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 1.2, color: tok.gold }}>{ar ? 'المصروف' : 'ALLOWANCE'}</Text>
+                      <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2, color: tok.gold }}>{ar ? 'المصروف' : 'ALLOWANCE'}</Text>
                     </Pressable>
                   )}
                   {manage && org && canRemoveMember(org.role, m.role) && (
@@ -343,7 +343,7 @@ export default function OrgDetailScreen() {
                         <Text
                           numberOfLines={1}
                           style={{
-                            fontFamily: fontBody(lang, 'medium'), fontSize: 13, color: tok.bone,
+                            fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: tok.bone,
                             textAlign: lang === 'ar' ? 'right' : 'left',
                           }}
                         >
@@ -353,7 +353,7 @@ export default function OrgDetailScreen() {
                           numberOfLines={1}
                           style={{
                             marginTop: 2,
-                            fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted, letterSpacing: 1.2,
+                            fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, letterSpacing: 1.2,
                             textAlign: lang === 'ar' ? 'right' : 'left',
                           }}
                         >
@@ -391,16 +391,16 @@ export default function OrgDetailScreen() {
                 <RCard padding={0} style={{ paddingHorizontal: 16, marginBottom: 18 }}>
                   <Pressable onPress={() => setApprovalSheet(true)} style={{ paddingVertical: 14, flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: tok.border }}>
                     <View style={{ flex: 1 }}>
-                      <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? 'حدّ الموافقة' : 'Approval limit'}</Text>
-                      <Text style={{ marginTop: 2, fontFamily: fontBody(lang), fontSize: 12, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+                      <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? 'حدّ الموافقة' : 'Approval limit'}</Text>
+                      <Text style={{ marginTop: 2, fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
                         {org?.approvalThreshold ? (ar ? `مصاريف الأعضاء من ${Math.round(org.approvalThreshold).toLocaleString('en-US')} فأكثر تنتظر موافقتك` : `Member expenses of ${Math.round(org.approvalThreshold).toLocaleString('en-US')} or more wait for your approval`) : (ar ? 'متوقف. حدّد مبلغاً لتفعيله.' : 'Off. Set an amount to turn it on.')}
                       </Text>
                     </View>
-                    <Text style={{ fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 1.2, color: tok.gold }}>{ar ? 'تغيير' : 'CHANGE'}</Text>
+                    <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2, color: tok.gold }}>{ar ? 'تغيير' : 'CHANGE'}</Text>
                   </Pressable>
                   <Pressable onPress={() => router.push({ pathname: '/orgs/[id]/approvals', params: { id: id! } })} style={{ paddingVertical: 14, flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 12 }}>
-                    <Text style={{ flex: 1, fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? 'بانتظار الموافقة' : 'Waiting for approval'}</Text>
-                    <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: (org?.pendingApprovals ?? 0) > 0 ? tok.gold : tok.muted }}>{org?.pendingApprovals ?? 0}</Text>
+                    <Text style={{ flex: 1, fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? 'بانتظار الموافقة' : 'Waiting for approval'}</Text>
+                    <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: (org?.pendingApprovals ?? 0) > 0 ? tok.gold : tok.muted }}>{org?.pendingApprovals ?? 0}</Text>
                     <ChevronRight size={16} color={tok.muted} style={{ transform: [{ scaleX: ar ? -1 : 1 }] }} />
                   </Pressable>
                 </RCard>
@@ -456,7 +456,7 @@ export default function OrgDetailScreen() {
                   <Layers size={16} color={tok.gold} strokeWidth={1.6} />
                   <Text style={{
                     flex: 1,
-                    color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 14,
+                    color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 16,
                     textAlign: lang === 'ar' ? 'right' : 'left',
                   }}>
                     {lang === 'ar' ? 'المشاريع' : 'Projects'}
@@ -484,7 +484,7 @@ export default function OrgDetailScreen() {
                     <Target size={14} color={tok.muted} strokeWidth={1.6} />
                     <Text style={{
                       color: tok.muted, fontFamily: fontMono('regular'),
-                      fontSize: 10, letterSpacing: 1.4,
+                      fontSize: 12, letterSpacing: 1.4,
                     }}>
                       {lang === 'ar' ? 'مشروع المجموعة الافتراضي' : 'GROUP DEFAULT PROJECT'}
                     </Text>
@@ -654,7 +654,7 @@ function SectionHeader({
       }}>
         {icon}
         <Text style={{
-          fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted, letterSpacing: 1.4,
+          fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, letterSpacing: 1.4,
         }}>
           {label}
         </Text>
@@ -662,7 +662,7 @@ function SectionHeader({
       {action && (
         <Pressable onPress={action.onPress} hitSlop={6}>
           <Text style={{
-            fontFamily: fontMono('regular'), fontSize: 10, color: tok.gold, letterSpacing: 1.4,
+            fontFamily: fontMono('regular'), fontSize: 12, color: tok.gold, letterSpacing: 1.4,
           }}>
             {action.label.toUpperCase()}
           </Text>

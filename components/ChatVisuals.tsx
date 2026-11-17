@@ -93,7 +93,7 @@ function TransactionsBlockView({ items }: { items: VisualTransaction[] }) {
     }}>
       <View style={{ flexDirection: rowDir, alignItems: 'center', gap: 6, paddingHorizontal: 14, paddingTop: 11, paddingBottom: 9 }}>
         <View style={{ width: 5, height: 5, borderRadius: 3, backgroundColor: tok.gold }} />
-        <Text style={{ fontFamily: fontMono('regular'), fontSize: 9.5, letterSpacing: 1.6, color: tok.gold, textTransform: 'uppercase' }}>
+        <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.6, color: tok.gold, textTransform: 'uppercase' }}>
           {lang === 'ar' ? `سُجّلت · ${items.length}` : `Logged · ${items.length}`}
         </Text>
       </View>
@@ -103,10 +103,10 @@ function TransactionsBlockView({ items }: { items: VisualTransaction[] }) {
             <CategoryIconByKey iconKey={iconKeyForCategory({ icon: t.icon, nameEn: t.category })} size={16} color={tok.bone} strokeWidth={1.6} />
           </View>
           <View style={{ flex: 1, minWidth: 0 }}>
-            <Text numberOfLines={1} style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+            <Text numberOfLines={1} style={{ fontFamily: fontBody(lang), fontSize: 16, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>
               {t.category}
             </Text>
-            <Text numberOfLines={1} style={{ fontFamily: fontMono('regular'), fontSize: 10.5, color: tok.muted, marginTop: 2, letterSpacing: 0.3, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+            <Text numberOfLines={1} style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, marginTop: 2, letterSpacing: 0.3, textAlign: lang === 'ar' ? 'right' : 'left' }}>
               {t.description ? `${t.description} · ${t.date}` : t.date}
             </Text>
           </View>
@@ -123,12 +123,12 @@ function ChartShell({ title, caption, children }: { title: string; caption?: str
   const align: 'right' | 'left' = lang === 'ar' ? 'right' : 'left';
   return (
     <View style={{ backgroundColor: tok.glowShellBg, borderRadius: 14, borderWidth: 1, borderColor: tok.glowShellBorder, borderTopColor: tok.glowCoreSheen, paddingHorizontal: 14, paddingVertical: 13 }}>
-      <Text style={{ fontFamily: fontMono('regular'), fontSize: 9.5, letterSpacing: 1.6, color: tok.gold, textTransform: 'uppercase', textAlign: align }}>
+      <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.6, color: tok.gold, textTransform: 'uppercase', textAlign: align }}>
         {title}
       </Text>
       {children}
       {caption ? (
-        <Text style={{ fontFamily: fontBody(lang), fontSize: 11.5, color: tok.muted, marginTop: 10, textAlign: align }}>{caption}</Text>
+        <Text style={{ fontFamily: fontBody(lang), fontSize: 12, color: tok.muted, marginTop: 10, textAlign: align }}>{caption}</Text>
       ) : null}
     </View>
   );
@@ -157,8 +157,8 @@ function BarsChart({ series, unit }: { series: ChartPoint[]; unit?: string }) {
       {series.slice(0, 8).map((p, i) => (
         <View key={i}>
           <View style={{ flexDirection: rowDir, justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 }}>
-            <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 12.5, color: tok.bone, textAlign: align }}>{p.label}</Text>
-            <Text style={{ fontFamily: fontMono('regular'), fontSize: 11.5, color: tok.muted, marginHorizontal: 8, writingDirection: 'ltr' }}>
+            <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 14, color: tok.bone, textAlign: align }}>{p.label}</Text>
+            <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, marginHorizontal: 8, writingDirection: 'ltr' }}>
               {fmt(p.value)}{unit ? ` ${unit}` : ''}
             </Text>
           </View>
@@ -198,16 +198,16 @@ function DonutChart({ series, unit }: { series: ChartPoint[]; unit?: string }) {
           </G>
         </Svg>
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ fontFamily: fontMono('medium'), fontSize: 15, color: tok.bone, writingDirection: 'ltr' }}>{fmt(total)}</Text>
-          {unit ? <Text style={{ fontFamily: fontMono('regular'), fontSize: 9, color: tok.muted, marginTop: 1 }}>{unit}</Text> : null}
+          <Text style={{ fontFamily: fontMono('medium'), fontSize: 16, color: tok.bone, writingDirection: 'ltr' }}>{fmt(total)}</Text>
+          {unit ? <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, marginTop: 1 }}>{unit}</Text> : null}
         </View>
       </View>
       <View style={{ flex: 1, gap: 8 }}>
         {pts.map((p, i) => (
           <View key={i} style={{ flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 8 }}>
             <View style={{ width: 9, height: 9, borderRadius: 2.5, backgroundColor: SLICE[i % SLICE.length] }} />
-            <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 12, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>{p.label}</Text>
-            <Text style={{ fontFamily: fontMono('regular'), fontSize: 11, color: tok.muted, writingDirection: 'ltr' }}>{fmt(p.value)}</Text>
+            <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 14, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>{p.label}</Text>
+            <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, writingDirection: 'ltr' }}>{fmt(p.value)}</Text>
           </View>
         ))}
       </View>
@@ -226,13 +226,13 @@ function StatChart({ series, unit }: { series: ChartPoint[]; unit?: string }) {
       <View style={{ alignItems: lang === 'ar' ? 'flex-end' : 'flex-start' }}>
         <RAmount value={hero.value} currency={unit || 'EGP'} size={32} sign decimals={0} />
       </View>
-      <Text style={{ fontFamily: fontMono('regular'), fontSize: 9.5, letterSpacing: 1.2, color: tok.muted, textTransform: 'uppercase', marginTop: 3, textAlign: align }}>{hero.label}</Text>
+      <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2, color: tok.muted, textTransform: 'uppercase', marginTop: 3, textAlign: align }}>{hero.label}</Text>
       {rest.length > 0 && (
         <View style={{ flexDirection: rowDir, gap: 18, marginTop: 12 }}>
           {rest.map((p, i) => (
             <View key={i}>
-              <Text style={{ fontFamily: fontMono('regular'), fontSize: 9, letterSpacing: 1.2, color: tok.muted, textTransform: 'uppercase', textAlign: align }}>{p.label}</Text>
-              <Text style={{ fontFamily: fontMono('medium'), fontSize: 14, color: tok.bone, marginTop: 2, textAlign: align, writingDirection: 'ltr' }}>{fmt(p.value)}</Text>
+              <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2, color: tok.muted, textTransform: 'uppercase', textAlign: align }}>{p.label}</Text>
+              <Text style={{ fontFamily: fontMono('medium'), fontSize: 16, color: tok.bone, marginTop: 2, textAlign: align, writingDirection: 'ltr' }}>{fmt(p.value)}</Text>
             </View>
           ))}
         </View>
@@ -256,7 +256,7 @@ function TrendChart({ series, unit }: { series: ChartPoint[]; unit?: string }) {
       </View>
       <View style={{ flexDirection: lang === 'ar' ? 'row-reverse' : 'row', gap: 4, marginTop: 6 }}>
         {pts.map((p, i) => (
-          <Text key={i} numberOfLines={1} style={{ flex: 1, textAlign: 'center', fontFamily: fontMono('regular'), fontSize: 8.5, color: tok.muted }}>{p.label}</Text>
+          <Text key={i} numberOfLines={1} style={{ flex: 1, textAlign: 'center', fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted }}>{p.label}</Text>
         ))}
       </View>
     </View>
@@ -272,7 +272,7 @@ function SummaryBlockView({ block }: { block: Extract<VisualBlock, { type: 'summ
   const align: 'right' | 'left' = lang === 'ar' ? 'right' : 'left';
   return (
     <View style={{ backgroundColor: tok.glowShellBg, borderRadius: 14, borderWidth: 1, borderColor: tok.glowShellBorder, borderTopColor: tok.glowCoreSheen, paddingHorizontal: 14, paddingVertical: 13 }}>
-      <Text style={{ fontFamily: fontMono('regular'), fontSize: 9.5, letterSpacing: 1.6, color: tok.gold, textTransform: 'uppercase', textAlign: align }}>
+      <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.6, color: tok.gold, textTransform: 'uppercase', textAlign: align }}>
         {monthLabel(block.period, lang)} · {lang === 'ar' ? 'ملخص' : 'Summary'}
       </Text>
       <View style={{ marginTop: 9, alignItems: lang === 'ar' ? 'flex-end' : 'flex-start' }}>
@@ -287,8 +287,8 @@ function SummaryBlockView({ block }: { block: Extract<VisualBlock, { type: 'summ
           {cats.map((c) => (
             <View key={c.category}>
               <View style={{ flexDirection: rowDir, justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 }}>
-                <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 12.5, color: tok.bone, textAlign: align }}>{c.category}</Text>
-                <Text style={{ fontFamily: fontMono('regular'), fontSize: 11.5, color: tok.muted, marginHorizontal: 8, writingDirection: 'ltr' }}>{fmt(c.total)}</Text>
+                <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 14, color: tok.bone, textAlign: align }}>{c.category}</Text>
+                <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, marginHorizontal: 8, writingDirection: 'ltr' }}>{fmt(c.total)}</Text>
               </View>
               <View style={{ height: 6, borderRadius: 3, backgroundColor: tok.shellBg, overflow: 'hidden', flexDirection: lang === 'ar' ? 'row-reverse' : 'row' }}>
                 <View style={{ width: `${Math.max(6, (c.total / max) * 100)}%`, backgroundColor: tok.gold, borderRadius: 3 }} />
@@ -305,8 +305,8 @@ function SummaryStat({ label, value, color, align }: { label: string; value: num
   const { tok } = useI18n();
   return (
     <View>
-      <Text style={{ fontFamily: fontMono('regular'), fontSize: 9, letterSpacing: 1.2, color: tok.muted, textTransform: 'uppercase', textAlign: align }}>{label}</Text>
-      <Text style={{ fontFamily: fontMono('medium'), fontSize: 14, color, marginTop: 2, textAlign: align, writingDirection: 'ltr' }}>{fmt(value)}</Text>
+      <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2, color: tok.muted, textTransform: 'uppercase', textAlign: align }}>{label}</Text>
+      <Text style={{ fontFamily: fontMono('medium'), fontSize: 16, color, marginTop: 2, textAlign: align, writingDirection: 'ltr' }}>{fmt(value)}</Text>
     </View>
   );
 }

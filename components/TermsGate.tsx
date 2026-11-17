@@ -53,7 +53,7 @@ export function TermsGate() {
   };
   const link = (path: string, text: string) => (
     <Pressable onPress={() => Linking.openURL(`${SITE_URL}${path}`).catch(() => {})} hitSlop={8}>
-      <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.gold }}>{text}</Text>
+      <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.gold }}>{text}</Text>
     </Pressable>
   );
 
@@ -63,7 +63,7 @@ export function TermsGate() {
         <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }} showsVerticalScrollIndicator={false}>
           <View style={{ backgroundColor: tok.void, borderRadius: radius.modal, borderWidth: 1, borderColor: tok.border, padding: 22, paddingBottom: 22 + (insets.bottom > 20 ? 0 : 0) }}>
             <Text style={{ fontFamily: fontHead(lang), fontSize: 22, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? 'قبل أن تتابع' : 'Before you continue'}</Text>
-            <Text style={{ marginTop: 10, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+            <Text style={{ marginTop: 10, fontFamily: fontBody(lang), fontSize: 16, lineHeight: 24, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
               {terms.accepted
                 ? (ar ? 'حدّثنا شروط الاستخدام وسياسة الخصوصية. يرجى قراءتهما والموافقة عليهما لتواصل استخدام سيشات.' : 'We updated our Terms of Use and Privacy Policy. Please read and accept them to keep using Seshat.')
                 : (ar ? 'يرجى قراءة شروط الاستخدام وسياسة الخصوصية والموافقة عليهما لتواصل استخدام سيشات.' : 'Please read and accept our Terms of Use and Privacy Policy to keep using Seshat.')}
@@ -76,11 +76,11 @@ export function TermsGate() {
               <View style={{ width: 24, height: 24, borderRadius: 7, borderWidth: 1.5, borderColor: checked ? tok.gold : tok.border, backgroundColor: checked ? tok.gold : 'transparent', alignItems: 'center', justifyContent: 'center', marginTop: 1 }}>
                 {checked ? <Check size={16} color={tok.void} strokeWidth={3} /> : null}
               </View>
-              <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 20, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
+              <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 16, lineHeight: 22, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
                 {ar ? 'قرأت شروط الاستخدام وسياسة الخصوصية وأوافق عليهما' : 'I have read and agree to the Terms of Use and the Privacy Policy'}
               </Text>
             </Pressable>
-            {err ? <Text style={{ marginTop: 10, fontFamily: fontBody(lang), fontSize: 12, color: tok.alertText, textAlign: ar ? 'right' : 'left' }}>{err}</Text> : null}
+            {err ? <Text style={{ marginTop: 10, fontFamily: fontBody(lang), fontSize: 14, color: tok.alertText, textAlign: ar ? 'right' : 'left' }}>{err}</Text> : null}
             <View style={{ marginTop: 18, gap: 10 }}>
               <RButton full onPress={agree} disabled={!checked} loading={busy}>{ar ? 'أوافق وأتابع' : 'Agree and continue'}</RButton>
               <RButton full variant="ghost" onPress={async () => { await signOut(); router.replace('/'); }}>{ar ? 'تسجيل الخروج' : 'Sign out'}</RButton>

@@ -83,7 +83,7 @@ export default function PersonaSwitch({ value, onChange, size = 'md', hint = fal
                 <Text
                   style={{
                     fontFamily: fontBody(lang, active ? 'semibold' : 'medium'),
-                    fontSize: 13,
+                    fontSize: 14,
                     color: active ? tok.gold : tok.muted,
                   }}
                 >
@@ -100,8 +100,8 @@ export default function PersonaSwitch({ value, onChange, size = 'md', hint = fal
           style={{
             marginTop: 7,
             fontFamily: fontMono(),
-            fontSize: 10.5,
-            lineHeight: 15,
+            fontSize: 12,
+            lineHeight: 17,
             color: tok.muted,
             letterSpacing: 0.2,
             textAlign: lang === 'ar' ? 'right' : 'left',

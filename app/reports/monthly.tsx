@@ -131,7 +131,7 @@ export default function MonthlyReportScreen() {
         ) : !picked ? (
           months.length === 0 ? (
             <RCard padding={24}>
-              <Text style={{ fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: tok.muted, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+              <Text style={{ fontFamily: fontBody(lang), fontSize: 16, lineHeight: 24, color: tok.muted, textAlign: lang === 'ar' ? 'right' : 'left' }}>
                 {lang === 'ar' ? 'لا توجد تقارير بعد. يظهر تقرير كل شهر بعد انتهائه.' : 'No reports yet. Each month gets a report once it is over.'}
               </Text>
             </RCard>
@@ -147,8 +147,8 @@ export default function MonthlyReportScreen() {
                   })}
                 >
                   <View style={{ flex: 1 }}>
-                    <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>{m.label}</Text>
-                    <Text style={{ marginTop: 2, fontFamily: fontMono('regular'), fontSize: 11, color: tok.muted, textAlign: lang === 'ar' ? 'right' : 'left' }}>{m.from} → {m.to}</Text>
+                    <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 17, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>{m.label}</Text>
+                    <Text style={{ marginTop: 2, fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, textAlign: lang === 'ar' ? 'right' : 'left' }}>{m.from} → {m.to}</Text>
                   </View>
                   <ChevronRight size={16} color={tok.muted} style={{ transform: [{ scaleX: lang === 'ar' ? -1 : 1 }] }} />
                 </Pressable>
@@ -158,7 +158,7 @@ export default function MonthlyReportScreen() {
         ) : !report ? (
           <RCard padding={32}>
             <Text style={{
-              fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, textAlign: 'center',
+              fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: 'center',
             }}>
               {lang === 'ar' ? 'تعذّر تحميل التقرير.' : 'Could not load the report.'}
             </Text>
@@ -196,7 +196,7 @@ export default function MonthlyReportScreen() {
                 {fmtNum(report.totals.net)} {currencyLabel(currency, lang)}
               </Text>
               <Text style={{
-                marginTop: 6, fontFamily: fontMono(), fontSize: 12, color: tok.muted,
+                marginTop: 6, fontFamily: fontMono(), fontSize: 14, color: tok.muted,
                 textAlign: lang === 'ar' ? 'right' : 'left',
               }}>
                 {report.totals.savingsRate}% {lang === 'ar' ? 'معدل الادخار' : 'savings rate'}
@@ -221,7 +221,7 @@ export default function MonthlyReportScreen() {
                         <REyebrow>{lang === 'ar' ? 'العنوان' : 'Headline'}</REyebrow>
                       </View>
                       <Text style={{
-                        fontFamily: fontHead(lang), fontSize: 18, lineHeight: 25, color: tok.bone,
+                        fontFamily: fontHead(lang), fontSize: 19, lineHeight: 28, color: tok.bone,
                         letterSpacing: -0.2, textAlign: lang === 'ar' ? 'right' : 'left',
                       }}>
                         {ins.headline}
@@ -266,7 +266,7 @@ export default function MonthlyReportScreen() {
             <RCard padding={0} style={{ paddingHorizontal: 16, paddingVertical: 4, marginBottom: 14 }}>
               {report.byCategory.length === 0 ? (
                 <Text style={{
-                  fontFamily: fontBody(lang), fontSize: 13, color: tok.muted,
+                  fontFamily: fontBody(lang), fontSize: 14, color: tok.muted,
                   textAlign: 'center', paddingVertical: 16,
                 }}>
                   {lang === 'ar' ? 'لا مصروفات هذا الشهر.' : 'No expenses this month.'}
@@ -281,13 +281,13 @@ export default function MonthlyReportScreen() {
                   <CategoryIconByKey iconKey={iconKeyForCategory(c)} size={18} color={tok.bone} />
                   <View style={{ flex: 1 }}>
                     <Text style={{
-                      fontFamily: fontBody(lang), fontSize: 14, color: tok.bone,
+                      fontFamily: fontBody(lang), fontSize: 16, color: tok.bone,
                       textAlign: lang === 'ar' ? 'right' : 'left',
                     }}>
                       {lang === 'ar' ? c.nameAr : c.nameEn}
                     </Text>
                     <Text style={{
-                      fontFamily: fontMono(), fontSize: 11, color: tok.muted,
+                      fontFamily: fontMono(), fontSize: 12, color: tok.muted,
                       textAlign: lang === 'ar' ? 'right' : 'left',
                     }}>
                       {c.percentOfExpense}%  ·  {c.countTx}× {lang === 'ar' ? 'معاملة' : 'tx'}
@@ -295,7 +295,7 @@ export default function MonthlyReportScreen() {
                   </View>
                   <View style={{ alignItems: lang === 'ar' ? 'flex-start' : 'flex-end' }}>
                     <Text style={{
-                      fontFamily: fontMono(), fontSize: 14, color: tok.bone,
+                      fontFamily: fontMono(), fontSize: 16, color: tok.bone,
                     }}>
                       {fmtNum(c.total)}
                     </Text>
@@ -308,7 +308,7 @@ export default function MonthlyReportScreen() {
                           ? <TrendingUp size={11} color={tok.alertText} />
                           : <TrendingDown size={11} color={tok.posText} />}
                         <Text style={{
-                          fontFamily: fontMono(), fontSize: 10,
+                          fontFamily: fontMono(), fontSize: 12,
                           color: c.deltaVsPrev > 0 ? tok.alertText : tok.posText,
                         }}>
                           {fmtNum(Math.abs(c.deltaVsPrev))}
@@ -349,13 +349,13 @@ export default function MonthlyReportScreen() {
                             <Text
                               numberOfLines={1}
                               style={{
-                                fontFamily: fontHead(lang), fontSize: 14, color: tok.bone,
+                                fontFamily: fontHead(lang), fontSize: 16, color: tok.bone,
                                 textAlign: lang === 'ar' ? 'right' : 'left',
                               }}
                             >{p.name}</Text>
                             <Text style={{
                               marginTop: 2,
-                              fontFamily: fontMono(), fontSize: 11, color: tok.muted,
+                              fontFamily: fontMono(), fontSize: 12, color: tok.muted,
                               textAlign: lang === 'ar' ? 'right' : 'left',
                             }}>
                               {p.countTx}× {lang === 'ar' ? 'معاملة' : 'tx'}
@@ -376,13 +376,13 @@ export default function MonthlyReportScreen() {
                           </View>
                           <View style={{ alignItems: lang === 'ar' ? 'flex-start' : 'flex-end' }}>
                             <Text style={{
-                              fontFamily: fontMono(), fontSize: 14, color: tok.bone,
+                              fontFamily: fontMono(), fontSize: 16, color: tok.bone,
                             }}>
                               {fmtNum(p.expense)}
                             </Text>
                             <Text style={{
                               marginTop: 2,
-                              fontFamily: fontMono(), fontSize: 10, color: netColor,
+                              fontFamily: fontMono(), fontSize: 12, color: netColor,
                             }}>
                               {p.net >= 0 ? '+' : ''}{fmtNum(p.net)} {lang === 'ar' ? 'صافي' : 'net'}
                             </Text>
@@ -423,13 +423,13 @@ export default function MonthlyReportScreen() {
                       borderBottomColor: tok.border, gap: 10,
                     }}>
                       <Text style={{
-                        flex: 1, fontFamily: fontBody(lang), fontSize: 13, color: tok.bone,
+                        flex: 1, fontFamily: fontBody(lang), fontSize: 14, color: tok.bone,
                         textAlign: lang === 'ar' ? 'right' : 'left',
                       }} numberOfLines={1}>
                         {v.description}
                       </Text>
-                      <Text style={{ fontFamily: fontMono(), fontSize: 11, color: tok.muted }}>{v.count}×</Text>
-                      <Text style={{ fontFamily: fontMono(), fontSize: 13, color: tok.bone }}>
+                      <Text style={{ fontFamily: fontMono(), fontSize: 12, color: tok.muted }}>{v.count}×</Text>
+                      <Text style={{ fontFamily: fontMono(), fontSize: 14, color: tok.bone }}>
                         {fmtNum(v.total)}
                       </Text>
                     </View>
@@ -459,12 +459,12 @@ export default function MonthlyReportScreen() {
                           justifyContent: 'space-between',
                         }}>
                           <Text style={{
-                            fontFamily: fontBody(lang), fontSize: 13, color: tok.bone,
+                            fontFamily: fontBody(lang), fontSize: 14, color: tok.bone,
                             textAlign: lang === 'ar' ? 'right' : 'left',
                           }}>
                             {lang === 'ar' ? b.nameAr : b.nameEn}
                           </Text>
-                          <Text style={{ fontFamily: fontMono(), fontSize: 12, color }}>
+                          <Text style={{ fontFamily: fontMono(), fontSize: 14, color }}>
                             {b.percent}%
                           </Text>
                         </View>
@@ -474,7 +474,7 @@ export default function MonthlyReportScreen() {
                           }} />
                         </View>
                         <Text style={{
-                          fontFamily: fontMono(), fontSize: 10, color: tok.muted,
+                          fontFamily: fontMono(), fontSize: 12, color: tok.muted,
                           textAlign: lang === 'ar' ? 'right' : 'left',
                         }}>
                           {fmtNum(b.spent)} / {fmtNum(b.cap)} {currencyLabel(currency, lang)}
@@ -494,7 +494,7 @@ export default function MonthlyReportScreen() {
                 alignItems: 'center', gap: 8,
               }}>
                 <Download size={16} color={tok.void} />
-                <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.void }}>
+                <Text style={{ fontFamily: fontBody(lang), fontSize: 16, color: tok.void }}>
                   {exporting
                     ? (lang === 'ar' ? 'جاري إنشاء PDF…' : 'Building PDF…')
                     : (lang === 'ar' ? 'مشاركة كـ PDF' : 'Share as PDF')}
@@ -532,7 +532,7 @@ function BrewingState({
           {lang === 'ar' ? 'تقريرك يتشكّل' : 'Your report is brewing'}
         </Text>
         <Text style={{
-          fontFamily: fontBody(lang), fontSize: 14, lineHeight: 22, color: tok.muted,
+          fontFamily: fontBody(lang), fontSize: 16, lineHeight: 25, color: tok.muted,
           textAlign: 'center', paddingHorizontal: 6,
         }}>
           {lang === 'ar'
@@ -563,7 +563,7 @@ function BrewingState({
         </View>
 
         <Text style={{
-          marginTop: 8, fontFamily: fontMono(), fontSize: 11, color: tok.gold,
+          marginTop: 8, fontFamily: fontMono(), fontSize: 12, color: tok.gold,
           textAlign: 'center', letterSpacing: 1.4,
         }}>
           {days > 0 && txs > 0
@@ -590,13 +590,13 @@ function ProgressRow({
         justifyContent: 'space-between', marginBottom: 6,
       }}>
         <Text style={{
-          fontFamily: fontBody(lang), fontSize: 12,
+          fontFamily: fontBody(lang), fontSize: 14,
           color: featured ? tok.bone : tok.muted,
         }}>
           {label}
         </Text>
         <Text style={{
-          fontFamily: fontMono(), fontSize: 12,
+          fontFamily: fontMono(), fontSize: 14,
           color: featured ? tok.gold : tok.muted,
         }}>
           {current} / {target}
@@ -620,14 +620,14 @@ function InsightBlock({
     <View style={{ marginBottom: 14 }}>
       <Text style={{
         fontFamily: fontMono(),
-        fontSize: 10, letterSpacing: 2, color: accent ? tok.gold : tok.muted,
+        fontSize: 12, letterSpacing: 2, color: accent ? tok.gold : tok.muted,
         textTransform: 'uppercase', marginBottom: 6,
         textAlign: lang === 'ar' ? 'right' : 'left',
       }}>
         {label}
       </Text>
       <Text style={{
-        fontFamily: fontBody(lang), fontSize: accent ? 15 : 14, lineHeight: 22,
+        fontFamily: fontBody(lang), fontSize: accent ? 15 : 14, lineHeight: 25,
         color: tok.bone, fontWeight: accent ? '500' : '400',
         textAlign: lang === 'ar' ? 'right' : 'left',
       }}>
@@ -647,7 +647,7 @@ function TotalsCard({
     <RCard padding={14} style={{ flex: 1 }}>
       <REyebrow style={{ textAlign: lang === 'ar' ? 'right' : 'left' }}>{label}</REyebrow>
       <Text style={{
-        marginTop: 4, fontFamily: fontHead(lang), fontSize: 18, color: tok.bone,
+        marginTop: 4, fontFamily: fontHead(lang), fontSize: 19, color: tok.bone,
         letterSpacing: -0.3, textAlign: lang === 'ar' ? 'right' : 'left',
       }}>
         {value}
@@ -657,7 +657,7 @@ function TotalsCard({
         alignItems: 'center', gap: 4, marginTop: 6,
       }}>
         {isUp ? <TrendingUp size={11} color={deltaColor} /> : <TrendingDown size={11} color={deltaColor} />}
-        <Text style={{ fontFamily: fontMono(), fontSize: 11, color: deltaColor }}>
+        <Text style={{ fontFamily: fontMono(), fontSize: 12, color: deltaColor }}>
           {Math.abs(deltaPercent)}%
         </Text>
       </View>
@@ -676,10 +676,10 @@ function MoreNumbers({ report, currency }: { report: MonthlyReport; currency: st
   const Row = ({ name, note, value, last }: { name: string; note?: string; value: string; last?: boolean }) => (
     <View style={{ flexDirection: dir, justifyContent: 'space-between', alignItems: 'center', gap: 12, paddingVertical: 12, borderBottomWidth: last ? 0 : 1, borderBottomColor: tok.border }}>
       <View style={{ flex: 1 }}>
-        <Text style={{ fontFamily: fontBody(lang), fontSize: 13.5, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{name}</Text>
-        {note ? <Text style={{ marginTop: 2, fontFamily: fontMono(), fontSize: 10.5, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{note}</Text> : null}
+        <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{name}</Text>
+        {note ? <Text style={{ marginTop: 2, fontFamily: fontMono(), fontSize: 12, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{note}</Text> : null}
       </View>
-      <Text style={{ fontFamily: fontMono(), fontSize: 12.5, color: tok.bone }}>{value}</Text>
+      <Text style={{ fontFamily: fontMono(), fontSize: 14, color: tok.bone }}>{value}</Text>
     </View>
   );
   const Card = ({ title, children }: { title: string; children: React.ReactNode }) => (

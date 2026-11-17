@@ -193,7 +193,7 @@ export function AddBySeshatPanel({
         }}>
           <ChevronLeft size={16} color={tok.muted} />
           <Text style={{
-            color: tok.muted, fontFamily: fontMono('regular'), fontSize: 10,
+            color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12,
             letterSpacing: 1.4, textTransform: 'uppercase',
           }}>{lang === 'ar' ? 'لوحة' : 'keypad'}</Text>
         </Pressable>
@@ -204,7 +204,7 @@ export function AddBySeshatPanel({
           <Sparkles size={12} color={tok.gold} />
           <Text style={{
             color: tok.gold, fontFamily: fontMono('regular'),
-            fontSize: 10, letterSpacing: 1.6, textTransform: 'uppercase',
+            fontSize: 12, letterSpacing: 1.6, textTransform: 'uppercase',
           }}>
             {lang === 'ar' ? 'إضافة بسيشات' : 'Add by Seshat'}
           </Text>
@@ -221,13 +221,13 @@ export function AddBySeshatPanel({
         <RCard accent padding={16}>
           <Text style={{
             color: tok.muted, fontFamily: fontMono('regular'),
-            fontSize: 10, letterSpacing: 1.4, textTransform: 'uppercase',
+            fontSize: 12, letterSpacing: 1.4, textTransform: 'uppercase',
             marginBottom: 6,
           }}>
             {lang === 'ar' ? 'كلامك' : 'You said'}
           </Text>
           <Text style={{
-            color: tok.bone, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 20,
+            color: tok.bone, fontFamily: fontBody(lang), fontSize: 16, lineHeight: 22,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}>{initialText}</Text>
         </RCard>
@@ -240,7 +240,7 @@ export function AddBySeshatPanel({
         }}>
           <Text style={{
             color: tok.muted, fontFamily: fontMono('regular'),
-            fontSize: 10, letterSpacing: 1.4, textTransform: 'uppercase',
+            fontSize: 12, letterSpacing: 1.4, textTransform: 'uppercase',
           }}>
             {lang === 'ar'
               ? `${entries.length} ${entries.length === 1 ? 'عملية' : 'عمليات'}`
@@ -259,7 +259,7 @@ export function AddBySeshatPanel({
             <Plus size={12} color={tok.gold} />
             <Text style={{
               color: tok.gold, fontFamily: fontMono('regular'),
-              fontSize: 10, letterSpacing: 1.4, textTransform: 'uppercase',
+              fontSize: 12, letterSpacing: 1.4, textTransform: 'uppercase',
             }}>{lang === 'ar' ? 'إضافة' : 'Add'}</Text>
           </Pressable>
         </View>
@@ -268,7 +268,7 @@ export function AddBySeshatPanel({
         {entries.length === 0 ? (
           <View style={{ paddingVertical: 24, alignItems: 'center', gap: 8 }}>
             <Text style={{
-              color: tok.muted, fontFamily: fontBody(lang), fontSize: 13,
+              color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
               textAlign: 'center',
             }}>
               {lang === 'ar' ? 'لم أرصد أرقامًا.' : "Couldn't find any amounts."}
@@ -280,7 +280,7 @@ export function AddBySeshatPanel({
             }}>
               <Text style={{
                 color: tok.bone, fontFamily: fontMono('regular'),
-                fontSize: 11, letterSpacing: 1.4, textTransform: 'uppercase',
+                fontSize: 12, letterSpacing: 1.4, textTransform: 'uppercase',
               }}>{lang === 'ar' ? 'أضف يدويًا' : 'Add manually'}</Text>
             </Pressable>
           </View>
@@ -305,7 +305,7 @@ export function AddBySeshatPanel({
             borderRadius: r.input, paddingVertical: 10, paddingHorizontal: 14,
           }}>
             <Text style={{
-              color: tok.alertText, fontFamily: fontBody(lang), fontSize: 13,
+              color: tok.alertText, fontFamily: fontBody(lang), fontSize: 14,
               textAlign: lang === 'ar' ? 'right' : 'left',
             }}>{error}</Text>
           </View>
@@ -334,7 +334,7 @@ export function AddBySeshatPanel({
               <ActivityIndicator size="small" color={tok.void} />
               <Text style={{
                 color: tok.void, fontFamily: fontHead(lang),
-                fontSize: 14, letterSpacing: 0.4,
+                fontSize: 16, letterSpacing: 0.4,
               }}>
                 {lang === 'ar'
                   ? `يحفظ... ${savedCount}/${validEntries.length}`
@@ -347,7 +347,7 @@ export function AddBySeshatPanel({
               <Text style={{
                 color: canSave ? tok.void : tok.muted,
                 fontFamily: fontHead(lang),
-                fontSize: 14, letterSpacing: 0.4,
+                fontSize: 16, letterSpacing: 0.4,
               }}>
                 {lang === 'ar'
                   ? `حفظ ${validEntries.length}`
@@ -401,7 +401,7 @@ function EntryRow({
         >
           <Text style={{
             color: entry.type === 'expense' ? tok.alertText : tok.posText,
-            fontFamily: fontMono('regular'), fontSize: 10,
+            fontFamily: fontMono('regular'), fontSize: 12,
             letterSpacing: 1.2, textTransform: 'uppercase',
           }}>
             {entry.type === 'expense'
@@ -422,7 +422,7 @@ function EntryRow({
           style={{ flex: 1 }}
         />
         <Text style={{
-          color: tok.muted, fontFamily: fontMono('regular'), fontSize: 13,
+          color: tok.muted, fontFamily: fontMono('regular'), fontSize: 14,
         }}>{currency}</Text>
         <Pressable onPress={onRemove} disabled={disabled} hitSlop={6} style={{ padding: 4 }}>
           <Trash2 size={16} color={tok.muted} strokeWidth={1.6} />
@@ -454,7 +454,7 @@ function EntryRow({
         <Text
           numberOfLines={1}
           style={{
-            color: tok.muted, fontFamily: fontMono('regular'), fontSize: 10,
+            color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12,
             letterSpacing: 0.4,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}
@@ -465,7 +465,7 @@ function EntryRow({
 
       {!currentCat && (
         <Text style={{
-          color: tok.alertText, fontFamily: fontMono('regular'), fontSize: 10,
+          color: tok.alertText, fontFamily: fontMono('regular'), fontSize: 12,
           letterSpacing: 1.2,
         }}>
           {lang === 'ar' ? 'اختر تصنيفًا' : 'pick a category'}

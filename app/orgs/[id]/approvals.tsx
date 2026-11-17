@@ -44,15 +44,15 @@ export default function ApprovalsScreen() {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); void load(); }} tintColor={tok.gold} colors={[tok.gold]} progressBackgroundColor={tok.surface} />}
       >
         {items === null ? null : items.length === 0 ? (
-          <Text style={{ paddingTop: 40, textAlign: 'center', color: tok.muted, fontFamily: fontBody(lang), fontSize: 14 }}>{ar ? 'لا شيء بانتظار الموافقة.' : 'Nothing is waiting.'}</Text>
+          <Text style={{ paddingTop: 40, textAlign: 'center', color: tok.muted, fontFamily: fontBody(lang), fontSize: 16 }}>{ar ? 'لا شيء بانتظار الموافقة.' : 'Nothing is waiting.'}</Text>
         ) : items.map((a) => (
           <RCard key={a.id} padding={16}>
             <View style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.bone }}>{a.by}</Text>
+              <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone }}>{a.by}</Text>
               <RAmount value={-a.amount} currency={a.currency} size={18} decimals={0} />
             </View>
-            <Text style={{ marginTop: 6, fontFamily: fontBody(lang), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{a.description || (ar ? a.category?.nameAr : a.category?.nameEn) || ''}</Text>
-            <Text style={{ marginTop: 4, fontFamily: fontMono('regular'), fontSize: 11, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+            <Text style={{ marginTop: 6, fontFamily: fontBody(lang), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{a.description || (ar ? a.category?.nameAr : a.category?.nameEn) || ''}</Text>
+            <Text style={{ marginTop: 4, fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
               {(ar ? a.category?.nameAr : a.category?.nameEn) ?? ''} · {new Date(a.date).toLocaleDateString(ar ? 'ar-EG' : 'en-GB', { day: 'numeric', month: 'short' })}
             </Text>
             <View style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 10, marginTop: 12 }}>

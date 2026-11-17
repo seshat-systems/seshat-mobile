@@ -518,7 +518,7 @@ export function AddTransactionSheet({ visible, onClose, onSave, categories, defa
               }}>
                 <Zap size={14} color={tok.gold} />
                 <Text style={{
-                  flex: 1, fontFamily: fontBody(lang), fontSize: 12, color: tok.bone,
+                  flex: 1, fontFamily: fontBody(lang), fontSize: 14, color: tok.bone,
                   textAlign: lang === 'ar' ? 'right' : 'left',
                 }} numberOfLines={2}>
                   {prefill.detectionBanner}
@@ -539,7 +539,7 @@ export function AddTransactionSheet({ visible, onClose, onSave, categories, defa
               }}>
                 <ChevronLeft size={14} color={tok.muted} />
                 <Text style={{
-                  color: tok.muted, fontFamily: fontMono('regular'), fontSize: 10,
+                  color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12,
                   letterSpacing: 1.4, textTransform: 'uppercase',
                 }}>{lang === 'ar' ? 'لوحة' : 'keypad'}</Text>
               </Pressable>
@@ -572,7 +572,7 @@ export function AddTransactionSheet({ visible, onClose, onSave, categories, defa
                 >
                   <Receipt size={15} color={tok.gold} strokeWidth={1.8} />
                   <Text style={{
-                    color: tok.gold, fontFamily: fontMono('regular'), fontSize: 10,
+                    color: tok.gold, fontFamily: fontMono('regular'), fontSize: 12,
                     letterSpacing: 1.4, textTransform: 'uppercase',
                   }}>{lang === 'ar' ? 'مسح إيصال' : 'Scan'}</Text>
                 </Pressable>
@@ -658,7 +658,7 @@ export function AddTransactionSheet({ visible, onClose, onSave, categories, defa
                 }}
               />
               <Pressable onPress={() => { hapticLight(); setShowCurrencies((v) => !v); }} hitSlop={10} style={{ marginLeft: 8, flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                <Text style={{ color: entryCurrency !== defaultCurrency ? tok.gold : tok.muted, fontFamily: fontMono('regular'), fontSize: 18 }}>
+                <Text style={{ color: entryCurrency !== defaultCurrency ? tok.gold : tok.muted, fontFamily: fontMono('regular'), fontSize: 19 }}>
                   {currencyLabel(entryCurrency, lang)}
                 </Text>
                 <ChevronDown size={14} color={tok.muted} />
@@ -666,7 +666,7 @@ export function AddTransactionSheet({ visible, onClose, onSave, categories, defa
             </View>
           </View>
           {entryCurrency !== defaultCurrency && (
-            <Text style={{ textAlign: 'center', color: tok.muted, fontFamily: fontMono('regular'), fontSize: 11, paddingBottom: 2 }}>
+            <Text style={{ textAlign: 'center', color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12, paddingBottom: 2 }}>
               {fxRate
                 ? `≈ ${Math.round(numericAmount * fxRate * 100) / 100} ${currencyLabel(defaultCurrency, lang)} · ${lang === 'ar' ? 'بسعر اليوم' : "today's rate"}`
                 : (lang === 'ar' ? 'جارٍ جلب سعر الصرف…' : 'Getting the exchange rate…')}
@@ -725,7 +725,7 @@ export function AddTransactionSheet({ visible, onClose, onSave, categories, defa
                     style={{
                       maxWidth: 60,
                       color: a ? tok.gold : tok.muted,
-                      fontFamily: fontMono('regular'), fontSize: 9,
+                      fontFamily: fontMono('regular'), fontSize: 12,
                       letterSpacing: lang === 'ar' ? 0 : 1,
                       textTransform: lang === 'ar' ? 'none' : 'uppercase',
                     }}
@@ -741,7 +741,7 @@ export function AddTransactionSheet({ visible, onClose, onSave, categories, defa
               }}>
                 <Plus size={20} color={showNewCat ? tok.gold : tok.muted} />
               </View>
-              <Text style={{ maxWidth: 60, color: showNewCat ? tok.gold : tok.muted, fontFamily: fontMono('regular'), fontSize: 9, letterSpacing: lang === 'ar' ? 0 : 1, textTransform: lang === 'ar' ? 'none' : 'uppercase' }}>
+              <Text style={{ maxWidth: 60, color: showNewCat ? tok.gold : tok.muted, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: lang === 'ar' ? 0 : 1, textTransform: lang === 'ar' ? 'none' : 'uppercase' }}>
                 {lang === 'ar' ? 'جديدة' : 'New'}
               </Text>
             </Pressable>
@@ -802,7 +802,7 @@ export function AddTransactionSheet({ visible, onClose, onSave, categories, defa
               flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', height: 58,
             }}>
               <Text style={{
-                fontFamily: fontMono('regular'), fontSize: 10.5, letterSpacing: lang === 'ar' ? 0 : 1.4,
+                fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: lang === 'ar' ? 0 : 1.4,
                 color: tok.muted, textTransform: lang === 'ar' ? 'none' : 'uppercase',
               }}>
                 {type === 'income' ? (lang === 'ar' ? 'استلمتُ في' : 'Into') : (lang === 'ar' ? 'دفعتُ من' : 'From')}
@@ -849,13 +849,13 @@ export function AddTransactionSheet({ visible, onClose, onSave, categories, defa
                       borderRadius: 999, paddingHorizontal: 12, paddingVertical: 7,
                     })}
                   >
-                    <Text style={{ color: tok.bone, fontFamily: fontBody(lang), fontSize: 12 }}>{c}</Text>
+                    <Text style={{ color: tok.bone, fontFamily: fontBody(lang), fontSize: 14 }}>{c}</Text>
                   </Pressable>
                 ))}
               </ScrollView>
 
               {(aiBusy || aiDesc) && (
-                <Text style={{ marginTop: 10, color: tok.gold, fontFamily: fontMono('regular'), fontSize: 11, letterSpacing: 1, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+                <Text style={{ marginTop: 10, color: tok.gold, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1, textAlign: lang === 'ar' ? 'right' : 'left' }}>
                   {aiBusy ? (lang === 'ar' ? 'أقرأ ملاحظتك…' : 'Reading your note…') : `${lang === 'ar' ? 'فهمتُ' : 'Understood'}: ${aiDesc}`}
                 </Text>
               )}
@@ -927,7 +927,7 @@ export function AddTransactionSheet({ visible, onClose, onSave, categories, defa
                   <Layers size={16} color={tok.gold} strokeWidth={1.8} />
                   <View style={{ flex: 1 }}>
                     <Text style={{
-                      color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 13,
+                      color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 14,
                       textAlign: lang === 'ar' ? 'right' : 'left',
                     }}>
                       {lang === 'ar'
@@ -935,7 +935,7 @@ export function AddTransactionSheet({ visible, onClose, onSave, categories, defa
                         : `Looks like ${batchCount} transactions`}
                     </Text>
                     <Text style={{
-                      color: tok.muted, fontFamily: fontMono('regular'), fontSize: 10,
+                      color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12,
                       letterSpacing: 1.2, textTransform: 'uppercase', marginTop: 2,
                       textAlign: lang === 'ar' ? 'right' : 'left',
                     }}>

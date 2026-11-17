@@ -88,7 +88,7 @@ export default function CardsScreen() {
             <Text style={{ fontFamily: fontHead(lang), fontSize: 17, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
               {ar ? 'أين تعيش أموالك؟' : 'Where does your money live?'}
             </Text>
-            <Text style={{ marginTop: 8, fontFamily: fontBody(lang), fontSize: 13.5, lineHeight: 20, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+            <Text style={{ marginTop: 8, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 22, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
               {ar ? 'أضف حسابك البنكي أو محفظتك لتتبّع رصيد كل واحد.' : 'Add your bank account or wallet and Seshat tracks the balance of each.'}
             </Text>
             <View style={{ marginTop: 14 }}>
@@ -100,7 +100,7 @@ export default function CardsScreen() {
         {cards && cards.length > 0 && cards.every((c) => c.kind === 'cash') && (
           <Pressable onPress={() => setAdding(true)} style={({ pressed }) => ({ opacity: pressed ? 0.85 : 1, marginBottom: 14 })}>
             <RCard padding={14}>
-              <Text style={{ fontFamily: fontBody(lang), fontSize: 13.5, lineHeight: 20, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+              <Text style={{ fontFamily: fontBody(lang), fontSize: 14, lineHeight: 22, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
                 {ar ? 'لديك الكاش فقط. أضف حسابك البنكي أو محفظتك ليظهر رصيدها هنا.' : 'You only have Cash so far. Add your bank account or wallet to see its balance here.'}
               </Text>
             </RCard>
@@ -125,8 +125,8 @@ export default function CardsScreen() {
                     <Icon size={19} color={tok.gold} />
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text numberOfLines={1} style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15.5, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{c.visibility === 'private' ? '🔒 ' : ''}{c.name}</Text>
-                    <Text style={{ marginTop: 2, fontFamily: fontMono('regular'), fontSize: 11, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+                    <Text numberOfLines={1} style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{c.visibility === 'private' ? '🔒 ' : ''}{c.name}</Text>
+                    <Text style={{ marginTop: 2, fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
                       {kindLabel}
                       {c.reportedBalance != null && Math.abs(c.reportedBalance - (c.balance ?? 0)) >= 1
                         ? ` · ${ar ? 'البنك يقول' : 'bank says'} ${Math.round(c.reportedBalance)}`

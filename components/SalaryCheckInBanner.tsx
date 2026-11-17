@@ -78,13 +78,13 @@ export function SalaryCheckInBanner({
           </View>
           <View style={{ flex: 1 }}>
             <Text style={{
-              color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 14,
+              color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 16,
               textAlign: lang === 'ar' ? 'right' : 'left',
             }}>
               {lang === 'ar' ? `هل استلمت راتب ${label}؟` : `Did you get paid for ${label}?`}
             </Text>
             <Text style={{
-              marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 12,
+              marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
               textAlign: lang === 'ar' ? 'right' : 'left',
             }}>
               {lang === 'ar'
@@ -92,7 +92,7 @@ export function SalaryCheckInBanner({
                 : 'Log it to close the month, or skip if you didn\'t.'}
             </Text>
           </View>
-          <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 14 }}>
+          <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 16 }}>
             {lang === 'ar' ? '←' : '→'}
           </Text>
         </View>
@@ -183,7 +183,7 @@ export function SalaryCheckInSheet({
         </View>
 
         <Text style={{
-          fontFamily: fontBody(lang), fontSize: 13.5, lineHeight: 20, color: tok.muted,
+          fontFamily: fontBody(lang), fontSize: 14, lineHeight: 22, color: tok.muted,
           textAlign: lang === 'ar' ? 'right' : 'left',
         }}>
           {lang === 'ar'
@@ -200,7 +200,7 @@ export function SalaryCheckInSheet({
           autoFocus
           label={lang === 'ar' ? 'المبلغ' : 'Amount'}
           secondary={
-            <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 14 }}>
+            <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 16 }}>
               {currencyLabel(currency, lang)}
             </Text>
           }
@@ -212,7 +212,7 @@ export function SalaryCheckInSheet({
             alignItems: 'center', gap: 6,
           }}>
             <Check size={16} color={tok.void} />
-            <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.void }}>
+            <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.void }}>
               {saving
                 ? (lang === 'ar' ? 'جارٍ الحفظ…' : 'Saving…')
                 : (lang === 'ar' ? 'استلمته - سجّل' : 'Received - log it')}
@@ -229,7 +229,7 @@ export function SalaryCheckInSheet({
             opacity: pressed ? 0.6 : 1,
           })}
         >
-          <Text style={{ fontFamily: fontBody(lang), fontSize: 13, color: tok.muted }}>
+          <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted }}>
             {lang === 'ar' ? 'تخطى هذا الشهر' : 'Skip this month'}
           </Text>
         </Pressable>

@@ -83,14 +83,14 @@ export default function NewOrgScreen() {
             return (
               <Pressable key={k} onPress={() => setKind(k)} style={{ flex: 1, padding: 14, borderRadius: 16, borderWidth: 1, borderColor: on ? tok.gold : tok.border, backgroundColor: on ? tok.glowShellBg : 'transparent', gap: 6 }}>
                 <Icon size={20} color={on ? tok.gold : tok.muted} strokeWidth={1.7} />
-                <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{label}</Text>
-                <Text style={{ fontFamily: fontBody(lang), fontSize: 12, lineHeight: 17, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{hint}</Text>
+                <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{label}</Text>
+                <Text style={{ fontFamily: fontBody(lang), fontSize: 14, lineHeight: 19, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{hint}</Text>
               </Pressable>
             );
           })}
         </View>
         <Text style={{
-          fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, lineHeight: 19, marginBottom: 20,
+          fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, lineHeight: 21, marginBottom: 20,
           textAlign: ar ? 'right' : 'left', writingDirection: ar ? 'rtl' : 'ltr',
         }}>
           {kind === 'family'
@@ -131,8 +131,8 @@ export default function NewOrgScreen() {
 
         <Text style={{
           marginTop: 18,
-          fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted, letterSpacing: 1.2,
-          textAlign: 'center', lineHeight: 16,
+          fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, letterSpacing: 1.2,
+          textAlign: 'center', lineHeight: 18,
         }}>
           {lang === 'ar'
             ? 'تنشأ بتصنيفات جاهزة تناسبها · يمكنك التخصيص لاحقًا'

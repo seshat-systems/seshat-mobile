@@ -146,7 +146,7 @@ export function NotificationBell() {
           alignItems: 'center', justifyContent: 'center',
         }}>
           <Text style={{
-            fontFamily: fontMono('medium'), fontSize: 9, lineHeight: 11,
+            fontFamily: fontMono('medium'), fontSize: 12, lineHeight: 11,
             color: tok.void, writingDirection: 'ltr',
           }}>{badge}</Text>
         </View>
@@ -277,7 +277,7 @@ export function RTxRow({
                 borderWidth: StyleSheet.hairlineWidth, borderColor: tok.border,
               }}>
                 <Text style={{
-                  fontFamily: fontMono('regular'), fontSize: 9,
+                  fontFamily: fontMono('regular'), fontSize: 12,
                   color: tok.gold, letterSpacing: 0.8,
                   textTransform: 'lowercase',
                 }}>
@@ -495,7 +495,7 @@ export function RecordingBanner({ visible }: { visible: boolean }) {
           transform: [{ scale: dotScale }], opacity: dotOpacity,
         }} />
         <Text style={{
-          fontFamily: fontBody(lang, 'medium'), fontSize: 13, color: tok.bone,
+          fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: tok.bone,
           writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
         }}>{label}</Text>
         <Waveform color={tok.alertText} />
@@ -545,7 +545,7 @@ export function SectionHeader({
       {action && (
         <Pressable onPress={onActionPress} hitSlop={6}>
           <Text style={{
-            color: tok.gold, fontFamily: fontMono('regular'), fontSize: 10,
+            color: tok.gold, fontFamily: fontMono('regular'), fontSize: 12,
             letterSpacing: 1.4, textTransform: 'uppercase',
           }}>{action} →</Text>
         </Pressable>

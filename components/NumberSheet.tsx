@@ -26,7 +26,7 @@ export function NumberSheet({
       <Pressable style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)' }} onPress={onClose} />
       <View style={{ backgroundColor: tok.void, borderTopLeftRadius: radius.modal, borderTopRightRadius: radius.modal, padding: 20, paddingBottom: insets.bottom + 16, borderTopWidth: 1, borderColor: tok.border, gap: 14 }}>
         <Text style={{ fontFamily: fontHead(lang), fontSize: 20, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{title}</Text>
-        {hint ? <Text style={{ fontFamily: fontBody(lang), fontSize: 13, lineHeight: 19, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{hint}</Text> : null}
+        {hint ? <Text style={{ fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{hint}</Text> : null}
         <RField value={text} onChange={setText} keyboardType="numeric" mono ltr placeholder={unit ? `0 ${unit}` : '0'} autoFocus />
         {extra}
         <RButton full onPress={() => run(value > 0 ? value : null)} loading={busy} disabled={busy || (text.trim() !== '' && !(value >= 0))}>{ar ? 'حفظ' : 'Save'}</RButton>

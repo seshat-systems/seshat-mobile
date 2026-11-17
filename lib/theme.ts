@@ -70,12 +70,12 @@ export const S = {
 // across mobile and web. Mobile values are slightly tighter than the
 // web's clamp() because phones don't have the breathing room.
 export const T = {
-  eyebrow: 11,
-  meta: 12,
-  bodyS: 13,
-  body: 15,
-  bodyL: 17,
-  h6: 18,
+  eyebrow: 12,
+  meta: 13,
+  bodyS: 14,
+  body: 16,
+  bodyL: 18,
+  h6: 20,
   h5: 22,
   h4: 26,
   h3: 32,

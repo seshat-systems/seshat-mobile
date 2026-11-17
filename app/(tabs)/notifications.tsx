@@ -234,7 +234,7 @@ function NotificationRow({
             }}
           >{n.title}</Text>
           <Text style={{
-            fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted,
+            fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted,
             writingDirection: 'ltr',
           }}>{relativeTime(n.createdAt, lang)}</Text>
           {unread && (
@@ -247,7 +247,7 @@ function NotificationRow({
             style={{
               marginTop: 4,
               fontFamily: fontBody(lang),
-              fontSize: 13, lineHeight: 19, color: tok.muted,
+              fontSize: 14, lineHeight: 21, color: tok.muted,
               writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
               textAlign: lang === 'ar' ? 'right' : 'left',
             }}
@@ -270,7 +270,7 @@ function EmptyState({ tok, lang }: { tok: any; lang: 'en' | 'ar' }) {
         <BellOff size={24} color={tok.muted} />
       </View>
       <Text style={{
-        fontFamily: fontBody(lang), fontSize: 14.5, lineHeight: 21,
+        fontFamily: fontBody(lang), fontSize: 16, lineHeight: 24,
         color: tok.muted, textAlign: 'center', maxWidth: 260,
       }}>
         {lang === 'ar'

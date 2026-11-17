@@ -119,7 +119,7 @@ export default function BillRemindersScreen() {
                         <Text
                           style={{
                             fontFamily: fontBody(lang),
-                            fontSize: 15,
+                            fontSize: 16,
                             color: tok.bone,
                             textAlign: lang === 'ar' ? 'right' : 'left',
                             writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
@@ -131,7 +131,7 @@ export default function BillRemindersScreen() {
                         <Text
                           style={{
                             fontFamily: fontMono('medium'),
-                            fontSize: 14,
+                            fontSize: 16,
                             color: tok.gold,
                             writingDirection: 'ltr',
                             marginLeft: lang === 'ar' ? 0 : 8,
@@ -145,7 +145,7 @@ export default function BillRemindersScreen() {
                       <Text
                         style={{
                           fontFamily: fontBody(lang),
-                          fontSize: 12,
+                          fontSize: 14,
                           color: tok.muted,
                           textAlign: lang === 'ar' ? 'right' : 'left',
                           writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
@@ -237,7 +237,7 @@ export default function BillRemindersScreen() {
                             <Text
                               style={{
                                 fontFamily: fontBody(lang),
-                                fontSize: 15,
+                                fontSize: 16,
                                 color: isOff ? tok.muted : tok.bone,
                                 textAlign: lang === 'ar' ? 'right' : 'left',
                                 writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
@@ -256,7 +256,7 @@ export default function BillRemindersScreen() {
                           <Text
                             style={{
                               fontFamily: fontBody(lang),
-                              fontSize: 11,
+                              fontSize: 12,
                               color: tok.muted,
                               marginTop: 2,
                               textAlign: lang === 'ar' ? 'right' : 'left',
@@ -299,7 +299,7 @@ export default function BillRemindersScreen() {
       <Modal visible={adding} transparent animationType="slide" onRequestClose={() => setAdding(false)}>
         <Pressable style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)' }} onPress={() => setAdding(false)} />
         <View style={{ backgroundColor: tok.void, borderTopLeftRadius: radius.modal, borderTopRightRadius: radius.modal, padding: 20, paddingBottom: insets.bottom + 16, borderTopWidth: 1, borderColor: tok.border, gap: 12 }}>
-          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 18, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? 'فاتورة جديدة' : 'New bill'}</Text>
+          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 19, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? 'فاتورة جديدة' : 'New bill'}</Text>
           <RField label={ar ? 'الاسم' : 'NAME'} value={bName} onChange={setBName} placeholder={ar ? 'مثلاً: الكهرباء' : 'e.g. Electricity'} maxLength={60} />
           <RField label={ar ? 'المبلغ (اختياري)' : 'AMOUNT (OPTIONAL)'} value={bAmount} onChange={setBAmount} keyboardType="numeric" mono ltr placeholder="0" />
           <RField label={ar ? 'يوم الشهر' : 'DAY OF THE MONTH'} value={bDay} onChange={setBDay} keyboardType="numeric" mono ltr placeholder="15" maxLength={2} />
@@ -316,8 +316,8 @@ function EmptyState({ tok, lang }: { tok: any; lang: 'en' | 'ar' }) {
       <Text
         style={{
           fontFamily: fontBody(lang),
-          fontSize: 14.5,
-          lineHeight: 21,
+          fontSize: 16,
+          lineHeight: 24,
           color: tok.muted,
           textAlign: 'center',
         }}

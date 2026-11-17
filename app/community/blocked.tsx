@@ -24,12 +24,12 @@ export default function BlockedScreen() {
     <PlanScreen title={ar ? 'الأعضاء المحظورون' : 'Blocked members'} subtitle={ar ? 'لا ترى منشوراتهم' : 'You do not see their posts'}>
       <ScreenScroll contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: insets.bottom + 40, paddingTop: 8, gap: 10 }} showsVerticalScrollIndicator={false}>
         {rows === null ? null : rows.length === 0 ? (
-          <Text style={{ paddingTop: 40, textAlign: 'center', color: tok.muted, fontFamily: fontBody(lang), fontSize: 14 }}>{ar ? 'لم تحظر أحداً.' : 'You have not blocked anyone.'}</Text>
+          <Text style={{ paddingTop: 40, textAlign: 'center', color: tok.muted, fontFamily: fontBody(lang), fontSize: 16 }}>{ar ? 'لم تحظر أحداً.' : 'You have not blocked anyone.'}</Text>
         ) : rows.map((b) => (
           <RCard key={b.id} padding={14}>
             <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 15 }}>{b.name}</Text>
-              <Pressable onPress={() => unblock(b.id)} hitSlop={8}><Text style={{ color: tok.gold, fontFamily: fontBody(lang, 'semibold'), fontSize: 13 }}>{ar ? 'إلغاء الحظر' : 'Unblock'}</Text></Pressable>
+              <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 16 }}>{b.name}</Text>
+              <Pressable onPress={() => unblock(b.id)} hitSlop={8}><Text style={{ color: tok.gold, fontFamily: fontBody(lang, 'semibold'), fontSize: 14 }}>{ar ? 'إلغاء الحظر' : 'Unblock'}</Text></Pressable>
             </View>
           </RCard>
         ))}

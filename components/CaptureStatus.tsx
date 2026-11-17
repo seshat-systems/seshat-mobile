@@ -51,7 +51,7 @@ export function CaptureStatus({ permissionOff }: { permissionOff?: boolean }) {
         <Icon size={18} color={color} />
         <REyebrow>{ar ? 'حالة التسجيل التلقائي' : 'Automatic logging'}</REyebrow>
       </View>
-      <Text style={{ fontFamily: fontBody(lang), fontSize: 13.5, lineHeight: 20, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{line}</Text>
+      <Text style={{ fontFamily: fontBody(lang), fontSize: 14, lineHeight: 22, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{line}</Text>
     </RCard>
   );
 }

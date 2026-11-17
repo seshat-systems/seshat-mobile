@@ -108,7 +108,7 @@ export default function CategoriesScreen() {
                   <Text
                     numberOfLines={1}
                     style={{
-                      fontFamily: fontBody(lang, 'medium'), fontSize: 15, color: tok.bone,
+                      fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone,
                       textAlign: lang === 'ar' ? 'right' : 'left',
                     }}
                   >
@@ -117,7 +117,7 @@ export default function CategoriesScreen() {
                   <Text
                     numberOfLines={1}
                     style={{
-                      fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted, letterSpacing: 1.2, marginTop: 3,
+                      fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, letterSpacing: 1.2, marginTop: 3,
                       textAlign: lang === 'ar' ? 'right' : 'left',
                     }}
                   >
@@ -153,7 +153,7 @@ export default function CategoriesScreen() {
 
         {!loading && (
           <Text style={{
-            fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted, letterSpacing: 1.2,
+            fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, letterSpacing: 1.2,
             textAlign: 'center', marginTop: 18,
           }}>
             {lang === 'ar' ? 'اضغط مطوّلاً على تصنيف مخصص لحذفه' : 'LONG-PRESS A CUSTOM CATEGORY TO DELETE'}
@@ -269,7 +269,7 @@ function AddCategorySheet({
         {/* Icon picker grid */}
         <View>
           <Text style={{
-            fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted, letterSpacing: 1.4, marginBottom: 8,
+            fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, letterSpacing: 1.4, marginBottom: 8,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}>{lang === 'ar' ? 'اختاري أيقونة' : 'PICK AN ICON'}</Text>
           <ScrollView style={{ maxHeight: 180 }} showsVerticalScrollIndicator={false}>
@@ -301,7 +301,7 @@ function AddCategorySheet({
 
         {err ? (
           <Text style={{
-            fontFamily: fontBody(lang), fontSize: 13, color: tok.alertText,
+            fontFamily: fontBody(lang), fontSize: 14, color: tok.alertText,
             textAlign: 'center', marginTop: -4,
           }}>{err}</Text>
         ) : null}

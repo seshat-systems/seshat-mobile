@@ -563,7 +563,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
           <Text
             numberOfLines={1}
             style={{
-              fontFamily: fontHead(lang), fontSize: 16, color: tok.bone, letterSpacing: -0.2,
+              fontFamily: fontHead(lang), fontSize: 17, color: tok.bone, letterSpacing: -0.2,
               textAlign: lang === 'ar' ? 'right' : 'left',
             }}
           >
@@ -578,7 +578,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
             paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999,
             backgroundColor: 'rgba(201,168,76,0.08)', borderWidth: 1, borderColor: 'rgba(201,168,76,0.18)',
           }}>
-            <Text style={{ fontFamily: fontMono('regular'), fontSize: 11, letterSpacing: 1.2, color: tok.gold, textTransform: 'uppercase' }}>
+            <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2, color: tok.gold, textTransform: 'uppercase' }}>
               {PERSONAS[persona].name[lang]}
             </Text>
           </View>
@@ -608,7 +608,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
         ListEmptyComponent={
           opening ? null : <View style={{ alignItems: 'center', paddingTop: 60 }}>
             <Text style={{
-              fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: 'center',
+              fontFamily: fontBody(lang), fontSize: 16, color: tok.muted, textAlign: 'center',
             }}>
               {persona === 'maat'
                 ? (lang === 'ar'
@@ -649,7 +649,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
         }}>
           <Text style={{
             flex: 1, color: tok.gold, fontFamily: fontMono('regular'),
-            fontSize: 11, letterSpacing: 0.4,
+            fontSize: 12, letterSpacing: 0.4,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}>
             {lang === 'ar' ? 'تعديل الرسالة — أرسل لتستبدل ما بعدها' : 'Editing message — send to replace what follows'}
@@ -659,7 +659,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
             hitSlop={8}
             accessibilityLabel={lang === 'ar' ? 'إلغاء التعديل' : 'Cancel edit'}
           >
-            <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 11, letterSpacing: 0.4 }}>
+            <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 0.4 }}>
               {lang === 'ar' ? 'إلغاء' : 'Cancel'}
             </Text>
           </Pressable>
@@ -697,7 +697,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
             multiline
             editable={!sending && !recorder.isRecording && !uploading}
             style={{
-              flex: 1, color: tok.bone, fontFamily: fontBody(lang), fontSize: 16,
+              flex: 1, color: tok.bone, fontFamily: fontBody(lang), fontSize: 17,
               paddingVertical: Platform.OS === 'ios' ? 13 : 9,
               maxHeight: 110,
               writingDirection: lang === 'ar' ? 'rtl' : 'ltr',

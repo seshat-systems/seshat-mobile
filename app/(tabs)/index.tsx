@@ -178,12 +178,12 @@ function EmptyState() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40 }}>
       <Text style={{
-        color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 18,
-        textAlign: 'center', lineHeight: 26,
+        color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 19,
+        textAlign: 'center', lineHeight: 29,
       }}>{t('noRecords')}</Text>
       <Text style={{
-        marginTop: 10, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
-        textAlign: 'center', lineHeight: 22,
+        marginTop: 10, color: tok.muted, fontFamily: fontBody(lang), fontSize: 16,
+        textAlign: 'center', lineHeight: 25,
       }}>{t('noRecordsSub')}</Text>
     </View>
   );

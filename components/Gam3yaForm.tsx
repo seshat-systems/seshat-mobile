@@ -80,7 +80,7 @@ export function Gam3yaForm({ seed, onDone }: { seed?: Partial<Suggestion>; onDon
       </View>
       {ok ? (
         <RCard padding={14}>
-          <Text style={{ fontFamily: fontBody(lang), fontSize: 13.5, lineHeight: 20, color: '#E8E6DD', textAlign: ar ? 'right' : 'left' }}>
+          <Text style={{ fontFamily: fontBody(lang), fontSize: 14, lineHeight: 22, color: '#E8E6DD', textAlign: ar ? 'right' : 'left' }}>
             {ar
               ? `تدفع ${n0(per)} في كل ${freq === 'weekly' ? 'أسبوع' : 'شهر'}، وتقبض ${n0(a * m)} في دورك. إجمالي ما تدفعه ${n0(per * m)}.`
               : `You pay ${n0(per)} each ${freq === 'weekly' ? 'week' : 'month'} and collect ${n0(a * m)} in your turn. Over the whole circle you pay ${n0(per * m)}.`}

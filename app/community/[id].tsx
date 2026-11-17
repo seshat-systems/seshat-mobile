@@ -87,7 +87,7 @@ export default function QuestionScreen() {
     const item = (Icon: typeof Trash2, label: string, onPress: () => void, color: string) => (
       <Pressable onPress={onPress} hitSlop={8} style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 5 }}>
         <Icon size={14} color={color} />
-        <Text style={{ fontFamily: fontBody(lang), fontSize: 12.5, color }}>{label}</Text>
+        <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color }}>{label}</Text>
       </Pressable>
     );
     return (
@@ -107,14 +107,14 @@ export default function QuestionScreen() {
       <View style={{ width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? tok.gold : tok.glowShellBg, borderWidth: 1, borderColor: tok.glowShellBorder }}>
         <ChevronUp size={18} color={on ? tok.void : tok.gold} strokeWidth={2.4} />
       </View>
-      <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted }}>{n}</Text>
+      <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: tok.muted }}>{n}</Text>
     </Pressable>
   );
 
   if (gone) return (
     <PlanScreen title={ar ? 'سؤال' : 'Question'}>
       <View style={{ paddingTop: 60, alignItems: 'center', gap: 8 }}>
-        <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 16 }}>{ar ? 'هذا السؤال غير متاح.' : 'This question is not available.'}</Text>
+        <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 17 }}>{ar ? 'هذا السؤال غير متاح.' : 'This question is not available.'}</Text>
         <View style={{ marginTop: 12 }}><RButton onPress={() => router.back()}>{ar ? 'رجوع' : 'Back'}</RButton></View>
       </View>
     </PlanScreen>
@@ -130,12 +130,12 @@ export default function QuestionScreen() {
           <View style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 12, alignItems: 'flex-start' }}>
             <VoteBtn n={q.votes} on={q.myVote} onPress={() => vote('question', q.id)} disabled={q.mine} />
             <View style={{ flex: 1 }}>
-              <Text style={{ fontFamily: fontHead(lang), fontSize: 20, lineHeight: 27, color: tok.bone, textAlign: qRtl ? 'right' : 'left', writingDirection: qRtl ? 'rtl' : 'ltr' }}>{q.title}</Text>
-              {q.body ? <Text style={{ marginTop: 8, fontFamily: fontBody(lang), fontSize: 14.5, lineHeight: 22, color: tok.bone, textAlign: qRtl ? 'right' : 'left', writingDirection: qRtl ? 'rtl' : 'ltr' }}>{q.body}</Text> : null}
+              <Text style={{ fontFamily: fontHead(lang), fontSize: 20, lineHeight: 30, color: tok.bone, textAlign: qRtl ? 'right' : 'left', writingDirection: qRtl ? 'rtl' : 'ltr' }}>{q.title}</Text>
+              {q.body ? <Text style={{ marginTop: 8, fontFamily: fontBody(lang), fontSize: 16, lineHeight: 25, color: tok.bone, textAlign: qRtl ? 'right' : 'left', writingDirection: qRtl ? 'rtl' : 'ltr' }}>{q.body}</Text> : null}
               <View style={{ marginTop: 12 }}><Actions t={{ type: 'question', id: q.id, mine: q.mine }} /></View>
             </View>
           </View>
-          {q.status === 'hidden' ? <Text style={{ marginTop: 10, fontFamily: fontBody(lang), fontSize: 12, color: tok.alertText, textAlign: ar ? 'right' : 'left' }}>{ar ? 'مخفي حتى تراجعه الإدارة.' : 'Hidden until the team reviews it.'}</Text> : null}
+          {q.status === 'hidden' ? <Text style={{ marginTop: 10, fontFamily: fontBody(lang), fontSize: 14, color: tok.alertText, textAlign: ar ? 'right' : 'left' }}>{ar ? 'مخفي حتى تراجعه الإدارة.' : 'Hidden until the team reviews it.'}</Text> : null}
         </RCard>
 
         <REyebrow style={{ textAlign: ar ? 'right' : 'left' }}>{d.answers.length === 0 ? (ar ? 'لا إجابات بعد' : 'No answers yet') : ar ? `${d.answers.length} إجابات` : `${d.answers.length} ${d.answers.length === 1 ? 'ANSWER' : 'ANSWERS'}`}</REyebrow>
@@ -150,15 +150,15 @@ export default function QuestionScreen() {
                   {a.accepted ? (
                     <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 6, marginBottom: 6 }}>
                       <CheckCircle2 size={15} color="#6FCF97" />
-                      <Text style={{ fontFamily: fontMono('regular'), fontSize: 11, letterSpacing: 1, color: '#6FCF97' }}>{ar ? 'أفضل إجابة' : 'BEST ANSWER'}</Text>
+                      <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1, color: '#6FCF97' }}>{ar ? 'أفضل إجابة' : 'BEST ANSWER'}</Text>
                     </View>
                   ) : null}
-                  <Text style={{ fontFamily: fontBody(lang), fontSize: 14.5, lineHeight: 22, color: tok.bone, textAlign: aRtl ? 'right' : 'left', writingDirection: aRtl ? 'rtl' : 'ltr' }}>{a.body}</Text>
-                  <Text style={{ marginTop: 8, fontFamily: fontMono('regular'), fontSize: 11, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{a.mine ? (ar ? 'أنت' : 'You') : a.authorName} · {timeAgo(a.createdAt, ar)}</Text>
+                  <Text style={{ fontFamily: fontBody(lang), fontSize: 16, lineHeight: 25, color: tok.bone, textAlign: aRtl ? 'right' : 'left', writingDirection: aRtl ? 'rtl' : 'ltr' }}>{a.body}</Text>
+                  <Text style={{ marginTop: 8, fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{a.mine ? (ar ? 'أنت' : 'You') : a.authorName} · {timeAgo(a.createdAt, ar)}</Text>
                   <View style={{ marginTop: 10, flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', flexWrap: 'wrap', columnGap: 16, rowGap: 8 }}>
                     {q.mine ? (
                       <Pressable onPress={() => markBest(a.id)}>
-                        <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 13, color: tok.gold }}>{a.accepted ? (ar ? 'إلغاء اختيارها' : 'Unmark best answer') : (ar ? 'اختر كأفضل إجابة' : 'Mark as best answer')}</Text>
+                        <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.gold }}>{a.accepted ? (ar ? 'إلغاء اختيارها' : 'Unmark best answer') : (ar ? 'اختر كأفضل إجابة' : 'Mark as best answer')}</Text>
                       </Pressable>
                     ) : null}
                     <Actions t={{ type: 'answer', id: a.id, mine: a.mine }} />

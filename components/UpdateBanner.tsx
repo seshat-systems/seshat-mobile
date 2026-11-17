@@ -30,13 +30,13 @@ export function UpdateBanner() {
           </View>
           <View style={{ flex: 1 }}>
             <Text style={{
-              color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 14,
+              color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 16,
               textAlign: ar ? 'right' : 'left',
             }}>
               {ar ? 'يوجد إصدار جديد من سيشات' : 'Get the latest version of Seshat'}
             </Text>
             <Text style={{
-              marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 12,
+              marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
               textAlign: ar ? 'right' : 'left',
             }}>
               {notes || (ar ? `الإصدار ${update.versionName} جاهز. اضغط للتحميل والتثبيت.` : `Version ${update.versionName} is ready. Tap to download and install.`)}

@@ -83,7 +83,7 @@ export default function CaptureSetupAndroidScreen() {
             <REyebrow>{lang === 'ar' ? 'ماذا نقرأ' : 'What we read'}</REyebrow>
           </View>
           <Text style={{
-            fontFamily: fontBody(lang), fontSize: 13.5, lineHeight: 20, color: tok.muted,
+            fontFamily: fontBody(lang), fontSize: 14, lineHeight: 22, color: tok.muted,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}>
             {lang === 'ar'
@@ -101,7 +101,7 @@ export default function CaptureSetupAndroidScreen() {
             <REyebrow>{lang === 'ar' ? 'ماذا نتجاهل' : 'What we ignore'}</REyebrow>
           </View>
           <Text style={{
-            fontFamily: fontBody(lang), fontSize: 13.5, lineHeight: 20, color: tok.muted,
+            fontFamily: fontBody(lang), fontSize: 14, lineHeight: 22, color: tok.muted,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}>
             {lang === 'ar'
@@ -119,7 +119,7 @@ export default function CaptureSetupAndroidScreen() {
             <REyebrow>{lang === 'ar' ? 'الخصوصية' : 'Privacy'}</REyebrow>
           </View>
           <Text style={{
-            fontFamily: fontBody(lang), fontSize: 13.5, lineHeight: 20, color: tok.muted,
+            fontFamily: fontBody(lang), fontSize: 14, lineHeight: 22, color: tok.muted,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}>
             {lang === 'ar'
@@ -137,7 +137,7 @@ export default function CaptureSetupAndroidScreen() {
             <REyebrow>{lang === 'ar' ? 'كيف يحدث ذلك' : 'How it works'}</REyebrow>
           </View>
           <Text style={{
-            fontFamily: fontBody(lang), fontSize: 13.5, lineHeight: 20, color: tok.muted,
+            fontFamily: fontBody(lang), fontSize: 14, lineHeight: 22, color: tok.muted,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}>
             {lang === 'ar'
@@ -148,7 +148,7 @@ export default function CaptureSetupAndroidScreen() {
 
         <RCard padding={18} style={{ marginBottom: 14 }}>
           <Text style={{
-            fontFamily: fontBody(lang), fontSize: 13, lineHeight: 19, color: tok.muted,
+            fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: tok.muted,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}>
             {lang === 'ar'
@@ -174,7 +174,7 @@ export default function CaptureSetupAndroidScreen() {
         </RButton>
 
         <Text style={{
-          marginTop: 12, fontFamily: fontBody(lang), fontSize: 11, color: tok.muted,
+          marginTop: 12, fontFamily: fontBody(lang), fontSize: 12, color: tok.muted,
           textAlign: 'center',
         }}>
           {lang === 'ar'

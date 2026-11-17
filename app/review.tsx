@@ -69,17 +69,17 @@ export default function ReviewScreen() {
         {items === null && <ActivityIndicator color={tok.gold} />}
         {items && items.length === 0 && (
           <RCard padding={20}>
-            <Text style={{ fontFamily: fontHead(lang), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
+            <Text style={{ fontFamily: fontHead(lang), fontSize: 17, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
               {ar ? 'لا أسئلة الآن' : 'Nothing to answer'}
             </Text>
-            <Text style={{ marginTop: 6, fontFamily: fontBody(lang), fontSize: 13.5, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+            <Text style={{ marginTop: 6, fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
               {ar ? 'سأسألك هنا عندما لا أكون متأكداً مما رصدته.' : 'I will ask here when I am not sure about something I captured.'}
             </Text>
           </RCard>
         )}
         {(items ?? []).map((q) => (
           <RCard key={q.id} padding={16} style={{ marginBottom: 12, opacity: busy === q.id ? 0.6 : 1 }}>
-            <Text style={{ fontFamily: fontHead(lang), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
+            <Text style={{ fontFamily: fontHead(lang), fontSize: 17, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
               {q.kind === 'atm'
                 ? (ar ? 'هل كان هذا سحباً من ماكينة؟' : 'Was this an ATM withdrawal?')
                 : (ar ? 'على ماذا صرفتَ هذا؟' : 'What was this for?')}
@@ -87,7 +87,7 @@ export default function ReviewScreen() {
             <View style={{ marginTop: 8 }}>
               <RAmount value={-q.amount} currency={q.currency} size={24} decimals={0} />
             </View>
-            <Text style={{ marginTop: 4, fontFamily: fontMono('regular'), fontSize: 11, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+            <Text style={{ marginTop: 4, fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
               {[q.description, card(q), new Date(q.date).toLocaleDateString(ar ? 'ar-EG' : 'en-US', { day: 'numeric', month: 'short' })].filter(Boolean).join(' · ')}
             </Text>
             {q.kind === 'atm' ? (
@@ -110,11 +110,11 @@ export default function ReviewScreen() {
                       borderWidth: 1, borderColor: tok.border, opacity: pressed ? 0.8 : 1,
                     })}
                   >
-                    <Text style={{ fontFamily: fontBody(lang), fontSize: 13, color: tok.bone }}>{ar && c.nameAr ? c.nameAr : c.nameEn}</Text>
+                    <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.bone }}>{ar && c.nameAr ? c.nameAr : c.nameEn}</Text>
                   </Pressable>
                 ))}
                 <Pressable onPress={() => answer(q.id, { action: 'spending' })} style={{ paddingHorizontal: 10, paddingVertical: 9 }}>
-                  <Text style={{ fontFamily: fontBody(lang), fontSize: 13, color: tok.muted }}>{ar ? 'اتركه كما هو' : 'Keep as is'}</Text>
+                  <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted }}>{ar ? 'اتركه كما هو' : 'Keep as is'}</Text>
                 </Pressable>
               </View>
             )}

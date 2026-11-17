@@ -120,7 +120,7 @@ export default function ChangePasswordScreen() {
             }}
           >
             <Text style={{
-              color: tok.alertText, fontFamily: fontBody(lang), fontSize: 13, lineHeight: 19,
+              color: tok.alertText, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21,
               textAlign: lang === 'ar' ? 'right' : 'left',
               writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
             }}>
@@ -152,7 +152,7 @@ export default function ChangePasswordScreen() {
           hitSlop={10}
           style={{ alignSelf: lang === 'ar' ? 'flex-start' : 'flex-end', marginBottom: 16 }}
         >
-          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.gold }}>{lang === 'ar' ? 'نسيتِ كلمة السر الحالية؟' : 'Forgot your current password?'}</Text>
+          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.gold }}>{lang === 'ar' ? 'نسيتِ كلمة السر الحالية؟' : 'Forgot your current password?'}</Text>
         </Pressable>
 
         <RField
@@ -168,7 +168,7 @@ export default function ChangePasswordScreen() {
         {tooShort ? (
           <Text style={{
             marginBottom: 16,
-            fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 0.4,
+            fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 0.4,
             color: tok.muted, textAlign: lang === 'ar' ? 'right' : 'left',
           }}>
             {lang === 'ar' ? `الحد الأدنى ${MIN_LEN} أحرف.` : `Min. ${MIN_LEN} characters.`}
@@ -189,7 +189,7 @@ export default function ChangePasswordScreen() {
         />
         {mismatch ? (
           <Text style={{
-            fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 0.4,
+            fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 0.4,
             color: tok.alertText, textAlign: lang === 'ar' ? 'right' : 'left',
           }}>
             {lang === 'ar' ? 'كلمتا السر غير متطابقتين.' : 'Passwords do not match.'}

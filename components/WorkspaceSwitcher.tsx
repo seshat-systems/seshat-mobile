@@ -49,7 +49,7 @@ export function WorkspaceChip() {
       <Text
         numberOfLines={1}
         style={{
-          fontFamily: fontMono('regular'), fontSize: 11,
+          fontFamily: fontMono('regular'), fontSize: 12,
           letterSpacing: 1.2, textTransform: 'uppercase',
           color: tok.gold, maxWidth: 130,
         }}
@@ -105,7 +105,7 @@ export function WorkspaceCard({ onPress }: { onPress: () => void }) {
         </View>
         <View style={{ flex: 1 }}>
           <Text style={{
-            fontFamily: fontMono('regular'), fontSize: 9, color: tok.muted, letterSpacing: 1.4,
+            fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, letterSpacing: 1.4,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}>
             {lang === 'ar' ? 'مساحة العمل' : 'WORKSPACE'}
@@ -114,7 +114,7 @@ export function WorkspaceCard({ onPress }: { onPress: () => void }) {
             numberOfLines={1}
             style={{
               marginTop: 2,
-              fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.bone,
+              fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone,
               textAlign: lang === 'ar' ? 'right' : 'left',
               writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
             }}
@@ -125,7 +125,7 @@ export function WorkspaceCard({ onPress }: { onPress: () => void }) {
             numberOfLines={1}
             style={{
               marginTop: 2,
-              fontFamily: fontBody(lang), fontSize: 12, color: tok.muted,
+              fontFamily: fontBody(lang), fontSize: 14, color: tok.muted,
               textAlign: lang === 'ar' ? 'right' : 'left',
               writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
             }}
@@ -197,7 +197,7 @@ export function WorkspaceSheet({ visible, onClose }: { visible: boolean; onClose
           marginBottom: 10,
         }}>
           <Text style={{
-            fontFamily: fontHead(lang), fontSize: 18, color: tok.bone, letterSpacing: -0.3,
+            fontFamily: fontHead(lang), fontSize: 19, color: tok.bone, letterSpacing: -0.3,
             writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
           }}>
             {lang === 'ar' ? 'تبديل مساحة العمل' : 'Switch workspace'}
@@ -246,7 +246,7 @@ export function WorkspaceSheet({ visible, onClose }: { visible: boolean; onClose
                     numberOfLines={1}
                     style={{
                       fontFamily: fontBody(lang, isActive ? 'semibold' : 'medium'),
-                      fontSize: 14, color: tok.bone,
+                      fontSize: 16, color: tok.bone,
                       textAlign: lang === 'ar' ? 'right' : 'left',
                       writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
                     }}
@@ -257,7 +257,7 @@ export function WorkspaceSheet({ visible, onClose }: { visible: boolean; onClose
                     numberOfLines={1}
                     style={{
                       marginTop: 2,
-                      fontFamily: fontBody(lang), fontSize: 11, color: tok.muted,
+                      fontFamily: fontBody(lang), fontSize: 12, color: tok.muted,
                       textAlign: lang === 'ar' ? 'right' : 'left',
                       writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
                     }}

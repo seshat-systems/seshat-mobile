@@ -224,8 +224,8 @@ export function AnimatedSplash({ onDone, onReady }: { onDone: () => void; onRead
         />
 
         <Animated.View style={{ alignItems: 'center', marginTop: 18, opacity: sub, transform: [{ translateY: sub.interpolate({ inputRange: [0, 1], outputRange: [6, 0] }) }] }}>
-          <Text style={{ fontFamily: FF.cairoBold, fontSize: 20, color: GOLD, lineHeight: 30 }}>سيشات</Text>
-          <Text style={{ marginTop: 6, fontFamily: FF.monoRegular, fontSize: 9.5, letterSpacing: 3, color: DIM }}>
+          <Text style={{ fontFamily: FF.cairoBold, fontSize: 20, color: GOLD, lineHeight: 34 }}>سيشات</Text>
+          <Text style={{ marginTop: 6, fontFamily: FF.monoRegular, fontSize: 12, letterSpacing: 3, color: DIM }}>
             THE SCRIBE OF YOUR MONEY
           </Text>
         </Animated.View>

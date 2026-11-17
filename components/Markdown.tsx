@@ -27,7 +27,7 @@ function useMarkdownStyles() {
       color: tok.bone,
       fontFamily: fontBody(lang),
       fontSize: rtl ? 15 : 14,
-      lineHeight: 22,
+      lineHeight: 25,
     },
     paragraph: {
       marginTop: 0,
@@ -64,7 +64,7 @@ function useMarkdownStyles() {
     // Headings stay restrained — personas may drop a small heading before a table.
     heading1: {
       fontFamily: fontHead(lang),
-      fontSize: 16,
+      fontSize: 17,
       color: tok.bone,
       marginTop: 2,
       marginBottom: 6,
@@ -72,7 +72,7 @@ function useMarkdownStyles() {
     },
     heading2: {
       fontFamily: fontHead(lang),
-      fontSize: 15,
+      fontSize: 16,
       color: tok.bone,
       marginTop: 2,
       marginBottom: 6,
@@ -80,7 +80,7 @@ function useMarkdownStyles() {
     },
     heading3: {
       fontFamily: fontMono('regular'),
-      fontSize: 10.5,
+      fontSize: 12,
       letterSpacing: 1.4,
       textTransform: rtl ? 'none' : 'uppercase',
       color: tok.gold,
@@ -90,7 +90,7 @@ function useMarkdownStyles() {
     },
     heading4: {
       fontFamily: fontMono('regular'),
-      fontSize: 10.5,
+      fontSize: 12,
       letterSpacing: 1.4,
       textTransform: rtl ? 'none' : 'uppercase',
       color: tok.gold,
@@ -100,7 +100,7 @@ function useMarkdownStyles() {
     },
     heading5: {
       fontFamily: fontMono('regular'),
-      fontSize: 10,
+      fontSize: 12,
       letterSpacing: 1.2,
       textTransform: rtl ? 'none' : 'uppercase',
       color: tok.gold,
@@ -109,7 +109,7 @@ function useMarkdownStyles() {
     },
     heading6: {
       fontFamily: fontMono('regular'),
-      fontSize: 10,
+      fontSize: 12,
       letterSpacing: 1.2,
       textTransform: rtl ? 'none' : 'uppercase',
       color: tok.muted,
@@ -136,7 +136,7 @@ function useMarkdownStyles() {
     bullet_list_icon: {
       color: tok.gold,
       fontSize: rtl ? 15 : 14,
-      lineHeight: 22,
+      lineHeight: 25,
       marginLeft: rtl ? 8 : 2,
       marginRight: rtl ? 2 : 8,
     },
@@ -147,7 +147,7 @@ function useMarkdownStyles() {
       color: tok.muted,
       fontFamily: fontMono('regular'),
       fontSize: rtl ? 14 : 13,
-      lineHeight: 22,
+      lineHeight: 25,
       marginLeft: rtl ? 8 : 2,
       marginRight: rtl ? 2 : 8,
     },
@@ -163,7 +163,7 @@ function useMarkdownStyles() {
     // Inline + block code — DM Mono on a faint surface, always LTR.
     code_inline: {
       fontFamily: fontMono('regular'),
-      fontSize: 12.5,
+      fontSize: 14,
       color: tok.bone,
       backgroundColor: codeSurface,
       borderRadius: 4,
@@ -172,7 +172,7 @@ function useMarkdownStyles() {
     },
     code_block: {
       fontFamily: fontMono('regular'),
-      fontSize: 12.5,
+      fontSize: 14,
       color: tok.bone,
       backgroundColor: codeSurface,
       borderColor: tok.border,
@@ -184,7 +184,7 @@ function useMarkdownStyles() {
     },
     fence: {
       fontFamily: fontMono('regular'),
-      fontSize: 12.5,
+      fontSize: 14,
       color: tok.bone,
       backgroundColor: codeSurface,
       borderColor: tok.border,

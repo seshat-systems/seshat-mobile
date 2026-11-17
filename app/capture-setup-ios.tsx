@@ -36,7 +36,7 @@ export default function CaptureSetupIosScreen() {
   };
 
   const para = {
-    fontFamily: fontBody(lang), fontSize: 13, lineHeight: 19, color: tok.muted,
+    fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: tok.muted,
     textAlign: ar ? 'right' : 'left',
   } as const;
 
@@ -52,7 +52,7 @@ export default function CaptureSetupIosScreen() {
           <REyebrow style={{ marginBottom: 6, textAlign: ar ? 'right' : 'left' }}>
             {ar ? 'كيف تعمل؟' : 'How it works'}
           </REyebrow>
-          <Text style={[para, { fontSize: 13.5, lineHeight: 20 }]}>
+          <Text style={[para, { fontSize: 14, lineHeight: 22 }]}>
             {ar
               ? `كل رسالة بنكية تحمل العملة. أتمتة واحدة تعمل عندما تصلك رسالة تحتوي على "${currency}"، وتسجّلها سيشات في الخلفية دون فتح التطبيق: المبلغ والتاجر والفئة والبطاقة. يصلك إشعار بما سُجّل، وتجد كل بطاقة في الملف الشخصي ← البطاقات.`
               : `Every bank message carries the currency. One automation fires when a message containing "${currency}" arrives, and Seshat logs it in the background without opening the app: amount, merchant, category and card. You get a notification of what was logged, and each card shows up under Profile → Cards.`}
@@ -102,7 +102,7 @@ export default function CaptureSetupIosScreen() {
                   opacity: pressed ? 0.85 : 1,
                 })}
               >
-                <Text style={{ fontFamily: fontMono(), fontSize: 14, color: tok.bone }}>{k}</Text>
+                <Text style={{ fontFamily: fontMono(), fontSize: 16, color: tok.bone }}>{k}</Text>
                 {copied === k ? <Check size={14} color={tok.gold} /> : <Copy size={13} color={tok.muted} />}
               </Pressable>
             ))}
@@ -154,10 +154,10 @@ function StepCard({
           backgroundColor: tok.gold,
           alignItems: 'center', justifyContent: 'center',
         }}>
-          <Text style={{ fontFamily: fontMono(), fontSize: 12, color: tok.void }}>{step}</Text>
+          <Text style={{ fontFamily: fontMono(), fontSize: 14, color: tok.void }}>{step}</Text>
         </View>
         <Text style={{
-          flex: 1, fontFamily: fontHead(lang), fontSize: 15, color: tok.bone,
+          flex: 1, fontFamily: fontHead(lang), fontSize: 16, color: tok.bone,
           textAlign: lang === 'ar' ? 'right' : 'left',
         }}>{title}</Text>
       </View>

@@ -116,7 +116,7 @@ export default function OrgsListScreen() {
                   <Text
                     numberOfLines={1}
                     style={{
-                      fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.bone,
+                      fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone,
                       textAlign: lang === 'ar' ? 'right' : 'left',
                     }}
                   >
@@ -126,7 +126,7 @@ export default function OrgsListScreen() {
                     numberOfLines={1}
                     style={{
                       marginTop: 3,
-                      fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted, letterSpacing: 1.2,
+                      fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, letterSpacing: 1.2,
                       textAlign: lang === 'ar' ? 'right' : 'left',
                     }}
                   >
@@ -168,13 +168,13 @@ function EmptyState({
         <Building2 size={28} color={tok.gold} strokeWidth={1.6} />
       </View>
       <Text style={{
-        fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone,
+        fontFamily: fontBody(lang, 'semibold'), fontSize: 17, color: tok.bone,
         textAlign: 'center', marginBottom: 8,
       }}>
         {lang === 'ar' ? 'لا فرق أو عائلات بعد' : 'No teams or families yet'}
       </Text>
       <Text style={{
-        fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, lineHeight: 19,
+        fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, lineHeight: 21,
         textAlign: 'center', marginBottom: 24,
       }}>
         {lang === 'ar'

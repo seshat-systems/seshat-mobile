@@ -63,7 +63,7 @@ export function ChildHome() {
               <REyebrow style={{ marginBottom: 8, textAlign: ar ? 'right' : 'left' }}>{allowance.period === 'week' ? (ar ? 'ما تبقّى من مصروفك هذا الأسبوع' : 'Left of your allowance this week') : (ar ? 'ما تبقّى من مصروفك هذا الشهر' : 'Left of your allowance this month')}</REyebrow>
               <RAmount value={Math.max(0, allowance.left)} currency={currency} size={32} decimals={0} color={allowance.over ? tok.alertText : undefined} />
               <View style={{ marginTop: 10 }}><RProgress value={Math.min(allowance.spent, allowance.amount)} max={Math.max(1, allowance.amount)} color={allowance.over ? tok.alertText : tok.gold} height={6} /></View>
-              <Text style={{ marginTop: 8, fontFamily: fontMono('regular'), fontSize: 11, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+              <Text style={{ marginTop: 8, fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
                 {ar ? `صرفتَ ${Math.round(allowance.spent).toLocaleString('en-US')} من ${Math.round(allowance.amount).toLocaleString('en-US')}` : `${Math.round(allowance.spent).toLocaleString('en-US')} spent of ${Math.round(allowance.amount).toLocaleString('en-US')}`}
               </Text>
             </RCard>
@@ -72,7 +72,7 @@ export function ChildHome() {
           <RCard padding={18}>
             <REyebrow style={{ marginBottom: 8, textAlign: ar ? 'right' : 'left' }}>{ar ? 'صرفتَ هذا الشهر' : 'You spent this month'}</REyebrow>
             <RAmount value={-spent} currency={currency} size={32} decimals={0} />
-            <Text style={{ marginTop: 8, fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+            <Text style={{ marginTop: 8, fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
               {ar ? 'اضغط + لتسجيل ما صرفته.' : 'Tap + to log what you spend.'}
             </Text>
           </RCard>
@@ -86,8 +86,8 @@ export function ChildHome() {
                 return (
                   <RCard key={g._id} padding={16}>
                     <View style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                      <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.bone }}>{ar ? (g.nameAr || g.nameEn) : g.nameEn}</Text>
-                      <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.gold }}>{pct}%</Text>
+                      <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone }}>{ar ? (g.nameAr || g.nameEn) : g.nameEn}</Text>
+                      <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: tok.gold }}>{pct}%</Text>
                     </View>
                     <View style={{ marginTop: 10 }}><RProgress value={got} max={Math.max(1, g.targetAmount)} color={tok.gold} height={6} /></View>
                   </RCard>
@@ -98,14 +98,14 @@ export function ChildHome() {
 
           <REyebrow style={{ marginTop: 4, textAlign: ar ? 'right' : 'left' }}>{ar ? 'مدخلاتك' : 'YOUR ENTRIES'}</REyebrow>
           {txs === null ? null : txs.length === 0 ? (
-            <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: 'center', paddingTop: 12 }}>{ar ? 'لم تسجّل شيئاً بعد.' : 'You have not logged anything yet.'}</Text>
+            <Text style={{ fontFamily: fontBody(lang), fontSize: 16, color: tok.muted, textAlign: 'center', paddingTop: 12 }}>{ar ? 'لم تسجّل شيئاً بعد.' : 'You have not logged anything yet.'}</Text>
           ) : (
             <RCard padding={0} style={{ paddingHorizontal: 16 }}>
               {txs.slice(0, 15).map((t, i) => (
                 <View key={t._id} style={{ paddingVertical: 12, flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 12, borderBottomWidth: i < Math.min(15, txs.length) - 1 ? 1 : 0, borderBottomColor: tok.border }}>
                   <View style={{ flex: 1 }}>
-                    <Text numberOfLines={1} style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{t.description || catName(t) || (ar ? 'مصروف' : 'Spending')}</Text>
-                    <Text style={{ marginTop: 2, fontFamily: fontMono('regular'), fontSize: 11, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{new Date(t.date).toLocaleDateString(ar ? 'ar-EG' : 'en-GB', { day: 'numeric', month: 'short' })}</Text>
+                    <Text numberOfLines={1} style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{t.description || catName(t) || (ar ? 'مصروف' : 'Spending')}</Text>
+                    <Text style={{ marginTop: 2, fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{new Date(t.date).toLocaleDateString(ar ? 'ar-EG' : 'en-GB', { day: 'numeric', month: 'short' })}</Text>
                   </View>
                   <RAmount value={-t.amount} currency={currency} size={14} decimals={0} />
                 </View>

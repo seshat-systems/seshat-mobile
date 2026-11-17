@@ -33,14 +33,14 @@ export function CommunityGuidelines({ visible, onAgree, onClose }: { visible: bo
       }}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={{ fontFamily: fontHead(lang), fontSize: 22, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? 'قواعد المجتمع' : 'Community guidelines'}</Text>
-          <Text style={{ marginTop: 6, fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, lineHeight: 19, textAlign: ar ? 'right' : 'left' }}>
+          <Text style={{ marginTop: 6, fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, lineHeight: 21, textAlign: ar ? 'right' : 'left' }}>
             {ar ? 'مكان لأسئلة المال وإجاباتها بين أعضاء سيشات. قبل أن تنشر:' : 'A place for Seshat members to ask and answer money questions. Before you post:'}
           </Text>
           <View style={{ marginTop: 14, gap: 12 }}>
             {rules.map((r) => (
               <View key={r} style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 10, alignItems: 'flex-start' }}>
                 <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: tok.gold, marginTop: 8 }} />
-                <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{r}</Text>
+                <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 16, lineHeight: 24, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{r}</Text>
               </View>
             ))}
           </View>

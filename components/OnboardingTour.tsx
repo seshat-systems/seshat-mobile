@@ -108,7 +108,7 @@ export function OnboardingTour({
           {scene !== 'threshold' && step > 0 ? (
             <Pressable onPress={goBack} hitSlop={10}>
               <Text style={{
-                color: tok.muted, fontFamily: fontMono('regular'), fontSize: 10,
+                color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12,
                 letterSpacing: 1.6, textTransform: ar ? 'none' : 'uppercase',
               }}>{ar ? 'رجوع' : 'Back'}</Text>
             </Pressable>
@@ -175,12 +175,12 @@ export function OnboardingTour({
                       writingDirection: 'ltr',
                     }}
                   />
-                  <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 16 }}>
+                  <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 17 }}>
                     {currencyLabel(currency, lang)}
                   </Text>
                 </View>
                 <Pressable onPress={goNext} hitSlop={8} style={{ alignSelf: 'center', marginTop: 12 }}>
-                  <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 12.5 }}>
+                  <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 14 }}>
                     {ar ? 'تخطّي الآن' : 'Skip for now'}
                   </Text>
                 </Pressable>
@@ -197,7 +197,7 @@ export function OnboardingTour({
                 <DayGrid value={monthDay} onSelect={setMonthDay} />
                 <Text style={{
                   marginTop: 14, textAlign: 'center', fontFamily: fontMono('regular'),
-                  fontSize: 11.5, color: tok.bone,
+                  fontSize: 12, color: tok.bone,
                 }}>
                   <Text style={{ color: tok.muted }}>{ar ? 'شهرك: ' : 'Your month: '}</Text>
                   <Text style={{ color: tok.gold }}>{windowLabel(monthDay, lang)}</Text>
@@ -215,8 +215,8 @@ export function OnboardingTour({
                 l1={ar ? 'الرصد' : 'Auto'} l2={ar ? 'التلقائي' : 'capture'}
               >
                 <Text style={{
-                  marginTop: 22, textAlign: 'center', fontFamily: fontBody(lang), fontSize: 13.5,
-                  lineHeight: 20, color: tok.muted,
+                  marginTop: 22, textAlign: 'center', fontFamily: fontBody(lang), fontSize: 14,
+                  lineHeight: 22, color: tok.muted,
                 }}>
                   {ar
                     ? `أتمتة واحدة عند وصول رسالة تحتوي على "${currency}" تكفي لكل البنوك. سنرشدك للخطوات من الصفحة الرئيسية، وتجدها دائماً في الملف الشخصي ← الرصد التلقائي.`
@@ -234,13 +234,13 @@ export function OnboardingTour({
                   : 'Seshat reads your bank notifications to log your purchases for you, and nothing else.'}
                 l1={ar ? 'الرصد' : 'Auto'} l2={ar ? 'التلقائي' : 'capture'}
               >
-                <Text style={{ marginTop: 22, textAlign: 'center', fontFamily: fontBody(lang), fontSize: 13.5, lineHeight: 20, color: tok.muted }}>
+                <Text style={{ marginTop: 22, textAlign: 'center', fontFamily: fontBody(lang), fontSize: 14, lineHeight: 22, color: tok.muted }}>
                   {ar ? 'اسمح بالوصول إلى الإشعارات من إعدادات أندرويد. يمكنك التراجع عنه في أي وقت.' : 'Allow notification access in Android settings. You can turn it off any time.'}
                 </Text>
                 <Spacer />
                 <CTA label={ar ? 'السماح بالوصول' : 'Allow access'} onPress={() => { requestPermission().catch(() => {}); goNext(); }} />
                 <Pressable onPress={goNext} hitSlop={10} style={{ alignSelf: 'center', marginTop: 16 }}>
-                  <Text style={{ fontFamily: fontBody(lang), fontSize: 13, color: tok.muted }}>{ar ? 'ليس الآن' : 'Not now'}</Text>
+                  <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted }}>{ar ? 'ليس الآن' : 'Not now'}</Text>
                 </Pressable>
               </SceneBody>
             )}
@@ -264,7 +264,7 @@ export function OnboardingTour({
                         <View style={{ width: 22, height: 22, borderRadius: 6, borderWidth: 1.5, borderColor: on ? tok.gold : tok.border, backgroundColor: on ? tok.gold : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
                           {on ? <Check size={14} color={tok.void} strokeWidth={3} /> : null}
                         </View>
-                        <Text style={{ flex: 1, fontFamily: fontBody(lang, 'medium'), fontSize: 15, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{label}</Text>
+                        <Text style={{ flex: 1, fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{label}</Text>
                       </Pressable>
                     );
                   })}
@@ -388,7 +388,7 @@ function RailNode({ val, pulse, active, label, tok }: {
         backgroundColor: val.interpolate({ inputRange: [0, 1], outputRange: ['rgba(255,255,255,0.03)', tok.gold] }),
       }}>
         <Animated.Text style={{
-          fontFamily: fontMono('medium'), fontSize: 8.5, letterSpacing: 0.5,
+          fontFamily: fontMono('medium'), fontSize: 12, letterSpacing: 0.5,
           color: val.interpolate({ inputRange: [0, 1], outputRange: [tok.muted, tok.void] }),
         }}>{label}</Animated.Text>
       </Animated.View>
@@ -410,7 +410,7 @@ function Narration({ text, align }: { text: string; align?: boolean }) {
   const { tok, lang } = useI18n();
   return (
     <Text style={{
-      fontFamily: fontBody(lang), fontWeight: '300', fontSize: 13.5, lineHeight: 21,
+      fontFamily: fontBody(lang), fontWeight: '300', fontSize: 14, lineHeight: 24,
       color: tok.muted, maxWidth: 280,
       textAlign: align ? (lang === 'ar' ? 'right' : 'left') : 'center',
       writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
@@ -439,7 +439,7 @@ function BeginHint({ label }: { label: string }) {
   return (
     <View style={{ alignItems: 'center', gap: 6, marginTop: 18 }}>
       <Text style={{
-        fontFamily: fontMono('regular'), fontSize: 9, letterSpacing: 2, textTransform: 'uppercase', color: tok.muted,
+        fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 2, textTransform: 'uppercase', color: tok.muted,
       }}>{label}</Text>
     </View>
   );
@@ -466,7 +466,7 @@ function CTA({ label, onPress, loading, icon = 'arrow' }: {
       })}
     >
       <Text style={{
-        fontFamily: fontMono('medium'), fontSize: 12.5, letterSpacing: 1, textTransform: ar ? 'none' : 'uppercase',
+        fontFamily: fontMono('medium'), fontSize: 14, letterSpacing: 1, textTransform: ar ? 'none' : 'uppercase',
         color: tok.void,
       }}>{label}</Text>
       <View style={{
@@ -499,7 +499,7 @@ function DayGrid({ value, onSelect }: { value: number; onSelect: (d: number) => 
             })}
           >
             <Text style={{
-              fontFamily: fontMono(on ? 'medium' : 'regular'), fontSize: 12,
+              fontFamily: fontMono(on ? 'medium' : 'regular'), fontSize: 14,
               color: on ? tok.void : tok.muted,
             }}>{d}</Text>
           </Pressable>

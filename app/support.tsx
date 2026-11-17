@@ -99,8 +99,8 @@ export default function SupportScreen() {
       >
         {/* Helper text */}
         <Text style={{
-          fontFamily: fontBody(lang), fontSize: 13, color: tok.muted,
-          lineHeight: 20, marginBottom: 18,
+          fontFamily: fontBody(lang), fontSize: 14, color: tok.muted,
+          lineHeight: 22, marginBottom: 18,
           textAlign: lang === 'ar' ? 'right' : 'left',
           writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
         }}>
@@ -127,10 +127,10 @@ export default function SupportScreen() {
               })}
             >
               <Icon size={18} color={tok.gold} />
-              <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 1.4, textAlign: lang === 'ar' ? 'right' : 'left', textTransform: lang === 'ar' ? 'none' : 'uppercase' }}>
+              <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.4, textAlign: lang === 'ar' ? 'right' : 'left', textTransform: lang === 'ar' ? 'none' : 'uppercase' }}>
                 {label}
               </Text>
-              <Text numberOfLines={1} style={{ color: tok.bone, fontFamily: fontBody(lang), fontSize: 13, writingDirection: ltr ? 'ltr' : undefined, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+              <Text numberOfLines={1} style={{ color: tok.bone, fontFamily: fontBody(lang), fontSize: 14, writingDirection: ltr ? 'ltr' : undefined, textAlign: lang === 'ar' ? 'right' : 'left' }}>
                 {value}
               </Text>
             </Pressable>
@@ -153,7 +153,7 @@ export default function SupportScreen() {
           label={lang === 'ar' ? 'التفاصيل' : 'DETAILS'}
           secondary={
             <Text style={{
-              fontFamily: fontMono('regular'), fontSize: 9, color: tok.muted,
+              fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted,
             }}>
               {message.length} / {MESSAGE_MAX}
             </Text>
@@ -179,8 +179,8 @@ export default function SupportScreen() {
 
         <Text style={{
           marginTop: 18,
-          fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 1.2,
-          color: tok.muted, textAlign: 'center', lineHeight: 16,
+          fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2,
+          color: tok.muted, textAlign: 'center', lineHeight: 18,
         }}>
           {lang === 'ar'
             ? 'يتم إرفاق معرف حسابكِ تلقائيًا لمساعدتنا في الرد بسرعة.'

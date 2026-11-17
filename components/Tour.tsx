@@ -90,7 +90,7 @@ export function Tour({ visible, onClose }: { visible: boolean; onClose: () => vo
           <SeshatMark size={72} gold={tok.gold} animate />
 
           <Text style={{
-            fontFamily: fontMono('regular'), fontSize: 11, letterSpacing: 3,
+            fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 3,
             color: tok.gold, textTransform: 'uppercase', marginTop: 26,
           }}>{ar ? 'سيشات' : 'SESHAT'}</Text>
 
@@ -100,7 +100,7 @@ export function Tour({ visible, onClose }: { visible: boolean; onClose: () => vo
           }}>{ar ? 'أهلاً بك.' : 'Welcome.'}</Text>
 
           <Text style={{
-            fontFamily: fontBody(lang), fontSize: 15, lineHeight: 22, color: tok.muted,
+            fontFamily: fontBody(lang), fontSize: 16, lineHeight: 25, color: tok.muted,
             marginTop: 12, textAlign: 'center', maxWidth: 320,
             writingDirection: ar ? 'rtl' : 'ltr',
           }}>{ar
@@ -112,7 +112,7 @@ export function Tour({ visible, onClose }: { visible: boolean; onClose: () => vo
               <View key={i} style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'flex-start', gap: 14 }}>
                 <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: tok.gold, marginTop: 7 }} />
                 <Text style={{
-                  flex: 1, fontFamily: fontBody(lang), fontSize: 14.5, lineHeight: 21, color: tok.bone,
+                  flex: 1, fontFamily: fontBody(lang), fontSize: 16, lineHeight: 24, color: tok.bone,
                   textAlign: ar ? 'right' : 'left', writingDirection: ar ? 'rtl' : 'ltr',
                 }}>{ar ? b.ar : b.en}</Text>
               </View>

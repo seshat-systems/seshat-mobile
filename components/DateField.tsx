@@ -72,7 +72,7 @@ export function DateField({
         })}
       >
         <CalendarDays size={18} color={tok.gold} />
-        <Text style={{ flex: 1, fontFamily: current ? fontMono('regular') : fontBody(lang), fontSize: 15, color: current ? tok.bone : tok.muted, textAlign: ar ? 'right' : 'left' }}>{shown}</Text>
+        <Text style={{ flex: 1, fontFamily: current ? fontMono('regular') : fontBody(lang), fontSize: 16, color: current ? tok.bone : tok.muted, textAlign: ar ? 'right' : 'left' }}>{shown}</Text>
         {clearable && current ? (
           <Pressable onPress={() => onChange('')} hitSlop={10}><X size={16} color={tok.muted} /></Pressable>
         ) : null}

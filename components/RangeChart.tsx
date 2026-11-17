@@ -55,13 +55,13 @@ export function RangeChart({ path, refreshKey }: { path: string; refreshKey?: st
             <Polyline points={line.value} fill="none" stroke={tok.gold} strokeWidth="2.2" />
           </Svg>
           <View style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between', marginTop: 4 }}>
-            <Text style={{ fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted }}>{shortDate(pts[0].date, ar)}</Text>
-            <Text style={{ fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted }}>{ar ? 'اليوم' : 'Today'}</Text>
+            <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted }}>{shortDate(pts[0].date, ar)}</Text>
+            <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted }}>{ar ? 'اليوم' : 'Today'}</Text>
           </View>
-          <Text style={{ fontFamily: fontBody(lang), fontSize: 11, color: tok.muted, marginTop: 6, textAlign: ar ? 'right' : 'left' }}>{ar ? 'الخط الذهبي قيمتها، والمنقّط ما دفعت.' : 'Gold line is what it is worth, dashed is what you put in.'}</Text>
+          <Text style={{ fontFamily: fontBody(lang), fontSize: 12, color: tok.muted, marginTop: 6, textAlign: ar ? 'right' : 'left' }}>{ar ? 'الخط الذهبي قيمتها، والمنقّط ما دفعت.' : 'Gold line is what it is worth, dashed is what you put in.'}</Text>
         </>
       ) : (
-        <Text style={{ fontFamily: fontBody(lang), fontSize: 12, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{ar ? 'لا بيانات كافية لهذه الفترة بعد.' : 'Not enough history for this period yet.'}</Text>
+        <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{ar ? 'لا بيانات كافية لهذه الفترة بعد.' : 'Not enough history for this period yet.'}</Text>
       )}
     </View>
   );

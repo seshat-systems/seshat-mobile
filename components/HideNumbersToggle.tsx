@@ -41,7 +41,7 @@ export function BalanceAmount(props: ComponentProps<typeof RAmount> & { eye?: nu
     >
       <RAmount {...amount} />
       {caption ? (
-        <Text style={{ marginTop: 6, fontFamily: fontMono('regular'), fontSize: 10.5, letterSpacing: 0.6, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+        <Text style={{ marginTop: 6, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 0.6, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
           {caption}
         </Text>
       ) : null}

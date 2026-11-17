@@ -59,7 +59,7 @@ export function AppLockGate() {
       <Text style={{ marginTop: 26, color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 20 }}>
         {ar ? 'سيشات مقفلة' : 'Seshat is locked'}
       </Text>
-      <Text style={{ marginTop: 8, color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1, textAlign: 'center' }}>
+      <Text style={{ marginTop: 8, color: tok.muted, fontFamily: fontMono('regular'), fontSize: 14, letterSpacing: 1, textAlign: 'center' }}>
         {Platform.OS === 'ios'
           ? (ar ? 'استخدم Face ID أو رمز الهاتف' : 'USE FACE ID OR YOUR PASSCODE')
           : (ar ? 'استخدم بصمتك أو رمز الهاتف' : 'USE YOUR FINGERPRINT OR PHONE PIN')}

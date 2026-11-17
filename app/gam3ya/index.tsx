@@ -73,18 +73,18 @@ export default function Gam3yaScreen() {
             <View style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 10, alignItems: 'flex-start' }}>
               <Lightbulb size={18} color={tok.gold} />
               <View style={{ flex: 1 }}>
-                <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
+                <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
                   {s.extendsDeadline
                     ? (ar ? `جمعية يتحمّلها دخلك لهدف «${s.goalNameAr}»` : `A gam3ya your income can carry for “${s.goalName}”`)
                     : (ar ? `جمعية تناسب هدفك «${s.goalNameAr}»` : `A gam3ya that fits your goal “${s.goalName}”`)}
                 </Text>
-                <Text style={{ marginTop: 4, fontFamily: fontBody(lang), fontSize: 13, lineHeight: 19, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
+                <Text style={{ marginTop: 4, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>
                   {ar
                     ? `${s.members} شهراً × ${n0(s.amount)} شهرياً، ودورك في الشهر ${s.turn}، فيصلك ${n0(s.pot)}.${s.extendsDeadline ? ` تنتهي نحو ${new Date(s.endsOn ?? '').toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' })}، أي بعد موعد هدفك، فأجّل موعد الهدف ليناسبها.` : ' يصلك قبل الموعد.'}`
                     : `${s.members} months at ${n0(s.amount)} a month, your turn in month ${s.turn}: ${n0(s.pot)}.${s.extendsDeadline ? ` It ends around ${new Date(s.endsOn ?? '').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}, after your goal's deadline, so move the goal's deadline to match.` : ' It lands before the deadline.'}`}
                 </Text>
                 <Pressable onPress={() => router.push({ pathname: '/gam3ya/new', params: { goal: s.goalName, goalAr: s.goalNameAr, amount: String(s.amount), members: String(s.members), turn: String(s.turn) } } as never)} style={{ marginTop: 8 }}>
-                  <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 13, color: tok.gold, textAlign: ar ? 'right' : 'left' }}>{ar ? 'أنشئها كما هي (اقتراح فقط)' : 'Start from this (a suggestion only)'}</Text>
+                  <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.gold, textAlign: ar ? 'right' : 'left' }}>{ar ? 'أنشئها كما هي (اقتراح فقط)' : 'Start from this (a suggestion only)'}</Text>
                 </Pressable>
               </View>
             </View>
@@ -94,8 +94,8 @@ export default function Gam3yaScreen() {
         {items === null ? null : items.length === 0 ? (
           <View style={{ paddingTop: 40, alignItems: 'center', gap: 8 }}>
             <Users size={28} color={tok.muted} />
-            <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 16 }}>{ar ? 'لا جمعيات بعد.' : 'No gam3yas yet.'}</Text>
-            <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 13, textAlign: 'center', maxWidth: 280, lineHeight: 19 }}>
+            <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 17 }}>{ar ? 'لا جمعيات بعد.' : 'No gam3yas yet.'}</Text>
+            <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 14, textAlign: 'center', maxWidth: 280, lineHeight: 21 }}>
               {ar ? 'أضف جمعيتك ليذكّرك سيشات بالقسط ويحسب ما دفعته وما تبقّى.' : 'Add yours and Seshat reminds you each payment and keeps count of what you paid and what is left.'}
             </Text>
             <View style={{ marginTop: 14, alignSelf: 'center' }}><RButton onPress={() => router.push('/gam3ya/new' as never)}>{ar ? 'أضف جمعية' : 'Add a gam3ya'}</RButton></View>
@@ -109,14 +109,14 @@ export default function Gam3yaScreen() {
             <Pressable key={g.id} onPress={() => router.push(`/gam3ya/${g.id}` as never)} style={({ pressed }) => ({ opacity: pressed ? 0.9 : 1 })}>
               <RCard padding={16}>
                 <View style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                  <Text style={{ flex: 1, color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 15, textAlign: ar ? 'right' : 'left' }}>{g.name}</Text>
-                  <Text style={{ color: g.overdue > 0 ? tok.alertText : tok.gold, fontFamily: fontMono('regular'), fontSize: 12 }}>{label}</Text>
+                  <Text style={{ flex: 1, color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 16, textAlign: ar ? 'right' : 'left' }}>{g.name}</Text>
+                  <Text style={{ color: g.overdue > 0 ? tok.alertText : tok.gold, fontFamily: fontMono('regular'), fontSize: 14 }}>{label}</Text>
                 </View>
-                <Text style={{ marginTop: 4, color: tok.muted, fontFamily: fontMono('regular'), fontSize: 11, textAlign: ar ? 'right' : 'left' }}>
+                <Text style={{ marginTop: 4, color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12, textAlign: ar ? 'right' : 'left' }}>
                   {n0(g.paymentPerPeriod)} {cur(g)} / {g.frequency === 'weekly' ? (ar ? 'أسبوع' : 'week') : (ar ? 'شهر' : 'month')} · {ar ? 'القبض' : 'pot'} {n0(g.pot)} {cur(g)}
                 </Text>
                 <View style={{ marginTop: 10 }}><RProgress value={g.paidCount} max={g.members} color={tok.gold} height={4} /></View>
-                <Text style={{ marginTop: 6, color: tok.muted, fontFamily: fontMono('regular'), fontSize: 11, textAlign: ar ? 'right' : 'left' }}>
+                <Text style={{ marginTop: 6, color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12, textAlign: ar ? 'right' : 'left' }}>
                   {ar ? `دفعت ${g.paidCount} من ${g.members} · متبقٍّ ${n0(g.remainingToPay)} ${cur(g)}` : `Paid ${g.paidCount} of ${g.members} · ${n0(g.remainingToPay)} ${cur(g)} left to pay`}
                 </Text>
               </RCard>

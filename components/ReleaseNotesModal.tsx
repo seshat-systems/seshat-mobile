@@ -23,9 +23,9 @@ export function ReleaseNotesModal({ visible, onClose }: { visible: boolean; onCl
     <View style={{ gap: 10 }}>
       <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 8 }}>
         <View style={{ paddingHorizontal: 9, paddingVertical: 3, borderRadius: 999, backgroundColor: 'rgba(201,168,76,0.14)', borderWidth: 1, borderColor: tok.gold }}>
-          <Text style={{ fontFamily: fontMono('medium'), fontSize: 11, color: tok.gold }}>v{r.version}</Text>
+          <Text style={{ fontFamily: fontMono('medium'), fontSize: 12, color: tok.gold }}>v{r.version}</Text>
         </View>
-        <Text style={{ fontFamily: fontMono('regular'), fontSize: 11, color: tok.muted }}>
+        <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted }}>
           {new Date(r.date + 'T00:00:00Z').toLocaleDateString(ar ? 'ar-EG' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}
         </Text>
       </View>
@@ -33,7 +33,7 @@ export function ReleaseNotesModal({ visible, onClose }: { visible: boolean; onCl
       {r.items.map((it, i) => (
         <View key={i} style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 10 }}>
           <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: tok.gold, marginTop: 8 }} />
-          <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? it.ar : it.en}</Text>
+          <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 16, lineHeight: 24, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? it.ar : it.en}</Text>
         </View>
       ))}
     </View>
@@ -52,7 +52,7 @@ export function ReleaseNotesModal({ visible, onClose }: { visible: boolean; onCl
         <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
           <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 8 }}>
             <Sparkles size={18} color={tok.gold} />
-            <Text style={{ fontFamily: fontMono('medium'), fontSize: 12, letterSpacing: ar ? 0 : 1.6, color: tok.gold, textTransform: ar ? 'none' : 'uppercase' }}>
+            <Text style={{ fontFamily: fontMono('medium'), fontSize: 14, letterSpacing: ar ? 0 : 1.6, color: tok.gold, textTransform: ar ? 'none' : 'uppercase' }}>
               {ar ? 'ما الجديد' : "What's new"}
             </Text>
           </View>
@@ -64,7 +64,7 @@ export function ReleaseNotesModal({ visible, onClose }: { visible: boolean; onCl
             ? older.map((r) => <Release key={r.id} r={r} />)
             : (
               <Pressable onPress={() => setShowOlder(true)} hitSlop={8}>
-                <Text style={{ fontFamily: fontBody(lang), fontSize: 13.5, color: tok.gold, textAlign: ar ? 'right' : 'left' }}>
+                <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.gold, textAlign: ar ? 'right' : 'left' }}>
                   {ar ? 'الإصدارات السابقة' : 'Earlier releases'}
                 </Text>
               </Pressable>

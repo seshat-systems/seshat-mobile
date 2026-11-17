@@ -50,21 +50,21 @@ export function SetupPrompt({
                 flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 8,
               }}>
                 <Text style={{
-                  color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 14,
+                  color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 16,
                   textAlign: ar ? 'right' : 'left',
                 }}>{item.title(lang)}</Text>
                 {remaining > 0 && (
                   <Text style={{
-                    color: tok.gold, fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 0.5,
+                    color: tok.gold, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 0.5,
                   }}>{`+${remaining}`}</Text>
                 )}
               </View>
               <Text style={{
-                marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 12,
+                marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
                 textAlign: ar ? 'right' : 'left',
               }}>{item.subtitle(lang)}</Text>
             </View>
-            <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 14 }}>
+            <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 16 }}>
               {ar ? '←' : '→'}
             </Text>
           </View>

@@ -15,8 +15,8 @@ export function PersonalOnly({ title, what }: { title: string; what: { en: strin
     <PlanScreen title={title}>
       <View style={{ paddingTop: 60, paddingHorizontal: 28, alignItems: 'center', gap: 10 }}>
         <Lock size={28} color={tok.muted} />
-        <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 16, textAlign: 'center' }}>{ar ? 'هذا للملف الشخصي فقط' : 'This is for your personal profile'}</Text>
-        <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 13, textAlign: 'center', lineHeight: 19, maxWidth: 300 }}>
+        <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 17, textAlign: 'center' }}>{ar ? 'هذا للملف الشخصي فقط' : 'This is for your personal profile'}</Text>
+        <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 14, textAlign: 'center', lineHeight: 21, maxWidth: 300 }}>
           {ar ? what.ar : what.en}
         </Text>
         <View style={{ marginTop: 14 }}><RButton onPress={openWorkspaceSheet}>{ar ? 'التبديل إلى الشخصي' : 'Switch to personal'}</RButton></View>

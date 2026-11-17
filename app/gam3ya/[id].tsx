@@ -69,7 +69,7 @@ export default function Gam3yaDetailScreen() {
   };
   const needsYou = gam.schedule.filter((p) => p.state === 'due' || p.payoutPending);
   const selected = sel === null ? null : gam.schedule.find((p) => p.period === sel) ?? null;
-  const muted = { fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, textAlign: ar ? 'right' : 'left' } as const;
+  const muted = { fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: ar ? 'right' : 'left' } as const;
 
   const accountPick = (
     <View style={{ gap: 8 }}>
@@ -106,7 +106,7 @@ export default function Gam3yaDetailScreen() {
   const Tile = ({ label, value }: { label: string; value: string }) => (
     <RCard padding={12} style={{ flex: 1 }}>
       <REyebrow style={{ marginBottom: 4, textAlign: ar ? 'right' : 'left' }}>{label}</REyebrow>
-      <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{value}</Text>
+      <Text style={{ fontFamily: fontMono('regular'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{value}</Text>
     </RCard>
   );
 
@@ -132,7 +132,7 @@ export default function Gam3yaDetailScreen() {
                 <View key={p.period} style={{ gap: 10 }}>
                   {p.state === 'due' && (
                     <>
-                      <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
+                      <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
                         {ar ? `قسط ${when(p.due, true)} · ${n0(gam.paymentPerPeriod)} ${cur} مستحق` : `${when(p.due, true)} payment · ${n0(gam.paymentPerPeriod)} ${cur} is due`}
                       </Text>
                       {payButtons(p)}
@@ -140,7 +140,7 @@ export default function Gam3yaDetailScreen() {
                   )}
                   {p.payoutPending && (
                     <>
-                      <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
+                      <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
                         {ar ? `حان دورك (${when(p.due, true)}). هل استلمت ${n0(gam.pot)} ${cur}؟` : `It is your turn (${when(p.due, true)}). Did you receive ${n0(gam.pot)} ${cur}?`}
                       </Text>
                       {payoutButtons(p)}
@@ -160,9 +160,9 @@ export default function Gam3yaDetailScreen() {
               return (
                 <Pressable key={p.period} onPress={() => setSel(sel === p.period ? null : p.period)}
                   style={{ width: '23%', padding: 8, borderRadius: 12, borderWidth: 1, borderColor: sel === p.period ? tok.gold : p.state === 'due' ? tok.alertText : tok.border, backgroundColor: tok.elevated }}>
-                  <Text style={{ fontFamily: fontMono('regular'), fontSize: 10, color: tok.muted }}>{p.period}</Text>
-                  <Text numberOfLines={1} style={{ fontFamily: fontBody(lang), fontSize: 12.5, color }}>{when(p.due)}</Text>
-                  <Text numberOfLines={1} style={{ fontFamily: fontMono('regular'), fontSize: 9.5, color: tok.muted }}>
+                  <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted }}>{p.period}</Text>
+                  <Text numberOfLines={1} style={{ fontFamily: fontBody(lang), fontSize: 14, color }}>{when(p.due)}</Text>
+                  <Text numberOfLines={1} style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted }}>
                     {p.isTurn ? (p.received ? (ar ? 'استلمت' : 'Received') : (ar ? 'دورك' : 'Your turn')) : p.state === 'paid' ? (ar ? 'مدفوع' : 'Paid') : ' '}
                   </Text>
                 </Pressable>
@@ -171,7 +171,7 @@ export default function Gam3yaDetailScreen() {
           </View>
           {selected && (
             <View style={{ marginTop: 14, gap: 12, borderTopWidth: 1, borderTopColor: tok.border, paddingTop: 12 }}>
-              <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
+              <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
                 {when(selected.due, true)}{selected.isTurn ? (ar ? '  ·  دورك' : '  ·  Your turn') : ''}
               </Text>
               {selected.state === 'paid'

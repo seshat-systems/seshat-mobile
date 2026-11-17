@@ -53,7 +53,7 @@ export function CaptureShortcutBanner() {
           </View>
           <View style={{ flex: 1 }}>
             <Text style={{
-              color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 14,
+              color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 16,
               textAlign: ar ? 'right' : 'left',
             }}>
               {Platform.OS === 'ios'
@@ -61,7 +61,7 @@ export function CaptureShortcutBanner() {
                 : (ar ? 'سجّل إشعارات البنوك تلقائياً' : 'Log bank notifications automatically')}
             </Text>
             <Text style={{
-              marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 12,
+              marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
               textAlign: ar ? 'right' : 'left',
             }}>
               {Platform.OS === 'ios'
@@ -72,7 +72,7 @@ export function CaptureShortcutBanner() {
           <Pressable onPress={close} hitSlop={10} accessibilityLabel={ar ? 'إغلاق' : 'Dismiss'}>
             <X size={16} color={tok.muted} />
           </Pressable>
-          <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 14 }}>{ar ? '←' : '→'}</Text>
+          <Text style={{ color: tok.gold, fontFamily: fontMono('regular'), fontSize: 16 }}>{ar ? '←' : '→'}</Text>
         </View>
       </RCard>
     </Pressable>

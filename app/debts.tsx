@@ -117,7 +117,7 @@ export default function DebtsScreen() {
         )}
         <Pressable onPress={() => setShowArchived((v) => !v)} hitSlop={8} style={{ alignSelf: 'center', marginTop: 18, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           <Archive size={14} color={tok.muted} />
-          <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 11, letterSpacing: 1 }}>
+          <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1 }}>
             {showArchived ? (lang === 'ar' ? 'عرض الديون الحالية' : 'SHOW ACTIVE DEBTS') : (lang === 'ar' ? 'عرض المؤرشفة' : 'SHOW ARCHIVED')}
           </Text>
         </Pressable>
@@ -143,12 +143,12 @@ function Empty({ text, sub, cta, onCta }: { text: string; sub: string; cta?: str
   return (
     <View style={{ paddingTop: 40, alignItems: 'center' }}>
       <Text style={{
-        color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 16,
+        color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 17,
         textAlign: 'center',
       }}>{text}</Text>
       <Text style={{
-        marginTop: 6, color: tok.muted, fontFamily: fontBody(lang), fontSize: 13,
-        textAlign: 'center', maxWidth: 280, lineHeight: 19,
+        marginTop: 6, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
+        textAlign: 'center', maxWidth: 280, lineHeight: 21,
       }}>{sub}</Text>
       {cta && onCta ? <View style={{ marginTop: 14 }}><RButton onPress={onCta}>{cta}</RButton></View> : null}
     </View>
@@ -169,18 +169,18 @@ function DebtRow({ debt, onPress }: { debt: Debt; onPress: () => void }) {
           <Text
             numberOfLines={1}
             style={{
-              flex: 1, color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 15,
+              flex: 1, color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 16,
               textAlign: lang === 'ar' ? 'right' : 'left',
             }}
           >{debt.creditor}</Text>
           <Text style={{
-            color: tok.alertText, fontFamily: fontMono('medium'), fontSize: 14, writingDirection: 'ltr',
+            color: tok.alertText, fontFamily: fontMono('medium'), fontSize: 16, writingDirection: 'ltr',
           }}>
             −{formatAmount(remaining, { decimals: 0 })} {currencyLabel(debt.currency, lang)}
           </Text>
         </View>
         <Text style={{
-          marginTop: 4, color: tok.muted, fontFamily: fontMono('regular'), fontSize: 11,
+          marginTop: 4, color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12,
           textAlign: lang === 'ar' ? 'right' : 'left', writingDirection: 'ltr',
         }}>
           {formatAmount(debt.paidAmount, { decimals: 0 })} / {formatAmount(debt.totalAmount, { decimals: 0 })} {lang === 'ar' ? 'مسدَّد' : 'paid'}
@@ -336,7 +336,7 @@ function EditDebtSheet({
                 ].map((x) => (
                   <View key={x.label} style={{ flex: 1 }}>
                     <REyebrow>{x.label}</REyebrow>
-                    <Text style={{ marginTop: 4, color: tok.bone, fontFamily: fontMono('regular'), fontSize: 16, writingDirection: 'ltr' }}>
+                    <Text style={{ marginTop: 4, color: tok.bone, fontFamily: fontMono('regular'), fontSize: 17, writingDirection: 'ltr' }}>
                       {formatAmount(x.v, { decimals: 0 })}
                     </Text>
                   </View>
@@ -364,7 +364,7 @@ function EditDebtSheet({
                       backgroundColor: entryKind === k ? 'rgba(201,168,76,0.14)' : 'transparent',
                     }}
                   >
-                    <Text style={{ fontFamily: fontMono('regular'), fontSize: 11, letterSpacing: 1, color: entryKind === k ? tok.gold : tok.muted, textTransform: 'uppercase' }}>
+                    <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1, color: entryKind === k ? tok.gold : tok.muted, textTransform: 'uppercase' }}>
                       {k === 'payment' ? (lang === 'ar' ? 'دفعة' : 'Payment') : (lang === 'ar' ? 'إضافة للدين' : 'Add to debt')}
                     </Text>
                   </Pressable>
@@ -385,7 +385,7 @@ function EditDebtSheet({
                 </RButton>
               </View>
               <View style={{ flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-                <Text style={{ flex: 1, color: tok.muted, fontFamily: fontBody(lang), fontSize: 12.5, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+                <Text style={{ flex: 1, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14, textAlign: lang === 'ar' ? 'right' : 'left' }}>
                   {entryKind === 'payment'
                     ? (lang === 'ar' ? 'سجّلها أيضاً كمصروف' : 'Also record as an expense')
                     : (lang === 'ar' ? 'سجّلها أيضاً كدخل (مبلغ استلمته)' : 'Also record as income (money received)')}
@@ -396,7 +396,7 @@ function EditDebtSheet({
               {paymentsLoading ? (
                 <SkeletonRow />
               ) : payments.length === 0 ? (
-                <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12 }}>
+                <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 14 }}>
                   {lang === 'ar' ? 'لا توجد دفعات مسجَّلة بعد.' : 'No payments recorded yet.'}
                 </Text>
               ) : (
@@ -411,13 +411,13 @@ function EditDebtSheet({
                       }}
                     >
                       <View>
-                        <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 13.5, writingDirection: 'ltr' }}>
+                        <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 14, writingDirection: 'ltr' }}>
                           {p.kind === 'increase' ? '+ ' : ''}{formatAmount(p.amount, { decimals: 0 })} {currencyLabel(p.currency, lang)}
-                          <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 11 }}>
+                          <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12 }}>
                             {'  '}{p.kind === 'increase' ? (lang === 'ar' ? 'إضافة' : 'added') : (lang === 'ar' ? 'دفعة' : 'payment')}
                           </Text>
                         </Text>
-                        <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 11, marginTop: 2 }}>
+                        <Text style={{ color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12, marginTop: 2 }}>
                           {new Date(p.date).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                         </Text>
                       </View>

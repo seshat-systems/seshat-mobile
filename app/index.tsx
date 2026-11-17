@@ -266,7 +266,7 @@ export default function AuthRouter() {
         headerCta={
           <Pressable onPress={() => switchView('register')} hitSlop={8}>
             <Text style={{
-              color: tok.gold, fontFamily: fontBody(lang, 'semibold'), fontSize: 13,
+              color: tok.gold, fontFamily: fontBody(lang, 'semibold'), fontSize: 14,
             }}>
               {lang === 'ar' ? `${t('signUp')} ←` : `${t('signUp')} →`}
             </Text>
@@ -305,7 +305,7 @@ export default function AuthRouter() {
           textContentType="password"
         />
         <Pressable onPress={() => switchView('forgot')} hitSlop={10} style={{ alignSelf: lang === 'ar' ? 'flex-start' : 'flex-end', marginTop: 10 }}>
-          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.gold }}>{lang === 'ar' ? 'نسيتِ كلمة المرور؟' : 'Forgot your password?'}</Text>
+          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.gold }}>{lang === 'ar' ? 'نسيتِ كلمة المرور؟' : 'Forgot your password?'}</Text>
         </Pressable>
       </AuthChrome>
     );
@@ -325,9 +325,9 @@ export default function AuthRouter() {
               flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
               justifyContent: 'center', alignItems: 'center', gap: 8,
             }}>
-              <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 13 }}>{t('haveAccount')}</Text>
+              <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 14 }}>{t('haveAccount')}</Text>
               <Pressable onPress={() => switchView('login')}>
-                <Text style={{ color: tok.gold, fontFamily: fontBody(lang, 'semibold'), fontSize: 13 }}>{t('signIn')} →</Text>
+                <Text style={{ color: tok.gold, fontFamily: fontBody(lang, 'semibold'), fontSize: 14 }}>{t('signIn')} →</Text>
               </Pressable>
             </View>
           </>
@@ -373,7 +373,7 @@ export default function AuthRouter() {
         />
         <Text style={{
           marginTop: 14,
-          fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 1.2,
+          fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2,
           color: tok.muted, textAlign: lang === 'ar' ? 'right' : 'left',
         }}>
           {lang === 'ar'
@@ -394,7 +394,7 @@ export default function AuthRouter() {
               <View style={{ width: 24, height: 24, borderRadius: 7, borderWidth: 1.5, borderColor: agreed ? tok.gold : tok.border, backgroundColor: agreed ? tok.gold : 'transparent', alignItems: 'center', justifyContent: 'center', marginTop: 1 }}>
                 {agreed ? <Check size={16} color={tok.void} strokeWidth={3} /> : null}
               </View>
-              <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 13, lineHeight: 19, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+              <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>
                 {lang === 'ar' ? 'أوافق على ' : 'I agree to the '}
                 <Text onPress={() => Linking.openURL(`${SITE_URL}/terms`).catch(() => {})} style={{ color: tok.gold }}>{lang === 'ar' ? 'شروط الاستخدام' : 'Terms of Use'}</Text>
                 {lang === 'ar' ? ' و' : ' and the '}
@@ -426,9 +426,9 @@ export default function AuthRouter() {
         />
         <Pressable onPress={() => setReferred((v) => !v)} style={{ flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 10, paddingVertical: 8 }}>
           <View style={{ width: 20, height: 20, borderRadius: 6, borderWidth: 1.5, borderColor: referred ? tok.gold : tok.border, backgroundColor: referred ? tok.gold : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
-            {referred ? <Text style={{ color: tok.void, fontSize: 13, lineHeight: 15 }}>✓</Text> : null}
+            {referred ? <Text style={{ color: tok.void, fontSize: 14, lineHeight: 17 }}>✓</Text> : null}
           </View>
-          <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 14, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+          <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 16, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>
             {lang === 'ar' ? 'أحالني شخص إلى سيشات' : 'Someone referred me to Seshat'}
           </Text>
         </Pressable>
@@ -455,7 +455,7 @@ export default function AuthRouter() {
             opacity: pressed ? 0.6 : 1,
           })}>
             <Text style={{
-              color: tok.muted, fontFamily: fontMono('regular'), fontSize: 11, letterSpacing: 1.4,
+              color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.4,
             }}>
               {lang === 'ar' ? 'تخطّي - أنا فرد' : "SKIP - I'M AN INDIVIDUAL"}
             </Text>
@@ -544,11 +544,11 @@ export default function AuthRouter() {
               flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
               justifyContent: 'center', alignItems: 'center', gap: 6,
             }}>
-              <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 12 }}>
+              <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 14 }}>
                 {lang === 'ar' ? 'ليس لديك حساب؟' : "Don't have an account?"}
               </Text>
               <Pressable onPress={() => switchView('register')}>
-                <Text style={{ color: tok.gold, fontFamily: fontBody(lang, 'semibold'), fontSize: 12 }}>
+                <Text style={{ color: tok.gold, fontFamily: fontBody(lang, 'semibold'), fontSize: 14 }}>
                   {lang === 'ar' ? 'سجّل الآن' : 'Sign up instead'}
                 </Text>
               </Pressable>
@@ -570,7 +570,7 @@ export default function AuthRouter() {
         />
         <Text style={{
           marginTop: 14,
-          fontFamily: fontMono('regular'), fontSize: 10, letterSpacing: 1.2,
+          fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2,
           color: tok.muted, textAlign: lang === 'ar' ? 'right' : 'left',
         }}>
           {lang === 'ar'
@@ -599,7 +599,7 @@ export default function AuthRouter() {
         <SeshatMark size={92} gold={tok.gold} lightRing />
       </View>
       <Text style={{
-        color: tok.muted, fontFamily: fontMono('regular'), fontSize: 10,
+        color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12,
         letterSpacing: 1.4, writingDirection: 'ltr', textAlign: 'center', marginBottom: 16,
       }}>{email}</Text>
       <AuthError message={err} />
@@ -647,13 +647,13 @@ function ResendCodeRow({
       flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
       justifyContent: 'center', alignItems: 'center', gap: 6,
     }}>
-      <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 12 }}>
+      <Text style={{ color: tok.muted, fontFamily: fontBody(lang), fontSize: 14 }}>
         {lang === 'ar' ? 'لم يصلكِ الرمز؟' : "Didn't get the code?"}
       </Text>
       <Pressable onPress={onResend} disabled={busy || cooldown} hitSlop={8}>
         <Text style={{
           color: busy || cooldown ? tok.muted : tok.gold,
-          fontFamily: fontBody(lang, 'semibold'), fontSize: 12,
+          fontFamily: fontBody(lang, 'semibold'), fontSize: 14,
         }}>
           {cooldown
             ? (lang === 'ar' ? `إعادة الإرسال خلال ${seconds}ث` : `Resend in ${seconds}s`)
@@ -688,7 +688,7 @@ function SegmentCard({
       })}
     >
       <Text style={{
-        fontFamily: fontHead(lang), fontSize: 18,
+        fontFamily: fontHead(lang), fontSize: 19,
         color: highlight ? tok.void : tok.bone,
         letterSpacing: -0.3,
         textAlign: lang === 'ar' ? 'right' : 'left',
@@ -697,7 +697,7 @@ function SegmentCard({
       </Text>
       <Text style={{
         marginTop: 4,
-        fontFamily: fontBody(lang), fontSize: 13, lineHeight: 19,
+        fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21,
         color: highlight ? tok.void : tok.muted,
         opacity: highlight ? 0.72 : 1,
         textAlign: lang === 'ar' ? 'right' : 'left',

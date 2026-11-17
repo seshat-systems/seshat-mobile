@@ -56,7 +56,7 @@ export function AuthChrome({
         }}>
           <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: tok.gold }} />
           <Text style={{
-            fontFamily: fontMono('regular'), fontSize: 11,
+            fontFamily: fontMono('regular'), fontSize: 12,
             letterSpacing: 1.2, textTransform: 'uppercase', color: tok.gold,
           }}>{brandName(lang)}</Text>
         </View>
@@ -75,7 +75,7 @@ export function AuthChrome({
             })}
           >
             <Text style={{
-              color: tok.muted, fontFamily: fontMono('regular'), fontSize: 10,
+              color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12,
               letterSpacing: 1.6, textTransform: 'uppercase',
             }}>{lang === 'ar' ? 'EN' : 'AR'}</Text>
           </Pressable>
@@ -119,7 +119,7 @@ export function AuthHero({ eyebrow, title, sub }: { eyebrow: string; title: stri
 
       {/* eyebrow */}
       <Text style={{
-        fontFamily: fontMono('regular'), fontSize: 10,
+        fontFamily: fontMono('regular'), fontSize: 12,
         letterSpacing: lang === 'ar' ? 0 : 2, textTransform: lang === 'ar' ? 'none' : 'uppercase',
         color: tok.gold, marginBottom: 14, textAlign: align,
         writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
@@ -138,7 +138,7 @@ export function AuthHero({ eyebrow, title, sub }: { eyebrow: string; title: stri
       <Text style={{
         marginTop: 12,
         fontFamily: fontBody(lang), fontSize: lang === 'ar' ? 15 : 14.5,
-        color: tok.muted, lineHeight: 22,
+        color: tok.muted, lineHeight: 25,
         textAlign: align,
         writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
       }}>{sub}</Text>
@@ -175,7 +175,7 @@ export function AuthLink({ children, onPress, gold }: { children: ReactNode; onP
     <Pressable onPress={onPress} hitSlop={6}>
       <Text style={{
         color: gold ? tok.gold : tok.muted,
-        fontFamily: fontMono('regular'), fontSize: 10,
+        fontFamily: fontMono('regular'), fontSize: 12,
         letterSpacing: 1.6, textTransform: 'uppercase',
       }}>{children}</Text>
     </Pressable>
@@ -213,7 +213,7 @@ export function SSOButton({ provider, onPress, label }: { provider: 'google' | '
           />
         </Svg>
       )}
-      <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 14 }}>{label}</Text>
+      <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 16 }}>{label}</Text>
     </Pressable>
   );
 }
@@ -230,7 +230,7 @@ export function AuthOr() {
     }}>
       <View style={{ flex: 1, height: StyleSheet.hairlineWidth, backgroundColor: tok.border }} />
       <Text style={{
-        color: tok.muted, fontFamily: fontMono('regular'), fontSize: 10,
+        color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12,
         letterSpacing: 1.8, textTransform: 'uppercase',
       }}>{t('or')}</Text>
       <View style={{ flex: 1, height: StyleSheet.hairlineWidth, backgroundColor: tok.border }} />
@@ -254,7 +254,7 @@ export function AuthBackLink({ onPress, label }: { onPress: () => void; label: s
     >
       <ChevronLeft size={12} color={tok.muted} style={{ transform: [{ scaleX: lang === 'ar' ? -1 : 1 }] }} />
       <Text style={{
-        color: tok.muted, fontFamily: fontMono('regular'), fontSize: 10,
+        color: tok.muted, fontFamily: fontMono('regular'), fontSize: 12,
         letterSpacing: 1.6, textTransform: 'uppercase',
       }}>{label}</Text>
     </Pressable>
@@ -275,7 +275,7 @@ export function AuthError({ message }: { message?: string }) {
       paddingVertical: 4, marginTop: 16,
     }}>
       <Text style={{
-        color: tok.alertText, fontFamily: fontBody(lang), fontSize: 13,
+        color: tok.alertText, fontFamily: fontBody(lang), fontSize: 14,
         textAlign: lang === 'ar' ? 'right' : 'left',
       }}>{message}</Text>
     </View>

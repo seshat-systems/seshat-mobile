@@ -123,8 +123,8 @@ export default function AcceptInviteScreen() {
           </Text>
           <Text style={{
             marginTop: 12,
-            fontFamily: fontBody(lang), fontSize: 14, color: tok.muted,
-            textAlign: 'center', lineHeight: 21,
+            fontFamily: fontBody(lang), fontSize: 16, color: tok.muted,
+            textAlign: 'center', lineHeight: 24,
             writingDirection: arText ? 'rtl' : 'ltr',
           }}>
             {arText
@@ -152,7 +152,7 @@ export default function AcceptInviteScreen() {
           </Text>
           <Text style={{
             marginTop: 12,
-            fontFamily: fontMono('regular'), fontSize: 11, color: tok.muted,
+            fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted,
             textAlign: 'center', letterSpacing: 0.4,
           }}>
             {error}
