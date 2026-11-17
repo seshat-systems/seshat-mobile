@@ -15,8 +15,8 @@ import { SETUP_ITEMS, type SetupProfile } from '../lib/setupRequirements';
 // lib/setupRequirements - this component never needs to change.
 // ─────────────────────────────────────────────────────────────
 export function SetupPrompt({
-  profile, onChanged,
-}: { profile: SetupProfile | null; onChanged: () => void }) {
+  profile, onChanged, compact = false,
+}: { profile: SetupProfile | null; onChanged: () => void; compact?: boolean }) {
   const { tok, lang } = useI18n();
   const [openKey, setOpenKey] = useState<string | null>(null);
   const ar = lang === 'ar';
@@ -31,6 +31,24 @@ export function SetupPrompt({
 
   return (
     <>
+      {compact ? (
+        // Same card as the other "Needs you" cards, so setup is one more thing in that row instead of a separate banner.
+        <View style={{ width: 262, minHeight: 168, borderRadius: 22, borderWidth: 1, borderColor: tok.borderHi, backgroundColor: tok.surface, padding: 16, justifyContent: 'space-between' }}>
+          <View>
+            <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: tok.elevated, alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
+              <Icon size={18} color={tok.gold} />
+            </View>
+            <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 16, lineHeight: 22, textAlign: ar ? 'right' : 'left' }} numberOfLines={2}>
+              {item.title(lang)}{remaining > 0 ? `  +${remaining}` : ''}
+            </Text>
+            <Text style={{ marginTop: 4, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 20, textAlign: ar ? 'right' : 'left' }} numberOfLines={3}>{item.subtitle(lang)}</Text>
+          </View>
+          <Pressable onPress={() => setOpenKey(item.key)} accessibilityRole="button"
+            style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 18, borderRadius: 999, alignItems: 'center', justifyContent: 'center', alignSelf: ar ? 'flex-end' : 'flex-start', backgroundColor: tok.gold, opacity: pressed ? 0.8 : 1 })}>
+            <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: '#14110A' }}>{ar ? 'ابدأ' : 'Set up'}</Text>
+          </Pressable>
+        </View>
+      ) : (
       <Pressable
         onPress={() => setOpenKey(item.key)}
         style={({ pressed }) => ({ opacity: pressed ? 0.9 : 1 })}
@@ -70,6 +88,7 @@ export function SetupPrompt({
           </View>
         </RCard>
       </Pressable>
+      )}
 
       {/* Each outstanding item mounts its own editor; only the open one is
           visible. Saving calls onChanged so the parent refetches the profile. */}

@@ -20,6 +20,7 @@ import { UpdateBanner } from '../../components/UpdateBanner';
 import { WidgetsAnnouncement } from '../../components/WidgetsAnnouncement';
 import { TodayCard, AccountsOverview, DailyBudgetCard, TodayNeeds, NetWorthCard } from '../../components/HomeMoney';
 import { SetupPrompt } from '../../components/SetupPrompt';
+import { SETUP_ITEMS } from '../../lib/setupRequirements';
 import { HomeAnswer } from '../../components/HomeAnswer';
 import { useRouter } from 'expo-router';
 
@@ -119,9 +120,10 @@ function FullHome() {
                   title: lang === 'ar' ? 'هل استلمت راتبك؟' : 'Did you get paid this month?',
                   body: lang === 'ar' ? 'سجّل الراتب وأنهِ الشهر، أو تخطى.' : "Log it to close the month, or skip if you didn't.",
                   onPress: () => setCheckInOpen(true),
-                }] : []} />
+                }] : []} trailing={profile && SETUP_ITEMS.some((i) => i.isMissing(profile))
+                  ? <SetupPrompt compact profile={profile} onChanged={() => { refresh(); bumpVersion(); }} /> : null} />
               )}
-              <SetupPrompt profile={profile} onChanged={() => { refresh(); bumpVersion(); }} />
+              {inOrg && <SetupPrompt profile={profile} onChanged={() => { refresh(); bumpVersion(); }} />}
               <UpdateBanner />
               <WidgetsAnnouncement />
               <CaptureShortcutBanner />
@@ -150,12 +152,12 @@ function FullHome() {
                 <View style={{ flex: 1, minHeight: 400 }}><EmptyState /></View>
               ) : (
                 <>
-                  {/* Breathing room under the banners above (they used to touch the hero card). */}
+                  <TodayCard data={data!} currency={currency} />
+                  {!inOrg && <DailyBudgetCard />}
+                  {/* The month's net number is already the headline sentence, so the big chart card sits below the daily answers. */}
                   <View style={{ marginTop: 14 }}>
                     <ChartCarousel data={data!} currency={currency} view={view} onViewChange={onViewChange} />
                   </View>
-                  <TodayCard data={data!} currency={currency} />
-                  {!inOrg && <DailyBudgetCard />}
                   {inOrg ? <AccountsOverview currency={currency} /> : <NetWorthCard />}
                   <DashboardBody data={data!} currency={currency} />
                 </>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { ChevronRight, Landmark, CreditCard, Wallet, Banknote, Users } from 'lucide-react-native';
@@ -141,7 +141,7 @@ type TodayRow = { id: string; kind: string; title: string; body: string; screen:
  */
 export type NeedsExtra = { id: string; title: string; body: string; onPress: () => void };
 
-export function TodayNeeds({ extra = [] }: { extra?: NeedsExtra[] } = {}) {
+export function TodayNeeds({ extra = [], trailing = null }: { extra?: NeedsExtra[]; trailing?: React.ReactNode } = {}) {
   const { tok, lang } = useI18n();
   const { dataVersion } = useAppData();
   const router = useRouter();
@@ -156,7 +156,7 @@ export function TodayNeeds({ extra = [] }: { extra?: NeedsExtra[] } = {}) {
     return () => { alive = false; };
   }, [dataVersion]);
   const total = rows.length + extra.length;
-  if (total === 0) return null;
+  if (total === 0 && !trailing) return null;
   const go = (r: TodayRow) => {
     if (r.screen === 'gam3ya') router.push(`/gam3ya/${r.refId}` as never);
     else if (r.screen === 'reminders') router.push('/reminders' as never);
@@ -190,7 +190,7 @@ export function TodayNeeds({ extra = [] }: { extra?: NeedsExtra[] } = {}) {
   return (
     <View style={{ marginTop: 6, marginBottom: 12 }}>
       <Text style={{ marginHorizontal: 20, marginBottom: 10, fontFamily: fontMono('medium'), fontSize: 12, letterSpacing: 1.4, color: tok.muted, textTransform: 'uppercase', textAlign: ar ? 'right' : 'left' }}>
-        {ar ? `يحتاجك · ${total}` : `Needs you · ${total}`}
+        {ar ? 'يحتاجك' : 'Needs you'}
       </Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} snapToInterval={CARD_W + 12} decelerationRate="fast"
         contentContainerStyle={{ paddingHorizontal: 16, gap: 12, flexDirection: ar ? 'row-reverse' : 'row' }}>
@@ -214,6 +214,7 @@ export function TodayNeeds({ extra = [] }: { extra?: NeedsExtra[] } = {}) {
             {r.screen !== 'home' ? <Btn label={verb(r)} onPress={() => go(r)} /> : <View style={{ height: 44 }} />}
           </View>
         ))}
+        {trailing}
       </ScrollView>
     </View>
   );
