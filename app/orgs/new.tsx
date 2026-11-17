@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, ScrollView, Alert, Pressable } from 'react-native';
 import { Building2, Home } from 'lucide-react-native';
 import { ScrollView as ScreenScroll } from '../../components/Scroll';
@@ -42,8 +42,18 @@ export default function NewOrgScreen() {
   const [kind, setKind] = useState<OrgKind>('team');
   const ar = lang === 'ar';
 
+  // A family starts with "<first name>'s Family" in the name field. The person can edit it; if they clear it, the default comes back.
+  const first = (profile?.displayName ?? '').trim().split(/\s+/)[0] ?? '';
+  const familyDefault = first ? (ar ? `عائلة ${first}` : `${first}'s Family`) : '';
+  const [touched, setTouched] = useState(false);
+  useEffect(() => {
+    if (kind === 'family' && !touched && !name) setName(familyDefault);
+    if (kind === 'team' && !touched && name === familyDefault) setName('');
+  }, [kind, familyDefault]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const submit = async () => {
-    if (!name.trim()) {
+    if (!name.trim() && kind === 'family' && familyDefault) setName(familyDefault);
+    if (!name.trim() && !(kind === 'family' && familyDefault)) {
       Alert.alert(
         lang === 'ar' ? 'الاسم مطلوب' : 'Name required',
         lang === 'ar' ? 'سمّي منظمتكِ.' : 'Give your organization a name.',
@@ -52,7 +62,7 @@ export default function NewOrgScreen() {
     }
     setSubmitting(true);
     try {
-      const org = await createOrg(name.trim(), currency, kind);
+      const org = await createOrg(name.trim() || (kind === 'family' ? familyDefault : ''), currency, kind);
       await switchLedger(org.ledgerId);
       await refresh();
       router.replace({ pathname: '/orgs/[id]', params: { id: org.id } });
@@ -101,7 +111,8 @@ export default function NewOrgScreen() {
         <RField
           label={kind === 'family' ? (ar ? 'اسم العائلة' : 'FAMILY NAME') : (ar ? 'اسم الفريق' : 'TEAM NAME')}
           value={name}
-          onChange={setName}
+          onChange={(v) => { setTouched(true); setName(v); }}
+          onBlur={() => { if (kind === 'family' && !name.trim() && familyDefault) setName(familyDefault); }}
           placeholder={kind === 'family' ? (ar ? 'مثل: بيت أحمد' : 'e.g. The Hassan household') : (ar ? 'مثل: شركة أكمي' : 'e.g. Acme Corp')}
           autoFocus
           autoCapitalize="words"

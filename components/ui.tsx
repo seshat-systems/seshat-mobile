@@ -265,7 +265,7 @@ export function RPill({
 export function RField({
   value, onChange, placeholder, label, secondary, secureTextEntry, keyboardType,
   autoFocus, autoComplete, textContentType, autoCapitalize, multiline, maxLength,
-  minHeight, mono, ltr, onSubmitEditing, returnKeyType, style,
+  minHeight, mono, ltr, onSubmitEditing, onBlur, returnKeyType, style,
 }: {
   value: string;
   onChange: (v: string) => void;
@@ -286,6 +286,7 @@ export function RField({
   /** Force LTR + left align (emails, numbers). Defaults true for numeric/email keyboards. */
   ltr?: boolean;
   onSubmitEditing?: () => void;
+  onBlur?: () => void;
   returnKeyType?: 'done' | 'next' | 'go' | 'send';
   style?: ViewStyle;
 }) {
@@ -346,7 +347,7 @@ export function RField({
             returnKeyType={returnKeyType}
             textAlignVertical={multiline ? 'top' : undefined}
             onFocus={() => { setFocused(true); reveal?.(inputRef.current); }}
-            onBlur={() => setFocused(false)}
+            onBlur={() => { setFocused(false); onBlur?.(); }}
             style={{
               backgroundColor: 'transparent',
               paddingHorizontal: 16, paddingVertical: 14,
