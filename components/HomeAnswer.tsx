@@ -190,7 +190,7 @@ export function HomeInput() {
     }}>
       <TextInput
         value={text} onChangeText={setText} onSubmitEditing={submit} returnKeyType="send"
-        placeholder={ar ? 'قل لسيشات… «٤٥ قهوة»' : 'Tell Seshat… “45 coffee”'} placeholderTextColor={tok.muted}
+        placeholder={ar ? 'قل لسيشات…' : 'Tell Seshat…'} placeholderTextColor={tok.muted}
         style={{ flex: 1, minHeight: 52, color: tok.bone, fontFamily: fontBody(lang), fontSize: 16, textAlign: ar ? 'right' : 'left' }}
       />
       <Pressable onPress={text.trim() ? submit : () => router.push({ pathname: '/seshat/[id]', params: { id: 'new' } } as never)}

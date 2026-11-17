@@ -15,12 +15,11 @@ import {
   SalaryCheckInSheet, fetchSalaryCheckIn, type CheckInStatus,
 } from '../../components/SalaryCheckInBanner';
 import { CapturePromptLine } from '../../components/CaptureShortcutBanner';
-import { useAndroidUpdate } from '../../lib/androidUpdate';
+import { UpdateBanner } from '../../components/UpdateBanner';
 import { WidgetsAnnouncement } from '../../components/WidgetsAnnouncement';
 import { TodayCard, AccountsOverview, TodayNeeds } from '../../components/HomeMoney';
 import { HomeAnswer, HomeInput } from '../../components/HomeAnswer';
 import { useRouter } from 'expo-router';
-import { Linking } from 'react-native';
 
 
 /** A child in a family workspace gets their own small Home; everyone else the full one. */
@@ -35,9 +34,6 @@ function FullHome() {
   const { profile, dataVersion, refresh, bumpVersion } = useAppData();
   const inOrg = useInOrg();
   const insets = useSafeAreaInsets();
-  const { update, dismiss: dismissUpdate } = useAndroidUpdate();
-  const [needsCount, setNeedsCount] = useState(0);
-  const [needsOpen, setNeedsOpen] = useState(false);
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -100,8 +96,6 @@ function FullHome() {
           // salary baseline exists).
           const needs = !inOrg ? (
             <TodayNeeds
-              hidden={!needsOpen}
-              onCount={setNeedsCount}
               extra={[
                 ...(checkIn.needed ? [{
                   id: 'salary',
@@ -109,21 +103,14 @@ function FullHome() {
                   body: lang === 'ar' ? 'سجّل الراتب وأنهِ الشهر، أو تخطى.' : "Log it to close the month, or skip if you didn't.",
                   onPress: () => setCheckInOpen(true),
                 }] : []),
-                // A new version is one more thing that needs you, not a banner of its own.
-                ...(update ? [{
-                  id: 'update',
-                  title: lang === 'ar' ? 'يوجد إصدار جديد من سيشات' : 'A new version of Seshat is ready',
-                  body: (lang === 'ar' ? (update.notesAr || update.notes) : update.notes) || (lang === 'ar' ? `الإصدار ${update.versionName} جاهز.` : `Version ${update.versionName} is ready.`),
-                  label: lang === 'ar' ? 'حدّث' : 'Update',
-                  onPress: () => { void Linking.openURL(update.url); },
-                  secondaryLabel: lang === 'ar' ? 'لاحقاً' : 'Later',
-                  onSecondary: dismissUpdate,
-                }] : []),
               ]}
             />
           ) : null;
+          // Announcements sit at the very top, one at a time (the highest priority shows): a new version, then the bank prompt, then news.
           const notices = (
             <>
+              <UpdateBanner />
+              {!inOrg ? <CapturePromptLine /> : null}
               <WidgetsAnnouncement />
             </>
           );
@@ -144,7 +131,7 @@ function FullHome() {
               contentContainerStyle={{ paddingTop: 6, paddingBottom: !inOrg && !isEmpty ? 96 : insets.bottom + 100, flexGrow: 1 }}
               refreshControl={refreshCtl}
             >
-              {!inOrg ? <CapturePromptLine /> : null}
+              {notices}
               {isEmpty ? (
                 <View style={{ flex: 1, minHeight: 400 }}><EmptyState /></View>
               ) : inOrg ? (
@@ -155,8 +142,7 @@ function FullHome() {
                 </>
               ) : (
                 <>
-                  <HomeAnswer data={data!} currency={currency} needsCount={needsCount} onNeeds={() => setNeedsOpen((o) => !o)} after={needs} />
-                  {notices}
+                  <HomeAnswer data={data!} currency={currency} after={needs} />
                 </>
               )}
             </ScreenScroll>

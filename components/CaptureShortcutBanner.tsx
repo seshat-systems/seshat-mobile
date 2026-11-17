@@ -100,7 +100,8 @@ export function CapturePromptLine() {
       if (status !== 'authorized' && status !== 'unavailable') setShow(true);
     })().catch(() => {});
   }, []);
-  if (!show) return null;
+  const active = useBannerSlot('capture', 50, show);
+  if (!show || !active) return null;
   const ar = lang === 'ar';
   const allow = () => { setShow(false); secureSet(KEY, 'done').catch(() => {}); router.push(Platform.OS === 'ios' ? '/capture-setup-ios' : '/capture-setup-android'); };
   const later = () => { setShow(false); secureSet(LATER_KEY, String(Date.now() + LATER_DAYS * 86400000)).catch(() => {}); };
