@@ -13,6 +13,16 @@ export type ReleaseNote = {
 
 export const RELEASE_NOTES: ReleaseNote[] = [
   {
+    id: '2026-11-v1.1.8',
+    version: '1.1.8',
+    date: '2026-11-17',
+    title: { en: "A new look for Seshat Ledger", ar: "مظهر جديد لسيشات ليدجر" },
+    items: [
+      { en: "A new app icon: the same mark, drawn bolder inside soft rings, with dark, light and tinted versions for your iPhone home screen.", ar: "أيقونة جديدة للتطبيق: العلامة نفسها بخطوط أوضح داخل حلقات ناعمة، بنسخ داكنة وفاتحة ومظللة لشاشتك الرئيسية على آيفون." },
+      { en: "The name now reads Seshat Ledger everywhere, including the Shortcuts app and Siri phrases.", ar: "صار الاسم سيشات ليدجر في كل مكان، بما في ذلك تطبيق الاختصارات وعبارات Siri." },
+    ],
+  },
+  {
     id: '2026-11-v1.1.7',
     version: '1.1.7',
     date: '2026-11-16',

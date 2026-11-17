@@ -88,7 +88,7 @@ private enum Capture {
 struct LogBankMessageIntent: AppIntent {
   static var title: LocalizedStringResource = "Log bank message"
   static var description = IntentDescription(
-    "Logs a bank or wallet message in Seshat in the background: amount, merchant, category and card."
+    "Logs a bank or wallet message in Seshat Ledger in the background: amount, merchant, category and card."
   )
   static var openAppWhenRun: Bool = false
 
@@ -96,7 +96,7 @@ struct LogBankMessageIntent: AppIntent {
   var message: String
 
   static var parameterSummary: some ParameterSummary {
-    Summary("Log \(\.$message) in Seshat")
+    Summary("Log \(\.$message) in Seshat Ledger")
   }
 
   func perform() async throws -> some IntentResult & ProvidesDialog {
@@ -104,7 +104,7 @@ struct LogBankMessageIntent: AppIntent {
       return .result(dialog: IntentDialog(stringLiteral: summary))
     }
     Capture.park(message)
-    return .result(dialog: "Saved — Seshat will log it the next time it opens")
+    return .result(dialog: "Saved — Seshat Ledger will log it the next time it opens")
   }
 }
 
@@ -112,7 +112,7 @@ struct LogBankMessageIntent: AppIntent {
 struct QuickAddIntent: AppIntent {
   static var title: LocalizedStringResource = "Quick add"
   static var description = IntentDescription(
-    "Logs an expense or income in Seshat in the background from an amount and a few words, like 45 coffee."
+    "Logs an expense or income in Seshat Ledger in the background from an amount and a few words, like 45 coffee."
   )
   static var openAppWhenRun: Bool = false
 
@@ -126,7 +126,7 @@ struct QuickAddIntent: AppIntent {
   var income: Bool
 
   static var parameterSummary: some ParameterSummary {
-    Summary("Add \(\.$amount) \(\.$note) to Seshat")
+    Summary("Add \(\.$amount) \(\.$note) to Seshat Ledger")
   }
 
   func perform() async throws -> some IntentResult & ProvidesDialog {
@@ -134,7 +134,7 @@ struct QuickAddIntent: AppIntent {
     if let summary = await Capture.sendQuick(amount: amount, note: note, income: income) {
       return .result(dialog: IntentDialog(stringLiteral: summary))
     }
-    return .result(dialog: "Could not reach Seshat. Check your connection and try again")
+    return .result(dialog: "Could not reach Seshat Ledger. Check your connection and try again")
   }
 }
 
