@@ -15,6 +15,8 @@ export type SessionSummary = {
   lastMessageAt: string;
   createdAt: string;
   messageCount: number;
+  /** The last line of the conversation (plain text), for the list. Empty for older servers. */
+  preview?: string;
   unreadCount: number;
   pinned?: boolean;
   /** Which persona owns the thread (fixed for its life). */

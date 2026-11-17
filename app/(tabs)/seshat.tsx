@@ -248,7 +248,7 @@ export default function SeshatSessionsScreen() {
       }}>
         <View style={{ flexShrink: 1, flex: 1 }}>
           <Text style={{
-            fontFamily: fontHead(lang), fontSize: 22, color: tok.bone, letterSpacing: -0.4,
+            fontFamily: fontHead(lang), fontSize: 28, color: tok.bone, letterSpacing: -0.5,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}>
             {lang === 'ar' ? 'المحادثات' : 'Chats'}
@@ -260,12 +260,28 @@ export default function SeshatSessionsScreen() {
         <HeaderAdd onPress={startNew} label={lang === 'ar' ? 'محادثة جديدة' : 'New chat'} />
       </FrostedHeader>
 
+      {/* Quick starts: the two questions people ask most, one tap into a new chat. */}
+      <View style={{ paddingHorizontal: 20, paddingBottom: 12, flexDirection: lang === 'ar' ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: 10 }}>
+        {(lang === 'ar'
+          ? [['أرني خطتي', 'أرني خطتي'], ['كم أصرف اليوم؟', 'كم أقدر أصرف اليوم؟']]
+          : [['Show my plan', 'show my plan'], ['What can I spend today?', 'What can I spend today?']]).map(([label, text], i) => (
+          <Pressable key={label} accessibilityRole="button"
+            onPress={() => router.push({ pathname: '/seshat/[id]', params: { id: 'new', persona: 'seshat', text } } as never)}
+            style={({ pressed }) => ({
+              minHeight: 44, paddingHorizontal: 18, borderRadius: 999, justifyContent: 'center',
+              backgroundColor: i === 0 ? tok.gold : tok.surface, borderWidth: i === 0 ? 0 : 1, borderColor: tok.borderHi, opacity: pressed ? 0.8 : 1,
+            })}>
+            <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: i === 0 ? '#14110A' : tok.bone }}>{label}</Text>
+          </Pressable>
+        ))}
+      </View>
+
       {/* Search */}
       <View style={{ paddingHorizontal: 20, paddingBottom: 12 }}>
         <View style={{
           flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
           alignItems: 'center', gap: 8,
-          paddingHorizontal: 12, height: 42, borderRadius: 12,
+          paddingHorizontal: 14, height: 48, borderRadius: 24,
           backgroundColor: tok.surface, borderWidth: 1, borderColor: tok.border,
         }}>
           <Search size={15} color={tok.muted} />
@@ -302,12 +318,12 @@ export default function SeshatSessionsScreen() {
               key={f}
               onPress={() => setFilter(f)}
               style={{
-                paddingHorizontal: 14, paddingVertical: 7, borderRadius: 999, borderWidth: 1,
+                minHeight: 40, justifyContent: 'center', paddingHorizontal: 16, borderRadius: 999, borderWidth: 1,
                 borderColor: on ? tok.gold : tok.border,
                 backgroundColor: on ? 'rgba(201,168,76,0.14)' : 'transparent',
               }}
             >
-              <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.1, color: on ? tok.gold : tok.muted, textTransform: 'uppercase' }}>
+              <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 14, color: on ? tok.gold : tok.muted }}>
                 {label}
               </Text>
             </Pressable>
@@ -493,13 +509,11 @@ function SessionRow({
         })}
       >
         <View style={{
-          width: 36, height: 36, borderRadius: 12,
+          width: 44, height: 44, borderRadius: 14,
           backgroundColor: tok.surface,
           alignItems: 'center', justifyContent: 'center',
         }}>
-          {s.pinned
-            ? <Pin size={15} color={tok.gold} fill={tok.gold} />
-            : (s.persona === 'maat' ? <Scale size={16} color={tok.gold} /> : <Sparkles size={16} color={tok.gold} />)}
+          {s.persona === 'maat' ? <Scale size={16} color={tok.gold} /> : <Sparkles size={16} color={tok.gold} />}
         </View>
         <View style={{ flex: 1, minWidth: 0 }}>
           {renaming ? (
@@ -523,22 +537,24 @@ function SessionRow({
             />
           ) : (
             <>
-              <Text
-                numberOfLines={1}
-                style={{
-                  fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone,
-                  textAlign: lang === 'ar' ? 'right' : 'left',
-                }}
-              >
-                {s.title}
-              </Text>
-              <Text style={{
-                marginTop: 2,
-                fontFamily: fontMono(), fontSize: 12, color: tok.muted,
-                textAlign: lang === 'ar' ? 'right' : 'left',
-              }}>
-                {formatRelative(s.lastMessageAt, lang)} · {s.messageCount} {lang === 'ar' ? 'رسالة' : 'msgs'}
-              </Text>
+              <View style={{ flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 6 }}>
+                {s.pinned ? <Pin size={13} color={tok.gold} fill={tok.gold} /> : null}
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    flexShrink: 1, fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone,
+                    textAlign: lang === 'ar' ? 'right' : 'left',
+                  }}
+                >
+                  {s.title}
+                </Text>
+              </View>
+              {s.preview ? (
+                <Text numberOfLines={1} style={{
+                  marginTop: 2, fontFamily: fontBody(lang), fontSize: 14, color: tok.muted,
+                  textAlign: lang === 'ar' ? 'right' : 'left', writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
+                }}>{s.preview}</Text>
+              ) : null}
             </>
           )}
         </View>
@@ -563,35 +579,28 @@ function SessionRow({
         </View>
       ) : (
         <>
-          {(s.unreadCount ?? 0) > 0 && (
-            <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: tok.gold }} />
-          )}
-          <Pressable
-            onPress={onTogglePin}
-            disabled={busy}
-            hitSlop={8}
-            accessibilityRole="button"
-            accessibilityLabel={s.pinned
-              ? (lang === 'ar' ? 'إلغاء التثبيت' : 'Unpin')
-              : (lang === 'ar' ? 'تثبيت' : 'Pin')}
-            style={({ pressed }) => ({
-              width: 30, height: 30, borderRadius: 8,
-              alignItems: 'center', justifyContent: 'center',
-              opacity: pressed ? 0.6 : 1,
-            })}
-          >
-            {s.pinned
-              ? <Pin size={15} color={tok.gold} fill={tok.gold} />
-              : <PinOff size={15} color={tok.muted} />}
-          </Pressable>
-          <ChevronRight
-            size={16} color={tok.muted}
-            style={{ transform: [{ scaleX: lang === 'ar' ? -1 : 1 }] }}
-          />
+          <View style={{ alignItems: lang === 'ar' ? 'flex-start' : 'flex-end', gap: 6 }}>
+            <Text style={{ fontFamily: fontBody(lang), fontSize: 13, color: tok.muted }}>{shortAgo(s.lastMessageAt, lang)}</Text>
+            {(s.unreadCount ?? 0) > 0 ? <View style={{ width: 9, height: 9, borderRadius: 5, backgroundColor: tok.gold }} /> : null}
+          </View>
         </>
       )}
     </View>
   );
+}
+
+/** "now", "3m", "5h", "2d", then the date: short enough for the right edge of a row. */
+function shortAgo(iso: string, lang: 'en' | 'ar'): string {
+  const ar = lang === 'ar';
+  const diff = Date.now() - new Date(iso).getTime();
+  const min = Math.floor(diff / 60000);
+  if (min < 1) return ar ? 'الآن' : 'now';
+  if (min < 60) return ar ? `${min} د` : `${min}m`;
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return ar ? `${hr} س` : `${hr}h`;
+  const day = Math.floor(hr / 24);
+  if (day < 7) return ar ? `${day} ي` : `${day}d`;
+  return new Date(iso).toLocaleDateString(ar ? 'ar-EG' : 'en-US', { day: 'numeric', month: 'short' });
 }
 
 function formatRelative(iso: string, lang: 'en' | 'ar'): string {

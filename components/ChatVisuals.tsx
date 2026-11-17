@@ -35,7 +35,9 @@ export type VisualTransaction = {
 export type ChartKind = 'bars' | 'donut' | 'stat' | 'trend';
 export type ChartPoint = { label: string; value: number };
 export type CategorySlice = { category: string; total: number };
+export type PlanGroupBlock = { key: 'needs' | 'wants' | 'saving'; spent: number; target: number; status: 'ok' | 'ahead' | 'over' };
 export type VisualBlock =
+  | { type: 'plan'; period: { en: string; ar: string }; currency: string; income: number; verdict: 'on_plan' | 'ahead_of_pace' | 'over'; paceFraction: number; groups: PlanGroupBlock[] }
   | { type: 'transactions'; items: VisualTransaction[] }
   | { type: 'chart'; kind: ChartKind; title: string; unit?: string; caption?: string; series: ChartPoint[] }
   | { type: 'summary'; period: string; currency: string; income: number; expense: number; balance: number; topCategories: CategorySlice[] };
@@ -57,6 +59,7 @@ export function ChatBlocks({ blocks }: { blocks?: VisualBlock[] }) {
     <FadeIn>
       <View style={{ gap: 8 }}>
         {blocks.map((b, i) => {
+          if (b.type === 'plan') return <PlanBlockView key={i} block={b} />;
           if (b.type === 'transactions') return <TransactionsBlockView key={i} items={b.items} />;
           if (b.type === 'chart') return <ChartBlockView key={i} block={b} />;
           if (b.type === 'summary') return <SummaryBlockView key={i} block={b} />;
@@ -122,14 +125,68 @@ function ChartShell({ title, caption, children }: { title: string; caption?: str
   const { tok, lang } = useI18n();
   const align: 'right' | 'left' = lang === 'ar' ? 'right' : 'left';
   return (
-    <View style={{ backgroundColor: tok.glowShellBg, borderRadius: 14, borderWidth: 1, borderColor: tok.glowShellBorder, borderTopColor: tok.glowCoreSheen, paddingHorizontal: 14, paddingVertical: 13 }}>
-      <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.6, color: tok.gold, textTransform: 'uppercase', textAlign: align }}>
+    <View style={{ backgroundColor: tok.glowShellBg, borderRadius: 22, borderWidth: 1, borderColor: tok.glowShellBorder, borderTopColor: tok.glowCoreSheen, paddingHorizontal: 16, paddingVertical: 16 }}>
+      <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.gold, textAlign: align }}>
         {title}
       </Text>
       {children}
       {caption ? (
-        <Text style={{ fontFamily: fontBody(lang), fontSize: 12, color: tok.muted, marginTop: 10, textAlign: align }}>{caption}</Text>
+        <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, marginTop: 12, textAlign: align }}>{caption}</Text>
       ) : null}
+    </View>
+  );
+}
+
+const GROUP_LABEL = {
+  needs: { en: 'Needs', ar: 'الاحتياجات' },
+  wants: { en: 'Wants', ar: 'الرغبات' },
+  saving: { en: 'Saving', ar: 'الادخار' },
+} as const;
+
+/** The monthly plan as one card: where each group stands against its allowance, a tick for where the calendar says you should be. */
+function PlanBlockView({ block }: { block: Extract<VisualBlock, { type: 'plan' }> }) {
+  const { tok, lang } = useI18n();
+  const ar = lang === 'ar';
+  const rowDir = ar ? 'row-reverse' : 'row';
+  const align: 'right' | 'left' = ar ? 'right' : 'left';
+  const verdict = ({
+    on_plan: { en: 'On plan', ar: 'على الخطة', color: tok.posText },
+    ahead_of_pace: { en: 'Ahead of pace', ar: 'أسرع من المعتاد', color: tok.warnText },
+    over: { en: 'Over plan', ar: 'فوق الخطة', color: tok.alertText },
+  } as const)[block.verdict] ?? { en: '', ar: '', color: tok.muted };
+  const n = (v: number) => Math.round(v).toLocaleString('en-US');
+  const cur = block.currency;
+  return (
+    <View style={{ backgroundColor: tok.glowShellBg, borderRadius: 22, borderWidth: 1, borderColor: tok.glowShellBorder, borderTopColor: tok.glowCoreSheen, padding: 16 }}>
+      <View style={{ flexDirection: rowDir, justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+        <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.gold, textAlign: align }}>
+          {ar ? `خطة ${block.period.ar}` : `${block.period.en} plan`} · {n(block.income)} {cur}
+        </Text>
+        <View style={{ paddingHorizontal: 10, minHeight: 28, borderRadius: 999, justifyContent: 'center', borderWidth: 1, borderColor: verdict.color }}>
+          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 13, color: verdict.color }}>{ar ? verdict.ar : verdict.en}</Text>
+        </View>
+      </View>
+      <View style={{ marginTop: 14, gap: 14 }}>
+        {block.groups.map((g) => {
+          const fill = g.target > 0 ? Math.min(1, g.spent / g.target) : 0;
+          const color = g.status === 'over' ? tok.alertText : g.status === 'ahead' ? tok.warnText : tok.gold;
+          return (
+            <View key={g.key}>
+              <View style={{ flexDirection: rowDir, justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+                <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 15, color: tok.bone }}>{GROUP_LABEL[g.key][ar ? 'ar' : 'en']}</Text>
+                <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, writingDirection: 'ltr' }}>{n(g.spent)} / {n(g.target)}</Text>
+              </View>
+              <View style={{ height: 12, borderRadius: 6, backgroundColor: tok.shellBg, justifyContent: 'center' }}>
+                <View style={{ width: `${Math.max(fill > 0 ? 3 : 0, fill * 100)}%`, height: 12, borderRadius: 6, backgroundColor: color, alignSelf: ar ? 'flex-end' : 'flex-start' }} />
+                <View style={{ position: 'absolute', top: -4, [ar ? 'right' : 'left']: `${Math.round(block.paceFraction * 100)}%`, width: 2, height: 20, borderRadius: 1, backgroundColor: tok.bone }} />
+              </View>
+            </View>
+          );
+        })}
+      </View>
+      <Text style={{ fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, marginTop: 12, textAlign: align }}>
+        {ar ? 'الخط الأبيض هو أين يجب أن تكون اليوم.' : 'The white tick is where you should be today.'}
+      </Text>
     </View>
   );
 }
@@ -157,13 +214,13 @@ function BarsChart({ series, unit }: { series: ChartPoint[]; unit?: string }) {
       {series.slice(0, 8).map((p, i) => (
         <View key={i}>
           <View style={{ flexDirection: rowDir, justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 }}>
-            <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 14, color: tok.bone, textAlign: align }}>{p.label}</Text>
-            <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, marginHorizontal: 8, writingDirection: 'ltr' }}>
+            <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontBody(lang, 'medium'), fontSize: 15, color: tok.bone, textAlign: align }}>{p.label}</Text>
+            <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, marginHorizontal: 8, writingDirection: 'ltr' }}>
               {fmt(p.value)}{unit ? ` ${unit}` : ''}
             </Text>
           </View>
-          <View style={{ height: 6, borderRadius: 3, backgroundColor: tok.shellBg, overflow: 'hidden', flexDirection: lang === 'ar' ? 'row-reverse' : 'row' }}>
-            <View style={{ width: `${Math.max(6, (Math.abs(p.value) / max) * 100)}%`, backgroundColor: tok.gold, borderRadius: 3 }} />
+          <View style={{ height: 10, borderRadius: 5, backgroundColor: tok.shellBg, overflow: 'hidden', flexDirection: lang === 'ar' ? 'row-reverse' : 'row' }}>
+            <View style={{ width: `${Math.max(6, (Math.abs(p.value) / max) * 100)}%`, backgroundColor: tok.gold, borderRadius: 5 }} />
           </View>
         </View>
       ))}

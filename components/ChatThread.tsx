@@ -635,8 +635,15 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
                   flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
                   flexWrap: 'wrap', gap: 8, marginTop: 4,
                 }}>
-                  {followups.map((c) => (
-                    <RChip key={c} label={c} onPress={() => sendText(c)} />
+                  {followups.map((c, i) => (
+                    <Pressable key={c} accessibilityRole="button" onPress={() => sendText(c)}
+                      style={({ pressed }) => ({
+                        minHeight: 44, paddingHorizontal: 18, borderRadius: 999, justifyContent: 'center',
+                        backgroundColor: asked && asked.length && i === 0 ? tok.gold : tok.surface,
+                        borderWidth: asked && asked.length && i === 0 ? 0 : 1, borderColor: tok.borderHi, opacity: pressed ? 0.8 : 1,
+                      })}>
+                      <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: asked && asked.length && i === 0 ? '#14110A' : tok.bone }}>{c}</Text>
+                    </Pressable>
                   ))}
                 </View>
               )
@@ -697,7 +704,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
             onSubmitEditing={() => sendText()}
             onFocus={() => setInputFocused(true)}
             onBlur={() => setInputFocused(false)}
-            placeholder={recorder.isRecording ? (lang === 'ar' ? 'يتم التسجيل…' : 'Recording…') : t('message')}
+            placeholder={recorder.isRecording ? (lang === 'ar' ? 'يتم التسجيل…' : 'Recording…') : (persona === 'maat' ? t('message') : (lang === 'ar' ? 'قل لسيشات…' : 'Tell Seshat…'))}
             placeholderTextColor={recorder.isRecording ? tok.gold : tok.muted}
             returnKeyType="send"
             multiline

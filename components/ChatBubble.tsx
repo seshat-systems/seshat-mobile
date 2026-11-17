@@ -85,6 +85,8 @@ function ChatBubbleInner({
     return () => clearTimeout(timer);
   }, [message.id, message.typing]);
 
+  // Copy, regenerate, edit and delete stay out of sight until the message is tapped.
+  const [actionsOpen, setActionsOpen] = useState(false);
   const isAssistant = message.role === 'assistant';
   const shown = message.content.slice(0, visibleLen);
   const stillTyping = isAssistant && visibleLen < message.content.length;
@@ -123,6 +125,9 @@ function ChatBubbleInner({
   // text bubble itself stays content-width, anchored on its side.
   const hasBlocks = isAssistant && !!message.blocks && message.blocks.length > 0;
   const hasTxBlock = !!message.blocks?.some((b) => b.type === 'transactions');
+  // The plan card leads the reply (it is the answer); everything else sits under the text.
+  const planBlocks = message.blocks?.filter((b) => b.type === 'plan');
+  const restBlocks = message.blocks?.filter((b) => b.type !== 'plan');
   const showBlocks = hasBlocks && !stillTyping;
 
   // Waiting on the model with nothing to show yet: no empty bubble with a blinking
@@ -148,7 +153,10 @@ function ChatBubbleInner({
         <ActivityTrace steps={message.activity} active={message.pending} />
       </View>
     )}
-    <Pressable onPress={stillTyping ? () => onSkipTyping(message.id) : undefined} style={{ alignSelf: message.pending ? 'stretch' : anchor, maxWidth: '100%' }}>
+    {planBlocks && planBlocks.length > 0 && !stillTyping && (
+      <View style={{ marginBottom: 8 }}><ChatBlocks blocks={planBlocks} /></View>
+    )}
+    <Pressable onPress={stillTyping ? () => onSkipTyping(message.id) : () => setActionsOpen((o) => !o)} style={{ alignSelf: message.pending ? 'stretch' : anchor, maxWidth: '100%' }}>
       <View
         style={{
           backgroundColor: isAssistant ? tok.coreBg : tok.gold,
@@ -209,7 +217,7 @@ function ChatBubbleInner({
             <Text style={{
               flexShrink: 1,
               color: isAssistant ? tok.bone : tok.void,
-              fontFamily: fontBody(lang), fontSize: lang === 'ar' ? 15 : 14, lineHeight: 25,
+              fontFamily: fontBody(lang), fontSize: 16, lineHeight: 25,
               textAlign: lang === 'ar' ? 'right' : 'left',
               writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
             }}>
@@ -231,7 +239,7 @@ function ChatBubbleInner({
         )}
       </View>
     </Pressable>
-      {showActions && (
+      {showActions && actionsOpen && (
         <View style={{
           // Anchor the row on the bubble's side; order icons leading→trailing
           // (reversed for the user so Copy sits nearest the trailing edge, like web).
@@ -279,7 +287,7 @@ function ChatBubbleInner({
       )}
       {showBlocks && (
         <View style={{ marginTop: 8 }}>
-          <ChatBlocks blocks={message.blocks} />
+          <ChatBlocks blocks={restBlocks} />
         </View>
       )}
     </View>
