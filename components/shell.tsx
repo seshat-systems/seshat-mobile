@@ -149,8 +149,8 @@ export function NotificationBell() {
           borderWidth: 1.5, borderColor: tok.void,
           alignItems: 'center', justifyContent: 'center',
         }}>
-          <Text style={{
-            fontFamily: fontMono('medium'), fontSize: 12, lineHeight: 11,
+          <Text allowFontScaling={false} style={{
+            fontFamily: fontMono('medium'), fontSize: 12, lineHeight: 14,
             color: tok.void, writingDirection: 'ltr',
           }}>{badge}</Text>
         </View>

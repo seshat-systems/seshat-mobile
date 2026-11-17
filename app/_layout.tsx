@@ -1,3 +1,5 @@
+import { installFontCap } from '../lib/fontCap';
+installFontCap();
 import { useState, useEffect } from 'react';
 import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';

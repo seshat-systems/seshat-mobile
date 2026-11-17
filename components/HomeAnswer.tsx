@@ -98,9 +98,9 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
 
   const Stat = ({ label, value, unit, bad, gold }: { label: string; value: string; unit: string; bad?: boolean; gold?: boolean }) => (
     <View style={{ flex: 1, paddingVertical: 14, paddingHorizontal: 14 }}>
-      <Text style={{ fontFamily: fontMono('medium'), fontSize: 12, letterSpacing: ar ? 0 : 1.2, color: tok.muted, textTransform: ar ? 'none' : 'uppercase', textAlign: align }}>{label}</Text>
+      <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7} style={{ fontFamily: fontMono('medium'), fontSize: 12, letterSpacing: ar ? 0 : 1.2, color: tok.muted, textTransform: ar ? 'none' : 'uppercase', textAlign: align }}>{label}</Text>
       <Text style={{ marginTop: 6, fontFamily: fontHead(lang), fontSize: 26, lineHeight: 30, color: bad ? tok.alertText : gold ? tok.goldLight : tok.bone, textAlign: align }} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7}>{value}</Text>
-      <Text style={{ marginTop: 2, fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, textAlign: align }} numberOfLines={1}>{unit}</Text>
+      <Text style={{ marginTop: 2, fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, textAlign: align }} numberOfLines={2}>{unit}</Text>
     </View>
   );
 
@@ -126,7 +126,7 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
             {/* where you should be by today */}
             <View style={{ position: 'absolute', top: -5, [ar ? 'right' : 'left']: `${Math.round(tick * 100)}%`, width: 2, height: 22, borderRadius: 1, backgroundColor: tok.bone }} />
           </View>
-          <View style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between', marginTop: 8 }}>
+          <View style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between', flexWrap: 'wrap', columnGap: 12, marginTop: 8 }}>
             <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted }}>
               {ar ? `صرفت ${fmtNum(Math.round(plan!.spentSoFar!))} من ${fmtNum(Math.round(plan!.spendableMonth!))}` : `Spent ${fmtNum(Math.round(plan!.spentSoFar!))} of ${fmtNum(Math.round(plan!.spendableMonth!))}`}
             </Text>

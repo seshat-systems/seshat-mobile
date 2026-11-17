@@ -321,6 +321,7 @@ function TabLabel({ focused, color, children }: { focused: boolean; color: Color
   return (
     <Text
       numberOfLines={1}
+      allowFontScaling={false}   // a tab bar keeps its size; only content text grows with the system setting
       style={{
         // Crisp color swap instead of an opacity dim (no flicker on switch).
         color: focused ? tok.gold : color,
