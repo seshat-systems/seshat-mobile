@@ -19,7 +19,8 @@ export function HomeAnswer({ data, currency }: { data: DashboardData; currency: 
   const ar = lang === 'ar';
   const [text, setText] = useState('');
   const net = data.current.balance;
-  const top = [...(data.categoryBreakdown || [])].sort((a, b) => b.total - a.total)[0];
+  // "mostly Other" tells the person nothing, so a catch-all category is never named as the cause
+  const top = [...(data.categoryBreakdown || [])].filter((c) => !/^(other|others|uncategori[sz]ed|أخرى)$/i.test((c.nameEn || '').trim())).sort((a, b) => b.total - a.total)[0];
   const topName = top ? (ar && top.nameAr ? top.nameAr : top.nameEn) : '';
   const spend = data.current.expense.total || 0;
   const share = top && spend > 0 ? Math.round((top.total / spend) * 100) : 0;
@@ -31,7 +32,7 @@ export function HomeAnswer({ data, currency }: { data: DashboardData; currency: 
     : (behind ? `You're ${amount} behind this month${topName ? `, mostly ${topName}` : ''}.` : `You're ${amount} ahead this month.`);
   const detail = topName && share > 0
     ? (ar ? `${topName} تمثّل ${share}% من مصروفاتك.` : `${topName} is ${share}% of what you spent.`)
-    : (ar ? 'سجّل أول مصروف وسأحسب لك الباقي.' : 'Log your first spend and I will work out the rest.');
+    : (ar ? 'اسألني عن أي شيء في أرقامك.' : 'Ask me anything about your numbers.');
 
   const ask = (q: string) => router.push({ pathname: '/seshat/[id]', params: { id: 'new', text: q } } as never);
   const submit = () => { const q = text.trim(); if (!q) return; setText(''); ask(q); };
