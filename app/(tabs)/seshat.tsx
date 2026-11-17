@@ -1,3 +1,4 @@
+import { pressFeel } from '../../components/press';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   View, Text, TextInput, ScrollView, Pressable, RefreshControl,
@@ -269,7 +270,7 @@ export default function SeshatSessionsScreen() {
             onPress={() => router.push({ pathname: '/seshat/[id]', params: { id: 'new', persona: 'seshat', text } } as never)}
             style={({ pressed }) => ({
               minHeight: 44, paddingHorizontal: 18, borderRadius: 999, justifyContent: 'center',
-              backgroundColor: i === 0 ? tok.gold : tok.surface, borderWidth: i === 0 ? 0 : 1, borderColor: tok.borderHi, opacity: pressed ? 0.8 : 1,
+              backgroundColor: i === 0 ? tok.gold : tok.surface, borderWidth: i === 0 ? 0 : 1, borderColor: tok.borderHi, ...pressFeel(pressed),
             })}>
             <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: i === 0 ? '#14110A' : tok.bone }}>{label}</Text>
           </Pressable>

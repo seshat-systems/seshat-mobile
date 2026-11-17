@@ -1,3 +1,4 @@
+import { Rise } from './Motion';
 import { memo, useEffect, useRef, useState, type ReactNode } from 'react';
 import { View, Text, Pressable, Animated, ActivityIndicator, Image } from 'react-native';
 import { Mic, Copy, Check, RefreshCw, Pencil, Trash2 } from 'lucide-react-native';

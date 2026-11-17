@@ -1,3 +1,5 @@
+import { pressFeel } from './press';
+import { Rise } from './Motion';
 import { router } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -598,15 +600,18 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
         data={messages}
         keyExtractor={(m) => m.id}
         renderItem={({ item }) => (
-          <ChatBubble
-            message={item}
-            onSkipTyping={handleSkipTyping}
-            onPressImage={handlePressImage}
-            onRegenerate={handleRegenerate}
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-            busy={sending}
-          />
+          // New messages ease in; the history of an old chat appears at once.
+          <Rise instant={!(item.typing || item.pending)} distance={10}>
+            <ChatBubble
+              message={item}
+              onSkipTyping={handleSkipTyping}
+              onPressImage={handlePressImage}
+              onRegenerate={handleRegenerate}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+              busy={sending}
+            />
+          </Rise>
         )}
         contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
@@ -640,7 +645,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
                       style={({ pressed }) => ({
                         minHeight: 44, paddingHorizontal: 18, borderRadius: 999, justifyContent: 'center',
                         backgroundColor: asked && asked.length && i === 0 ? tok.gold : tok.surface,
-                        borderWidth: asked && asked.length && i === 0 ? 0 : 1, borderColor: tok.borderHi, opacity: pressed ? 0.8 : 1,
+                        borderWidth: asked && asked.length && i === 0 ? 0 : 1, borderColor: tok.borderHi, ...pressFeel(pressed),
                       })}>
                       <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: asked && asked.length && i === 0 ? '#14110A' : tok.bone }}>{c}</Text>
                     </Pressable>

@@ -1,3 +1,4 @@
+import { pressFeel } from './press';
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -7,6 +8,7 @@ import { useAppData } from '../lib/appData';
 import { apiFetch, hasToken } from '../lib/api';
 import { fontBody, fontMono } from '../lib/fonts';
 import { RCard, REyebrow, RAmount, RProgress, RButton } from './ui';
+import { Rise } from './Motion';
 import { DailyBudgetSheet, type DailyBudgetInfo } from './MoneySheets';
 import type { CardSummary } from '../lib/cards';
 import type { DashboardData } from './dashboards';
@@ -188,7 +190,7 @@ export function TodayNeeds({ extra = [], trailing = null, hidden = false, onCoun
   const Btn = ({ label, onPress, primary = true }: { label: string; onPress: () => void; primary?: boolean }) => (
     <Pressable onPress={onPress} accessibilityRole="button"
       style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 18, borderRadius: 999, alignItems: 'center', justifyContent: 'center', alignSelf: ar ? 'flex-end' : 'flex-start',
-        backgroundColor: primary ? tok.gold : 'transparent', borderWidth: primary ? 0 : 1, borderColor: tok.borderHi, opacity: pressed ? 0.8 : 1 })}>
+        backgroundColor: primary ? tok.gold : 'transparent', borderWidth: primary ? 0 : 1, borderColor: tok.borderHi, ...pressFeel(pressed) })}>
       <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: primary ? '#14110A' : tok.bone }}>{label}</Text>
     </Pressable>
   );
@@ -199,28 +201,28 @@ export function TodayNeeds({ extra = [], trailing = null, hidden = false, onCoun
       </Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} snapToInterval={CARD_W + 12} decelerationRate="fast"
         contentContainerStyle={{ paddingHorizontal: 16, gap: 12, flexDirection: ar ? 'row-reverse' : 'row' }}>
-        {extra.map((x) => (
-          <View key={x.id} style={cardStyle}>
+        {extra.map((x, xi) => (
+          <Rise key={x.id} delay={380 + xi * 70}><View style={cardStyle}>
             <View><Text style={titleStyle} numberOfLines={3}>{x.title}</Text><Text style={bodyStyle} numberOfLines={3}>{x.body}</Text></View>
             <View style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 8 }}>
               <Btn label={x.label ?? (ar ? 'سجّل' : 'Log it')} onPress={x.onPress} />
               {x.onSecondary ? <Btn label={x.secondaryLabel ?? (ar ? 'لاحقاً' : 'Later')} primary={false} onPress={x.onSecondary} /> : null}
             </View>
-          </View>
+          </View></Rise>
         ))}
-        {shown.map((r) => r.kind === 'ask_savings' || r.kind === 'ask_goals' ? (
-          <View key={r.id} style={cardStyle}>
+        {shown.map((r, ri) => r.kind === 'ask_savings' || r.kind === 'ask_goals' ? (
+          <Rise key={r.id} delay={380 + (extra.length + ri) * 70}><View style={cardStyle}>
             <View><Text style={titleStyle} numberOfLines={3}>{r.title}</Text><Text style={bodyStyle} numberOfLines={3}>{r.body}</Text></View>
             <View style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 8 }}>
               <Btn label={r.kind === 'ask_goals' ? (ar ? 'أضف هدفاً' : 'Add a goal') : (ar ? 'أضف مدخراتي' : 'Add savings')} onPress={() => answerAsk(r.kind as 'ask_savings' | 'ask_goals', 'yes')} />
               <Btn label={ar ? 'لا' : 'No'} primary={false} onPress={() => answerAsk(r.kind as 'ask_savings' | 'ask_goals', 'no')} />
             </View>
-          </View>
+          </View></Rise>
         ) : (
-          <View key={r.id} style={cardStyle}>
+          <Rise key={r.id} delay={380 + (extra.length + ri) * 70}><View style={cardStyle}>
             <View><Text style={titleStyle} numberOfLines={3}>{r.title}</Text><Text style={bodyStyle} numberOfLines={3}>{r.body}</Text></View>
             <Btn label={r.screen !== 'home' ? verb(r) : r.id.startsWith('cap-') ? (ar ? 'افتح الميزانية' : 'Open budget') : (ar ? 'اسأل سيشات' : 'Ask Seshat')} onPress={() => go(r)} />
-          </View>
+          </View></Rise>
         ))}
         {trailing}
       </ScrollView>
@@ -406,7 +408,7 @@ export function NetWorthCard() {
             onPress={() => router.push(r.to as never)}
             style={({ pressed }) => ({
               flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 8, paddingVertical: 11,
-              borderTopWidth: i === 0 ? 0 : StyleSheet.hairlineWidth, borderTopColor: tok.border, opacity: pressed ? 0.8 : 1,
+              borderTopWidth: i === 0 ? 0 : StyleSheet.hairlineWidth, borderTopColor: tok.border, ...pressFeel(pressed),
             })}
           >
             <View style={{ flex: 1 }}>

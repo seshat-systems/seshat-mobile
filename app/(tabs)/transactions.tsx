@@ -8,6 +8,7 @@ import { SlidersHorizontal } from 'lucide-react-native';
 import { apiFetch, hasToken } from '../../lib/api';
 import { useI18n, monthYear, currencyLabel } from '../../lib/i18n';
 import { fmtNum } from '../../lib/privacy';
+import { CountUp, Rise } from '../../components/Motion';
 import { useAppData } from '../../lib/appData';
 import { fontBody, fontHead } from '../../lib/fonts';
 import { RCard, REyebrow, RPill, RHScroll, RAmount, RField, RChip } from '../../components/ui';
@@ -48,6 +49,8 @@ export default function TransactionsScreen() {
     }
   }, [defaultFrom]);
   const rangeIsDefault = filters.from === defaultFrom && !filters.to;
+  // The first list of the visit eases in; later filter changes swap rows without replaying it.
+  const playedRef = useRef(false);
   // Project filter is single-select and lives outside the FiltersSheet for
   // quick switching: null = no filter, 'none' = only untagged tx, else id.
   const [projectFilter, setProjectFilter] = useState<string | 'none' | null>(null);
@@ -179,6 +182,8 @@ export default function TransactionsScreen() {
     }));
   }, [txs, lang, t]);
 
+  useEffect(() => { if (groups.length > 0) playedRef.current = true; }, [groups.length]);
+
   // What the list adds up to, and the categories worth a one-tap filter (the biggest spending, kept steady while one is chosen).
   const totals = useMemo(() => {
     let spent = 0; let earned = 0;
@@ -216,9 +221,8 @@ export default function TransactionsScreen() {
           }}>{t('transactions')}</Text>
           {/* The month in one line: what the list adds up to. */}
           <View style={{ marginTop: 6, flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
-            <Text style={{ fontFamily: fontHead(lang), fontSize: 30, color: filters.type === 'income' ? tok.posText : tok.goldLight }}>
-              {fmtNum(Math.round(filters.type === 'income' ? totals.earned : totals.spent))}
-            </Text>
+            <CountUp value={Math.round(filters.type === 'income' ? totals.earned : totals.spent)} format={(n) => fmtNum(Math.round(n))}
+              style={{ fontFamily: fontHead(lang), fontSize: 30, color: filters.type === 'income' ? tok.posText : tok.goldLight }} />
             <Text style={{ fontFamily: fontBody(lang), fontSize: 15, color: tok.muted }}>
               {currencyLabel(profile?.currency ?? 'EGP', lang)} {filters.type === 'income' ? (lang === 'ar' ? 'دخل' : 'earned') : (lang === 'ar' ? 'مصروف' : 'spent')}{rangeIsDefault ? (lang === 'ar' ? ' هذا الشهر' : ' this month') : ''} · {txs.length} {t('records')}
             </Text>
@@ -332,7 +336,8 @@ export default function TransactionsScreen() {
                 progressBackgroundColor={tok.surface}
               />
             }
-            renderItem={({ item: { day, list, dayTotal } }) => (
+            renderItem={({ item: { day, list, dayTotal }, index }) => (
+              <Rise instant={playedRef.current || index > 4} delay={index * 60} distance={12}>
               <View style={{ marginBottom: 14 }}>
                 <View style={{
                   flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
@@ -353,6 +358,7 @@ export default function TransactionsScreen() {
                   ))}
                 </RCard>
               </View>
+              </Rise>
             )}
           />
         )}

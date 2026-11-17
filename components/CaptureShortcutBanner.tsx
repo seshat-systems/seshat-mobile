@@ -1,3 +1,4 @@
+import { pressFeel } from './press';
 import { useBannerSlot } from '../lib/bannerSlot';
 import { useEffect, useState } from 'react';
 import { View, Text, Pressable, Platform } from 'react-native';
@@ -120,11 +121,11 @@ export function CapturePromptLine() {
       </Text>
       <View style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 10, marginTop: 12 }}>
         <Pressable onPress={allow} accessibilityRole="button"
-          style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 18, borderRadius: 999, alignItems: 'center', justifyContent: 'center', backgroundColor: tok.gold, opacity: pressed ? 0.8 : 1 })}>
+          style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 18, borderRadius: 999, alignItems: 'center', justifyContent: 'center', backgroundColor: tok.gold, ...pressFeel(pressed) })}>
           <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: '#14110A' }}>{ar ? 'نعم، فعّل' : 'Yes, set it up'}</Text>
         </Pressable>
         <Pressable onPress={later} accessibilityRole="button"
-          style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 18, borderRadius: 999, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: tok.borderHi, opacity: pressed ? 0.8 : 1 })}>
+          style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 18, borderRadius: 999, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: tok.borderHi, ...pressFeel(pressed) })}>
           <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.bone }}>{ar ? 'لاحقاً' : 'Later'}</Text>
         </Pressable>
       </View>

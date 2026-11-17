@@ -4,6 +4,7 @@ import Svg, { Circle, G } from 'react-native-svg';
 import { useI18n, formatAmount } from '../lib/i18n';
 import { fontMono, fontBody } from '../lib/fonts';
 import { RAmount } from './ui';
+import { GrowBar } from './Motion';
 import { CategoryIconByKey } from './icons';
 import { iconKeyForCategory } from '../lib/categoryMap';
 
@@ -176,10 +177,7 @@ function PlanBlockView({ block }: { block: Extract<VisualBlock, { type: 'plan' }
                 <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 15, color: tok.bone }}>{GROUP_LABEL[g.key][ar ? 'ar' : 'en']}</Text>
                 <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, writingDirection: 'ltr' }}>{n(g.spent)} / {n(g.target)}</Text>
               </View>
-              <View style={{ height: 12, borderRadius: 6, backgroundColor: tok.shellBg, justifyContent: 'center' }}>
-                <View style={{ width: `${Math.max(fill > 0 ? 3 : 0, fill * 100)}%`, height: 12, borderRadius: 6, backgroundColor: color, alignSelf: ar ? 'flex-end' : 'flex-start' }} />
-                <View style={{ position: 'absolute', top: -4, [ar ? 'right' : 'left']: `${Math.round(block.paceFraction * 100)}%`, width: 2, height: 20, borderRadius: 1, backgroundColor: tok.bone }} />
-              </View>
+              <GrowBar fraction={fill} color={color} track={tok.shellBg} rtl={ar} delay={200 + block.groups.indexOf(g) * 120} tick={{ at: block.paceFraction, color: tok.bone }} />
             </View>
           );
         })}
@@ -219,9 +217,7 @@ function BarsChart({ series, unit }: { series: ChartPoint[]; unit?: string }) {
               {fmt(p.value)}{unit ? ` ${unit}` : ''}
             </Text>
           </View>
-          <View style={{ height: 10, borderRadius: 5, backgroundColor: tok.shellBg, overflow: 'hidden', flexDirection: lang === 'ar' ? 'row-reverse' : 'row' }}>
-            <View style={{ width: `${Math.max(6, (Math.abs(p.value) / max) * 100)}%`, backgroundColor: tok.gold, borderRadius: 5 }} />
-          </View>
+          <GrowBar fraction={Math.max(0.06, Math.abs(p.value) / max)} color={tok.gold} track={tok.shellBg} height={10} rtl={lang === 'ar'} delay={i * 90} />
         </View>
       ))}
     </View>

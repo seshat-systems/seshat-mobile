@@ -1,3 +1,4 @@
+import { pressFeel } from './press';
 import { useEffect, useState, type ReactNode } from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -8,6 +9,7 @@ import { apiFetch, hasToken } from '../lib/api';
 import { fontBody, fontHead, fontMono } from '../lib/fonts';
 import { fmtNum } from '../lib/privacy';
 import type { DashboardData } from './dashboards';
+import { Rise, GrowBar, CountUp } from './Motion';
 import type { DailyBudgetInfo } from './MoneySheets';
 
 /**
@@ -96,10 +98,10 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
   const chip = { minHeight: 44, paddingHorizontal: 18, borderRadius: 999, justifyContent: 'center' as const };
   const align = ar ? 'right' : 'left';
 
-  const Stat = ({ label, value, unit, bad, gold }: { label: string; value: string; unit: string; bad?: boolean; gold?: boolean }) => (
+  const Stat = ({ label, value, unit, bad, gold }: { label: string; value: number; unit: string; bad?: boolean; gold?: boolean }) => (
     <View style={{ flex: 1, paddingVertical: 14, paddingHorizontal: 14 }}>
       <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7} style={{ fontFamily: fontMono('medium'), fontSize: 12, letterSpacing: ar ? 0 : 1.2, color: tok.muted, textTransform: ar ? 'none' : 'uppercase', textAlign: align }}>{label}</Text>
-      <Text style={{ marginTop: 6, fontFamily: fontHead(lang), fontSize: 26, lineHeight: 30, color: bad ? tok.alertText : gold ? tok.goldLight : tok.bone, textAlign: align }} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7}>{value}</Text>
+      <CountUp value={value} format={(n) => fmtNum(Math.round(n))} delay={300} style={{ marginTop: 6, fontFamily: fontHead(lang), fontSize: 26, lineHeight: 30, color: bad ? tok.alertText : gold ? tok.goldLight : tok.bone, textAlign: align }} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7} />
       <Text style={{ marginTop: 2, fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, textAlign: align }} numberOfLines={2}>{unit}</Text>
     </View>
   );
@@ -110,6 +112,7 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
   return (
     <>
     <View style={{ paddingHorizontal: 20, paddingTop: 8, paddingBottom: 6 }}>
+      <Rise>
       <Text style={{
         fontFamily: fontHead(lang), fontSize: 28, lineHeight: 35, color: behind ? tok.bone : tok.goldLight,
         textAlign: align, letterSpacing: -0.3,
@@ -118,14 +121,12 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
         marginTop: 8, fontFamily: fontBody(lang), fontSize: 17, lineHeight: 25, color: behind && ready ? tok.bone : tok.muted,
         textAlign: align,
       }}>{detail}</Text>
+      </Rise>
 
       {ready && total > 0 ? (
+        <Rise delay={120}>
         <View style={{ marginTop: 18 }}>
-          <View style={{ height: 12, borderRadius: 6, backgroundColor: tok.elevated, justifyContent: 'center' }}>
-            <View style={{ width: `${Math.round(fill * 100)}%`, height: 12, borderRadius: 6, backgroundColor: overMonth ? tok.alertText : tok.gold, alignSelf: ar ? 'flex-end' : 'flex-start' }} />
-            {/* where you should be by today */}
-            <View style={{ position: 'absolute', top: -5, [ar ? 'right' : 'left']: `${Math.round(tick * 100)}%`, width: 2, height: 22, borderRadius: 1, backgroundColor: tok.bone }} />
-          </View>
+          <GrowBar fraction={fill} color={overMonth ? tok.alertText : tok.gold} track={tok.elevated} delay={260} rtl={ar} tick={{ at: tick, color: tok.bone }} />
           <View style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between', flexWrap: 'wrap', columnGap: 12, marginTop: 8 }}>
             <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted }}>
               {ar ? `صرفت ${fmtNum(Math.round(plan!.spentSoFar!))} من ${fmtNum(Math.round(plan!.spendableMonth!))}` : `Spent ${fmtNum(Math.round(plan!.spentSoFar!))} of ${fmtNum(Math.round(plan!.spendableMonth!))}`}
@@ -135,37 +136,41 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
             </Text>
           </View>
         </View>
+        </Rise>
       ) : null}
 
       {ready ? (
+        <Rise delay={220}>
         <View style={{ flexDirection: ar ? 'row-reverse' : 'row', marginTop: 16, borderRadius: 22, borderWidth: 1, borderColor: tok.border, backgroundColor: tok.surface }}>
-          <Stat label={ar ? 'المتبقي' : 'Left'} value={fmtNum(Math.round(monthLeft))} unit={ar ? `${cur} هذا الشهر` : `${cur} this month`} bad={monthLeft < 0} gold={monthLeft >= 0} />
+          <Stat label={ar ? 'المتبقي' : 'Left'} value={Math.round(monthLeft)} unit={ar ? `${cur} هذا الشهر` : `${cur} this month`} bad={monthLeft < 0} gold={monthLeft >= 0} />
           <View style={{ width: 1, backgroundColor: tok.border }} />
-          <Stat label={ar ? 'اليوم' : 'Today'} value={fmtNum(Math.round(todayLeft))} unit={todayLeft < 0 ? (ar ? `${cur} فوق الحد` : `${cur} over`) : (ar ? `${cur} آمن` : `${cur} safe`)} bad={todayLeft < 0} />
+          <Stat label={ar ? 'اليوم' : 'Today'} value={Math.round(todayLeft)} unit={todayLeft < 0 ? (ar ? `${cur} فوق الحد` : `${cur} over`) : (ar ? `${cur} آمن` : `${cur} safe`)} bad={todayLeft < 0} />
           <View style={{ width: 1, backgroundColor: tok.border }} />
-          <Stat label={ar ? 'الراتب' : 'Payday'} value={fmtNum(plan!.daysLeft ?? 0)} unit={ar ? 'يوم' : (plan!.daysLeft === 1 ? 'day' : 'days')} />
+          <Stat label={ar ? 'الراتب' : 'Payday'} value={plan!.daysLeft ?? 0} unit={ar ? 'يوم' : (plan!.daysLeft === 1 ? 'day' : 'days')} />
         </View>
+        </Rise>
       ) : null}
 
+      <Rise delay={320}>
       {coach ? (
         <Text style={{ marginTop: 14, fontFamily: fontBody(lang), fontSize: 16, lineHeight: 24, color: tok.muted, textAlign: align }}>{coach}</Text>
       ) : null}
 
       <View style={{ flexDirection: ar ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: 10, marginTop: 16 }}>
         <Pressable onPress={() => ask(why)} accessibilityRole="button"
-          style={({ pressed }) => ({ ...chip, backgroundColor: tok.gold, opacity: pressed ? 0.8 : 1 })}>
+          style={({ pressed }) => ({ ...chip, backgroundColor: tok.gold, ...pressFeel(pressed) })}>
           <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: '#14110A' }}>{ar ? 'اشرح لي السبب' : 'Show me why'}</Text>
         </Pressable>
         {needsCount > 0 && onNeeds ? (
           <Pressable onPress={onNeeds} accessibilityRole="button"
-            style={({ pressed }) => ({ ...chip, backgroundColor: tok.surface, borderWidth: 1, borderColor: tok.borderHi, opacity: pressed ? 0.8 : 1 })}>
+            style={({ pressed }) => ({ ...chip, backgroundColor: tok.surface, borderWidth: 1, borderColor: tok.borderHi, ...pressFeel(pressed) })}>
             <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.bone }}>
               {ar ? `${needsCount} تحتاجك ${'←'}` : `${needsCount} need you →`}
             </Text>
           </Pressable>
         ) : null}
       </View>
-
+      </Rise>
     </View>
     {after}
     </>
