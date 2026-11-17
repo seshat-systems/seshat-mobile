@@ -1,10 +1,10 @@
+import { queueOnboardingForms } from '../lib/onboardingForms';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import {
   View, Text, Pressable, TextInput, Animated, Easing,
   ScrollView, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
 import { requestPermission } from '../lib/androidNotificationListener';
 import { ArrowRight, Check } from 'lucide-react-native';
 import { useI18n, currencyLabel } from '../lib/i18n';
@@ -51,7 +51,6 @@ export function OnboardingTour({
   const [busy, setBusy] = useState(false);
   // What they already have: each opens its own form after the tour (savings first), and savings also settles the Home question.
   const [have, setHave] = useState<{ savings: boolean; goal: boolean; gam3ya: boolean; debt: boolean }>({ savings: false, goal: false, gam3ya: false, debt: false });
-  const router = useRouter();
 
   const scene = SCENES[step];
 
@@ -87,9 +86,11 @@ export function OnboardingTour({
       console.warn('onboarding save failed', err);
     } finally {
       setBusy(false);
+      // Every ticked form opens, one after the other; the tabs layout takes the next whenever the person is back on Home.
+      queueOnboardingForms([
+        have.savings && '/savings/new', have.goal && '/goals?new=1', have.gam3ya && '/gam3ya/new', have.debt && '/debts',
+      ].filter(Boolean) as string[]);
       onDone();
-      const next = have.savings ? '/savings/new' : have.goal ? '/goals?new=1' : have.gam3ya ? '/gam3ya/new' : have.debt ? '/debts' : null;
-      if (next) setTimeout(() => router.push(next as never), 500);
     }
   };
 
