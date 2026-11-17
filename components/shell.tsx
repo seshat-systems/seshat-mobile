@@ -6,7 +6,7 @@ import { View, Text, Pressable, StyleSheet, ViewStyle, Animated, Easing, Activit
 import { FrostedHeader } from './FrostedHeader';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { BarChart3, Bell, Crosshair, LayoutGrid, Mic, Plus } from 'lucide-react-native';
+import { BarChart3, Bell, Crosshair, LayoutGrid, Mic, Plus, Pencil, Sparkles, Send, Landmark, ScanLine } from 'lucide-react-native';
 import { useI18n, formatAmount, currencyLabel, monthYear, greeting } from '../lib/i18n';
 import { useNotifications } from '../lib/notifications';
 import { fontBody, fontHead, fontMono } from '../lib/fonts';
@@ -208,6 +208,8 @@ export type TxRowData = {
   // anything other than 'manual'. Lets the user spot AI-created, voice,
   // receipt, or bot-created entries at a glance.
   source?: 'manual' | 'voice' | 'seshat' | 'bot' | 'notification' | 'receipt-ocr';
+  /** For a captured bank message: SMS or push notification. */
+  captureChannel?: 'sms' | 'push';
   // The card / account used (populated by the API).
   cardId?: { _id?: string; bank?: string | null; last4?: string; label?: string | null; kind?: string } | null;
   // Entered in another currency: the row's amount is already converted; this is what was typed.
@@ -215,87 +217,62 @@ export type TxRowData = {
   originalCurrency?: string;
 };
 
-function sourceChipLabel(source: TxRowData['source'], lang: 'en' | 'ar'): string | null {
-  if (!source || source === 'manual') return null;
-  if (lang === 'ar') {
-    return ({
-      voice: 'صوت',
-      seshat: 'سيشات',
-      bot: 'تيليجرام',
-      notification: 'إشعار',
-      'receipt-ocr': 'إيصال',
-    } as const)[source] ?? null;
+/**
+ * Where an entry came from, in words a person uses, with a small icon: typed by hand, Seshat chat, voice, Telegram,
+ * a bank SMS or notification, a receipt scan. Every entry carries one, manual included, so nothing is a mystery.
+ */
+export function sourceInfo(source: TxRowData['source'], channel: TxRowData['captureChannel'], lang: 'en' | 'ar'): { label: string; Icon: typeof Pencil } {
+  const ar = lang === 'ar';
+  switch (source) {
+    case 'seshat': return { label: ar ? 'محادثة سيشات' : 'Seshat chat', Icon: Sparkles };
+    case 'voice': return { label: ar ? 'بالصوت' : 'Voice', Icon: Mic };
+    case 'bot': return { label: ar ? 'تيليجرام' : 'Telegram', Icon: Send };
+    case 'notification': return { label: channel === 'push' ? (ar ? 'إشعار البنك' : 'Bank notification') : (ar ? 'رسالة البنك' : 'Bank SMS'), Icon: Landmark };
+    case 'receipt-ocr': return { label: ar ? 'مسح إيصال' : 'Receipt scan', Icon: ScanLine };
+    default: return { label: ar ? 'أضفته يدوياً' : 'Added by hand', Icon: Pencil };
   }
-  return ({
-    voice: 'voice',
-    seshat: 'seshat',
-    bot: 'telegram',
-    notification: 'notification',
-    'receipt-ocr': 'receipt',
-  } as const)[source] ?? null;
 }
 
 export function RTxRow({
-  tx, last, onPress, onLongPress,
+  tx, last, onPress, onLongPress, showDate,
 }: {
   tx: TxRowData;
   last?: boolean;
   onPress?: () => void;
   onLongPress?: () => void;
+  /** Show the date as well as the time (lists that are not grouped by day). */
+  showDate?: boolean;
 }) {
   const { tok, lang } = useI18n();
+  const ar = lang === 'ar';
   const iconKey = iconKeyForCategory(tx.categoryId);
   const desc = tx.description || catLabel(tx.categoryId, lang);
   const signed = tx.type === 'income' ? tx.amount : -tx.amount;
-  const dateLabel = new Date(tx.date).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+  const when = new Date(tx.date);
+  const time = when.toLocaleTimeString(ar ? 'ar-EG' : 'en-US', { hour: 'numeric', minute: '2-digit' });
+  const timeLabel = showDate ? `${when.toLocaleDateString(ar ? 'ar-EG' : 'en-US', { day: 'numeric', month: 'short' })}, ${time}` : time;
+  const src = sourceInfo(tx.source, tx.captureChannel, lang);
+  const account = cardChipName(tx.cardId);
+  const second = [catLabel(tx.categoryId, lang), account, tx.originalCurrency && tx.originalAmount ? `${tx.originalAmount} ${tx.originalCurrency}` : null].filter(Boolean).join(' · ');
+  const align = ar ? 'right' : 'left';
 
   const content = (
     <View style={{
-      flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
-      alignItems: 'center', gap: 12, paddingVertical: 12,
+      flexDirection: ar ? 'row-reverse' : 'row',
+      alignItems: 'center', gap: 12, paddingVertical: 14,
       borderBottomWidth: last ? 0 : StyleSheet.hairlineWidth,
       borderBottomColor: tok.border,
     }}>
       <RCatChip iconKey={iconKey} />
       <View style={{ flex: 1, minWidth: 0 }}>
-        <View style={{
-          flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
-          alignItems: 'center', gap: 6,
-        }}>
-          <Text
-            numberOfLines={1}
-            style={{
-              flex: 1,
-              fontFamily: fontBody(lang, 'medium'), fontSize: lang === 'ar' ? 15 : 14,
-              color: tok.bone, writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
-              textAlign: lang === 'ar' ? 'right' : 'left',
-            }}
-          >{desc}</Text>
-          {(() => {
-            const label = sourceChipLabel(tx.source, lang);
-            if (!label) return null;
-            return (
-              <View style={{
-                paddingHorizontal: 6, paddingVertical: 2, borderRadius: 6,
-                backgroundColor: tok.elevated,
-                borderWidth: StyleSheet.hairlineWidth, borderColor: tok.border,
-              }}>
-                <Text style={{
-                  fontFamily: fontMono('regular'), fontSize: 12,
-                  color: tok.gold, letterSpacing: 0.8,
-                  textTransform: 'lowercase',
-                }}>
-                  {label}
-                </Text>
-              </View>
-            );
-          })()}
+        <Text numberOfLines={1} style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone, writingDirection: ar ? 'rtl' : 'ltr', textAlign: align }}>{desc}</Text>
+        <Text numberOfLines={1} style={{ marginTop: 2, fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, writingDirection: ar ? 'rtl' : 'ltr', textAlign: align }}>{second}</Text>
+        <View style={{ marginTop: 4, flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 5 }}>
+          <src.Icon size={13} color={tok.gold} strokeWidth={1.8} />
+          <Text numberOfLines={1} style={{ flexShrink: 1, fontFamily: fontBody(lang), fontSize: 13, color: tok.muted }}>{src.label} · {timeLabel}</Text>
         </View>
-        <REyebrow style={{ marginTop: 3, textAlign: lang === 'ar' ? 'right' : 'left' }}>
-          {catLabel(tx.categoryId, lang)} · {dateLabel}{cardChipName(tx.cardId) ? ` · ${cardChipName(tx.cardId)}` : ''}{tx.originalCurrency && tx.originalAmount ? ` · ${tx.originalAmount} ${tx.originalCurrency}` : ''}
-        </REyebrow>
       </View>
-      <RAmount value={signed} currency={tx.currency} size={15} sign={signed > 0} decimals={signed % 1 === 0 ? 0 : 2} />
+      <RAmount value={signed} currency={tx.currency} size={17} sign={signed > 0} decimals={signed % 1 === 0 ? 0 : 2} />
     </View>
   );
 

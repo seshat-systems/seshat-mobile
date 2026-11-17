@@ -79,6 +79,10 @@ function presetRange(p: Preset): { from?: string; to?: string } {
 }
 
 type Props = {
+  /** Accounts / cards the list can be limited to (single choice), and the current choice: null = all, 'none' = no account. */
+  cards?: Array<{ id: string; name: string }>;
+  cardFilter?: string | 'none' | null;
+  onCardFilter?: (id: string | 'none' | null) => void;
   visible: boolean;
   onClose: () => void;
   initial: TxFilters;
@@ -86,7 +90,7 @@ type Props = {
   onApply: (filters: TxFilters) => void;
 };
 
-export function TxFiltersSheet({ visible, onClose, initial, categories, onApply }: Props) {
+export function TxFiltersSheet({ visible, onClose, initial, categories, onApply, cards = [], cardFilter = null, onCardFilter }: Props) {
   const { tok, lang } = useI18n();
   const insets = useSafeAreaInsets();
   const [draft, setDraft] = useState<TxFilters>(initial);
@@ -207,6 +211,19 @@ export function TxFiltersSheet({ visible, onClose, initial, categories, onApply 
               </RPill>
             </Row>
           </Section>
+
+          {/* Account */}
+          {cards.length > 0 && onCardFilter ? (
+            <Section title={lang === 'ar' ? 'الحساب' : 'Account'} tok={tok} lang={lang}>
+              <Row>
+                <RPill active={cardFilter === null} onPress={() => onCardFilter(null)}>{lang === 'ar' ? 'كل الحسابات' : 'All accounts'}</RPill>
+                {cards.map((c) => (
+                  <RPill key={c.id} active={cardFilter === c.id} onPress={() => onCardFilter(c.id)}>{c.name}</RPill>
+                ))}
+                <RPill active={cardFilter === 'none'} onPress={() => onCardFilter('none')}>{lang === 'ar' ? 'بدون حساب' : 'No account'}</RPill>
+              </Row>
+            </Section>
+          ) : null}
 
           {/* Date range */}
           <Section title={lang === 'ar' ? 'الفترة' : 'Date range'} tok={tok} lang={lang}>

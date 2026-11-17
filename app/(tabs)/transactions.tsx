@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, FlatList, RefreshControl, Alert } from 'react-native';
 // Search + filter chips sit between the header and this list, so it must clip (not slide under them).
 import { FlatList as ScreenFlatList } from 'react-native';
@@ -6,7 +6,8 @@ import { FrostedHeader } from '../../components/FrostedHeader';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SlidersHorizontal } from 'lucide-react-native';
 import { apiFetch, hasToken } from '../../lib/api';
-import { useI18n, monthYear } from '../../lib/i18n';
+import { useI18n, monthYear, currencyLabel } from '../../lib/i18n';
+import { fmtNum } from '../../lib/privacy';
 import { useAppData } from '../../lib/appData';
 import { fontBody, fontHead } from '../../lib/fonts';
 import { RCard, REyebrow, RPill, RHScroll, RAmount, RField, RChip } from '../../components/ui';
@@ -17,14 +18,36 @@ import { EditTransactionSheet, type EditingTx } from '../../components/EditTrans
 import type { CardSummary } from '../../lib/cards';
 import { TxFiltersSheet, EMPTY_FILTERS, type TxFilters } from '../../components/TxFiltersSheet';
 
+/** First day of the current financial month (the month starts on the person's payday, day 1 by default), as YYYY-MM-DD. */
+function monthStartISO(startDay: number | null | undefined): string {
+  const d = Math.min(Math.max(Math.trunc(Number(startDay) || 1), 1), 31);
+  const now = new Date();
+  const clamp = (y: number, m: number) => Math.min(d, new Date(y, m + 1, 0).getDate());
+  let y = now.getFullYear(); let m = now.getMonth();
+  if (now.getDate() < clamp(y, m)) { m -= 1; if (m < 0) { m = 11; y -= 1; } }
+  const dd = clamp(y, m);
+  return `${y}-${String(m + 1).padStart(2, '0')}-${String(dd).padStart(2, '0')}`;
+}
+
 export default function TransactionsScreen() {
   const { tok, lang, t } = useI18n();
-  const { dataVersion, categories, projects, bumpVersion } = useAppData();
+  const { dataVersion, categories, projects, bumpVersion, profile } = useAppData();
   const insets = useSafeAreaInsets();
   const [txs, setTxs] = useState<TxRowData[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [filters, setFilters] = useState<TxFilters>(EMPTY_FILTERS);
+  // Records open on the current month, like Home, so the total at the top is the month's. "Reset" in the filter sheet shows everything.
+  const defaultFrom = monthStartISO(profile?.monthStartDay);
+  const [filters, setFilters] = useState<TxFilters>({ ...EMPTY_FILTERS, from: monthStartISO(profile?.monthStartDay) });
+  const lastDefault = useRef(defaultFrom);
+  useEffect(() => {
+    // The profile arrives after the first render: move the default to the person's own month start unless they already chose a range.
+    if (lastDefault.current !== defaultFrom) {
+      setFilters((f) => (f.from === lastDefault.current && !f.to ? { ...f, from: defaultFrom } : f));
+      lastDefault.current = defaultFrom;
+    }
+  }, [defaultFrom]);
+  const rangeIsDefault = filters.from === defaultFrom && !filters.to;
   // Project filter is single-select and lives outside the FiltersSheet for
   // quick switching: null = no filter, 'none' = only untagged tx, else id.
   const [projectFilter, setProjectFilter] = useState<string | 'none' | null>(null);
@@ -156,6 +179,28 @@ export default function TransactionsScreen() {
     }));
   }, [txs, lang, t]);
 
+  // What the list adds up to, and the categories worth a one-tap filter (the biggest spending, kept steady while one is chosen).
+  const totals = useMemo(() => {
+    let spent = 0; let earned = 0;
+    for (const tx of txs) { if (tx.type === 'income') earned += tx.amount; else spent += tx.amount; }
+    return { spent, earned };
+  }, [txs]);
+  const [lens, setLens] = useState<Array<{ id: string; name: string; pct: number }>>([]);
+  useEffect(() => {
+    if (filters.categoryIds.length > 0) return;
+    const by = new Map<string, { name: string; total: number }>();
+    let all = 0;
+    for (const tx of txs) {
+      if (tx.type !== 'expense' || !tx.categoryId?._id || tx.categoryId.icon === 'savings') continue;   // money set aside is not a spending category
+      all += tx.amount;
+      const nm = (lang === 'ar' && tx.categoryId.nameAr) ? tx.categoryId.nameAr : (tx.categoryId.nameEn ?? '');
+      const cur = by.get(tx.categoryId._id) ?? { name: nm, total: 0 };
+      cur.total += tx.amount; by.set(tx.categoryId._id, cur);
+    }
+    setLens([...by.entries()].sort((a, b) => b[1].total - a[1].total).slice(0, 4)
+      .map(([id, v]) => ({ id, name: v.name, pct: all > 0 ? Math.round((v.total / all) * 100) : 0 })));
+  }, [txs, filters.categoryIds.length, lang]);
+
   return (
     <ScreenScaffold>
       <FrostedHeader style={{
@@ -166,12 +211,18 @@ export default function TransactionsScreen() {
         <View style={{ flex: 1 }}>
           <Text style={{
             fontFamily: fontHead(lang),
-            fontSize: 22, color: tok.bone, letterSpacing: -0.4,
+            fontSize: 28, color: tok.bone, letterSpacing: -0.5,
             textAlign: lang === 'ar' ? 'right' : 'left',
           }}>{t('transactions')}</Text>
-          <REyebrow style={{ marginTop: 4, textAlign: lang === 'ar' ? 'right' : 'left' }}>
-            {txs.length} {t('records')} · {monthYear(lang)}
-          </REyebrow>
+          {/* The month in one line: what the list adds up to. */}
+          <View style={{ marginTop: 6, flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
+            <Text style={{ fontFamily: fontHead(lang), fontSize: 30, color: filters.type === 'income' ? tok.posText : tok.goldLight }}>
+              {fmtNum(Math.round(filters.type === 'income' ? totals.earned : totals.spent))}
+            </Text>
+            <Text style={{ fontFamily: fontBody(lang), fontSize: 15, color: tok.muted }}>
+              {currencyLabel(profile?.currency ?? 'EGP', lang)} {filters.type === 'income' ? (lang === 'ar' ? 'دخل' : 'earned') : (lang === 'ar' ? 'مصروف' : 'spent')}{rangeIsDefault ? (lang === 'ar' ? ' هذا الشهر' : ' this month') : ''} · {txs.length} {t('records')}
+            </Text>
+          </View>
         </View>
         <RefreshSpinner refreshing={refreshing} />
       </FrostedHeader>
@@ -189,32 +240,14 @@ export default function TransactionsScreen() {
             style={{ flex: 1 }}
           />
           <RPill
-            active={hasActiveFilters(filters)}
+            active={hasActiveFilters(filters, rangeIsDefault) || cardFilter !== null}
             onPress={() => setFilterSheetOpen(true)}
-            icon={<SlidersHorizontal size={16} color={hasActiveFilters(filters) ? tok.void : tok.muted} />}
+            icon={<SlidersHorizontal size={16} color={hasActiveFilters(filters, rangeIsDefault) || cardFilter !== null ? tok.void : tok.muted} />}
             style={{ width: 56, height: 56, minHeight: 56, paddingVertical: 0, paddingHorizontal: 0, gap: 0, justifyContent: 'center' }}
           >
             {''}
           </RPill>
         </View>
-
-        {/* Card filter row - shown once the user has at least one card (created from
-            captured bank messages or added by hand). Single-select. */}
-        {cards.length > 0 ? (
-          <RHScroll style={{ marginBottom: 8 }}>
-            <RPill active={cardFilter === null} onPress={() => setCardFilter(null)}>
-              {lang === 'ar' ? 'كل الحسابات' : 'All accounts'}
-            </RPill>
-            {cards.map((c) => (
-              <RPill key={c.id} active={cardFilter === c.id} onPress={() => setCardFilter(c.id)}>
-                {c.name}
-              </RPill>
-            ))}
-            <RPill active={cardFilter === 'none'} onPress={() => setCardFilter('none')}>
-              {lang === 'ar' ? 'بدون حساب' : 'No account'}
-            </RPill>
-          </RHScroll>
-        ) : null}
 
         {/* Project filter row - only rendered when the active workspace has
             projects (an org ledger). Single-select: "All", "No project"
@@ -239,21 +272,33 @@ export default function TransactionsScreen() {
           </RHScroll>
         ) : null}
 
-        {/* Active filter chips - one chip per active filter dimension. Tap an
-            x on a chip to drop just that filter. Type segmented stays as the
-            quick top-level toggle. */}
-        <RHScroll style={{ marginBottom: 14 }}>
-          <RPill active={filters.type === 'all'} onPress={() => setFilters((f) => ({ ...f, type: 'all' }))}>{t('all')}</RPill>
-          <RPill active={filters.type === 'expense'} onPress={() => setFilters((f) => ({ ...f, type: 'expense' }))}>{t('expense')}</RPill>
-          <RPill active={filters.type === 'income'} onPress={() => setFilters((f) => ({ ...f, type: 'income' }))}>{t('earned')}</RPill>
-          {summarizeFilters(filters, categories, lang).map((chip) => (
-            <RChip
-              key={chip.key}
-              label={chip.label}
-              onRemove={() => setFilters(chip.remove)}
-            />
-          ))}
-        </RHScroll>
+        {/* One-tap category filters from this month's biggest spending; account and type live in the filter button. */}
+        {lens.length > 0 ? (
+          <RHScroll style={{ marginBottom: 10 }}>
+            <RPill active={filters.categoryIds.length === 0} onPress={() => setFilters((f) => ({ ...f, categoryIds: [] }))}>{t('all')}</RPill>
+            {lens.map((c) => (
+              <RPill key={c.id} active={filters.categoryIds.length === 1 && filters.categoryIds[0] === c.id}
+                onPress={() => setFilters((f) => ({ ...f, categoryIds: f.categoryIds[0] === c.id && f.categoryIds.length === 1 ? [] : [c.id] }))}>
+                {c.name} {c.pct}%
+              </RPill>
+            ))}
+          </RHScroll>
+        ) : null}
+
+        {/* Other active filters, each dismissible (the category chips above show the category choice). */}
+        {(filters.type !== 'all' || cardFilter !== null || summarizeFilters(filters, categories, lang, rangeIsDefault).some((c) => !c.key.startsWith('cat-'))) ? (
+          <RHScroll style={{ marginBottom: 12 }}>
+            {filters.type !== 'all' ? (
+              <RChip label={filters.type === 'expense' ? t('expense') : t('earned')} onRemove={() => setFilters((f) => ({ ...f, type: 'all' }))} />
+            ) : null}
+            {cardFilter !== null ? (
+              <RChip label={cardFilter === 'none' ? (lang === 'ar' ? 'بدون حساب' : 'No account') : (cards.find((c) => c.id === cardFilter)?.name ?? '')} onRemove={() => setCardFilter(null)} />
+            ) : null}
+            {summarizeFilters(filters, categories, lang, rangeIsDefault).filter((c) => !c.key.startsWith('cat-')).map((chip) => (
+              <RChip key={chip.key} label={chip.label} onRemove={() => setFilters(chip.remove)} />
+            ))}
+          </RHScroll>
+        ) : null}
 
         {loading ? (
           <RCard padding={18}>
@@ -295,7 +340,7 @@ export default function TransactionsScreen() {
                   paddingHorizontal: 4, paddingBottom: 8,
                 }}>
                   <REyebrow>{day}</REyebrow>
-                  <RAmount value={dayTotal} size={11} weight="regular" currency={list[0]?.currency ?? 'EGP'} sign decimals={0} />
+                  <RAmount value={dayTotal} size={14} weight="regular" currency={list[0]?.currency ?? 'EGP'} sign decimals={0} />
                 </View>
                 <RCard padding={0} style={{ paddingHorizontal: 18 }}>
                   {list.map((tx, i) => (
@@ -327,17 +372,20 @@ export default function TransactionsScreen() {
         initial={filters}
         categories={categories}
         onApply={(next) => setFilters(next)}
+        cards={cards.map((c) => ({ id: c.id, name: c.name }))}
+        cardFilter={cardFilter}
+        onCardFilter={setCardFilter}
       />
     </ScreenScaffold>
   );
 }
 
 /** Returns true when any filter beyond the default type=all is in effect. */
-function hasActiveFilters(f: TxFilters): boolean {
+function hasActiveFilters(f: TxFilters, rangeIsDefault = false): boolean {
   return f.type !== 'all'
     || f.categoryIds.length > 0
     || f.sources.length > 0
-    || !!f.from || !!f.to
+    || (!rangeIsDefault && (!!f.from || !!f.to))
     || typeof f.minAmount === 'number'
     || typeof f.maxAmount === 'number';
 }
@@ -350,10 +398,11 @@ function summarizeFilters(
   f: TxFilters,
   categories: { _id: string; nameEn: string; nameAr?: string; emoji?: string }[],
   lang: 'en' | 'ar',
+  rangeIsDefault = false,
 ): Array<{ key: string; label: string; remove: (cur: TxFilters) => TxFilters }> {
   const chips: Array<{ key: string; label: string; remove: (cur: TxFilters) => TxFilters }> = [];
 
-  if (f.from || f.to) {
+  if ((f.from || f.to) && !rangeIsDefault) {
     // Mirror the range arrow for Arabic (RTL) so it points start->end visually.
     const arrow = lang === 'ar' ? '←' : '→';
     const label = `${f.from ?? '…'} ${arrow} ${f.to ?? '…'}`;
