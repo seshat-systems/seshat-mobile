@@ -67,7 +67,6 @@ const EN: Strings = {
   light: 'Light',
   mayShort: 'May',
   // Auth
-  authVersion: 'Seshat · v1.0',
   loginTitle: 'Welcome back.',
   loginSub: 'Nothing flies under.',
   registerTitle: "Let's start watching.",
@@ -173,7 +172,6 @@ const AR: Strings = {
   light: 'فاتح',
   mayShort: 'مايو',
   // Auth
-  authVersion: 'سيشات · إصدار ١٫٠',
   loginTitle: 'أهلاً بعودتك.',
   loginSub: 'لا شيء يفوت سيشات.',
   registerTitle: 'لنبدأ المراقبة.',

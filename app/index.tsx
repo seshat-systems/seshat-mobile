@@ -264,9 +264,9 @@ export default function AuthRouter() {
         // when the keyboard opened. Footer keeps the primary action chain
         // (sign in, OR, Google) but no longer trails with a second prompt.
         headerCta={
-          <Pressable onPress={() => switchView('register')} hitSlop={8}>
+          <Pressable onPress={() => switchView('register')} style={{ minHeight: 44, justifyContent: 'center' }}>
             <Text style={{
-              color: tok.gold, fontFamily: fontBody(lang, 'semibold'), fontSize: 13,
+              color: tok.gold, fontFamily: fontBody(lang, 'semibold'), fontSize: 15,
             }}>
               {lang === 'ar' ? `${t('signUp')} ←` : `${t('signUp')} →`}
             </Text>
@@ -292,7 +292,7 @@ export default function AuthRouter() {
           </>
         }
       >
-        <AuthHero eyebrow={t('authVersion')} title={t('loginTitle')} sub={t('loginSub')} />
+        <AuthHero title={t('loginTitle')} sub={t('loginSub')} />
         <AuthError message={err} />
         <AuthField
           label={t('emailOrUsername')} value={email} onChange={setEmail}
@@ -333,7 +333,7 @@ export default function AuthRouter() {
           </>
         }
       >
-        <AuthHero eyebrow={t('authVersion')} title={t('registerTitle')} sub={t('registerSub')} />
+        <AuthHero title={t('registerTitle')} sub={t('registerSub')} />
         <AuthError message={err} />
         <AuthField
           label={t('email')} value={email} onChange={setEmail}
@@ -364,7 +364,7 @@ export default function AuthRouter() {
           </>
         }
       >
-        <AuthHero eyebrow={t('authVersion')} title={t('verifyTitle')} sub={`${t('verifySub')} ${email}`} />
+        <AuthHero title={t('verifyTitle')} sub={`${t('verifySub')} ${email}`} />
         <AuthError message={err} />
         <AuthField
           label={t('verifyCode')} value={code} onChange={setCode}
@@ -407,7 +407,7 @@ export default function AuthRouter() {
           </>
         }
       >
-        <AuthHero eyebrow={t('authVersion')} title={t('almostThere')} sub={t('registerSub')} />
+        <AuthHero title={t('almostThere')} sub={t('registerSub')} />
         <AuthError message={err} />
         <AuthField
           label={t('username')} value={name} onChange={setName}
@@ -463,7 +463,6 @@ export default function AuthRouter() {
         }
       >
         <AuthHero
-          eyebrow={t('authVersion')}
           title={lang === 'ar' ? 'لمن هذا الحساب؟' : 'Who is this account for?'}
           sub={lang === 'ar'
             ? 'يمكنكِ تغيير ذلك أو إضافة منظمة لاحقًا من الإعدادات.'
@@ -508,7 +507,7 @@ export default function AuthRouter() {
           </>
         }
       >
-        <AuthHero eyebrow={t('authVersion')} title={t('forgotTitle')} sub={t('forgotSub')} />
+        <AuthHero title={t('forgotTitle')} sub={t('forgotSub')} />
         <AuthError message={err} />
         <AuthField
           label={t('email')} value={email} onChange={setEmail}
@@ -558,7 +557,6 @@ export default function AuthRouter() {
         }
       >
         <AuthHero
-          eyebrow={t('authVersion')}
           title={lang === 'ar' ? 'تحقق من الرمز' : 'Verify the code'}
           sub={`${lang === 'ar' ? 'أرسلنا رمزًا إلى' : 'We sent a code to'} ${email}`}
         />
@@ -591,7 +589,6 @@ export default function AuthRouter() {
       }
     >
       <AuthHero
-        eyebrow={t('authVersion')}
         title={lang === 'ar' ? 'كلمة سر جديدة' : 'Set a new password'}
         sub={lang === 'ar' ? 'الحد الأدنى 8 أحرف.' : 'At least 8 characters.'}
       />
