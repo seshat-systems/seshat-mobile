@@ -72,7 +72,7 @@ export default function AuthRouter() {
   const [busy, setBusy] = useState(false);
   // Captured at the pickSegment step; after the onboarding tour we use it to
   // route org founders into the org-create form.
-  const [segment, setSegment] = useState<'individual' | 'org'>('individual');
+  const [segment, setSegment] = useState<'individual' | 'org' | 'family'>('individual');
 
   // Google sign-in via native OAuth clients - no proxy, no Web client.
   // expo-auth-session picks the platform-specific client at runtime and
@@ -176,10 +176,12 @@ export default function AuthRouter() {
   // into the org-create form after the tour settles.
   const pickIndividual = () => { setSegment('individual'); setView('onboard'); };
   const pickOrganization = () => { setSegment('org'); setView('onboard'); };
+  const pickFamily = () => { setSegment('family'); setView('onboard'); };
   const finishOnboarding = () => {
     goApp();
     // Defer so the tabs are mounted before we push into /orgs/new.
     if (segment === 'org') setTimeout(() => router.push('/orgs/new'), 50);
+    if (segment === 'family') setTimeout(() => router.push({ pathname: '/orgs/new', params: { kind: 'family' } }), 50);
   };
 
   const submitForgot = async () => {
@@ -264,9 +266,9 @@ export default function AuthRouter() {
         // when the keyboard opened. Footer keeps the primary action chain
         // (sign in, OR, Google) but no longer trails with a second prompt.
         headerCta={
-          <Pressable onPress={() => switchView('register')} hitSlop={8}>
+          <Pressable onPress={() => switchView('register')} style={{ minHeight: 44, justifyContent: 'center' }}>
             <Text style={{
-              color: tok.gold, fontFamily: fontBody(lang, 'semibold'), fontSize: 14,
+              color: tok.gold, fontFamily: fontBody(lang, 'semibold'), fontSize: 15,
             }}>
               {lang === 'ar' ? `${t('signUp')} ←` : `${t('signUp')} →`}
             </Text>
@@ -292,7 +294,7 @@ export default function AuthRouter() {
           </>
         }
       >
-        <AuthHero eyebrow={t('authVersion')} title={t('loginTitle')} sub={t('loginSub')} />
+        <AuthHero title={t('loginTitle')} sub={t('loginSub')} />
         <AuthError message={err} />
         <AuthField
           label={t('emailOrUsername')} value={email} onChange={setEmail}
@@ -333,7 +335,7 @@ export default function AuthRouter() {
           </>
         }
       >
-        <AuthHero eyebrow={t('authVersion')} title={t('registerTitle')} sub={t('registerSub')} />
+        <AuthHero title={t('registerTitle')} sub={t('registerSub')} />
         <AuthError message={err} />
         <AuthField
           label={t('email')} value={email} onChange={setEmail}
@@ -364,7 +366,7 @@ export default function AuthRouter() {
           </>
         }
       >
-        <AuthHero eyebrow={t('authVersion')} title={t('verifyTitle')} sub={`${t('verifySub')} ${email}`} />
+        <AuthHero title={t('verifyTitle')} sub={`${t('verifySub')} ${email}`} />
         <AuthError message={err} />
         <AuthField
           label={t('verifyCode')} value={code} onChange={setCode}
@@ -407,7 +409,7 @@ export default function AuthRouter() {
           </>
         }
       >
-        <AuthHero eyebrow={t('authVersion')} title={t('almostThere')} sub={t('registerSub')} />
+        <AuthHero title={t('almostThere')} sub={t('registerSub')} />
         <AuthError message={err} />
         <AuthField
           label={t('username')} value={name} onChange={setName}
@@ -463,7 +465,6 @@ export default function AuthRouter() {
         }
       >
         <AuthHero
-          eyebrow={t('authVersion')}
           title={lang === 'ar' ? 'لمن هذا الحساب؟' : 'Who is this account for?'}
           sub={lang === 'ar'
             ? 'يمكنكِ تغيير ذلك أو إضافة منظمة لاحقًا من الإعدادات.'
@@ -474,6 +475,13 @@ export default function AuthRouter() {
             title={lang === 'ar' ? 'فرد' : 'Individual'}
             sub={lang === 'ar' ? 'لتتبع مصاريفي الشخصية فقط.' : 'Track my own money. Personal ledger only.'}
             onPress={pickIndividual}
+            tok={tok}
+            lang={lang}
+          />
+          <SegmentCard
+            title={lang === 'ar' ? 'عائلة' : 'Family'}
+            sub={lang === 'ar' ? 'ميزانية البيت مشتركة، ويمكن إضافة الأولاد.' : 'One household ledger. Kids can join.'}
+            onPress={pickFamily}
             tok={tok}
             lang={lang}
           />
@@ -508,7 +516,7 @@ export default function AuthRouter() {
           </>
         }
       >
-        <AuthHero eyebrow={t('authVersion')} title={t('forgotTitle')} sub={t('forgotSub')} />
+        <AuthHero title={t('forgotTitle')} sub={t('forgotSub')} />
         <AuthError message={err} />
         <AuthField
           label={t('email')} value={email} onChange={setEmail}
@@ -558,7 +566,6 @@ export default function AuthRouter() {
         }
       >
         <AuthHero
-          eyebrow={t('authVersion')}
           title={lang === 'ar' ? 'تحقق من الرمز' : 'Verify the code'}
           sub={`${lang === 'ar' ? 'أرسلنا رمزًا إلى' : 'We sent a code to'} ${email}`}
         />
@@ -591,7 +598,6 @@ export default function AuthRouter() {
       }
     >
       <AuthHero
-        eyebrow={t('authVersion')}
         title={lang === 'ar' ? 'كلمة سر جديدة' : 'Set a new password'}
         sub={lang === 'ar' ? 'الحد الأدنى 8 أحرف.' : 'At least 8 characters.'}
       />

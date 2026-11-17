@@ -69,7 +69,7 @@ export function AuthChrome({
             onPress={() => setLang(lang === 'ar' ? 'en' : 'ar')}
             style={({ pressed }) => ({
               borderWidth: 1, borderColor: tok.shellBorder,
-              borderRadius: 999, paddingHorizontal: 12, paddingVertical: 6,
+              borderRadius: 999, paddingHorizontal: 16, minHeight: 44, justifyContent: 'center',
               backgroundColor: pressed ? tok.elevated : tok.shellBg,
               opacity: pressed ? 0.7 : 1,
             })}
@@ -106,24 +106,24 @@ export function AuthChrome({
 // ─────────────────────────────────────────────────────────────
 // Hero block — eyebrow + headline + subline
 // ─────────────────────────────────────────────────────────────
-export function AuthHero({ eyebrow, title, sub }: { eyebrow: string; title: string; sub: string }) {
+export function AuthHero({ eyebrow, title, sub }: { eyebrow?: string; title: string; sub: string }) {
   const { tok, lang } = useI18n();
   const align = lang === 'ar' ? 'right' : 'left';
   return (
-    <View style={{ marginTop: 40, marginBottom: 8 }}>
+    <View style={{ marginTop: 28, marginBottom: 8 }}>
       {/* The seal: the struck-medallion logo badge, identical to the landing's
           TourGate seal (soft halo + struck disc + inner ring + mark). */}
       <View style={{ alignItems: lang === 'ar' ? 'flex-end' : 'flex-start', marginBottom: 26 }}>
         <SeshatSeal size={64} gold={tok.gold} />
       </View>
 
-      {/* eyebrow */}
-      <Text style={{
+      {/* eyebrow (optional) */}
+      {!!eyebrow && <Text style={{
         fontFamily: fontMono('regular'), fontSize: 12,
         letterSpacing: lang === 'ar' ? 0 : 2, textTransform: lang === 'ar' ? 'none' : 'uppercase',
         color: tok.gold, marginBottom: 14, textAlign: align,
         writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
-      }}>{eyebrow}</Text>
+      }}>{eyebrow}</Text>}
 
       {/* editorial headline — large Syne, tight tracking */}
       <Text style={{
@@ -137,8 +137,8 @@ export function AuthHero({ eyebrow, title, sub }: { eyebrow: string; title: stri
 
       <Text style={{
         marginTop: 12,
-        fontFamily: fontBody(lang), fontSize: lang === 'ar' ? 15 : 14.5,
-        color: tok.muted, lineHeight: 25,
+        fontFamily: fontBody(lang), fontSize: 16,
+        color: tok.muted, lineHeight: 24,
         textAlign: align,
         writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
       }}>{sub}</Text>
@@ -172,7 +172,7 @@ export function AuthField(props: {
 export function AuthLink({ children, onPress, gold }: { children: ReactNode; onPress?: () => void; gold?: boolean }) {
   const { tok } = useI18n();
   return (
-    <Pressable onPress={onPress} hitSlop={6}>
+    <Pressable onPress={onPress} style={{ minHeight: 44, justifyContent: 'center' }}>
       <Text style={{
         color: gold ? tok.gold : tok.muted,
         fontFamily: fontMono('regular'), fontSize: 12,
