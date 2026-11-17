@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   View, Text, FlatList, TextInput, Pressable, KeyboardAvoidingView, Platform, StyleSheet, Alert, ActivityIndicator,
@@ -177,10 +178,13 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
     return () => clearTimeout(timer);
   }, [sessionId, sending, userTurns]);
 
+  // A setup answer can ask the app to open a form ("Yes, add them" opens the savings form); wait a moment so the reply is read first.
+  const openAfterReply = (path?: string) => { if (path) setTimeout(() => router.push(path as never), 900); };
+
   // Non-stream JSON send — used for image/receipt turns (the streaming contract
   // is message-based) and as the fallback when streaming can't start.
   const sendViaJson = async (text: string, pendingId: string, imageUrl?: string) => {
-    const res = await apiFetch<{ data: { reply: string; sessionId: string; createdTransactionIds?: string[]; mutated?: boolean; visualBlocks?: VisualBlock[]; quickReplies?: string[]; activity?: Message['activity'] } }>('/chat', {
+    const res = await apiFetch<{ data: { reply: string; sessionId: string; createdTransactionIds?: string[]; mutated?: boolean; visualBlocks?: VisualBlock[]; quickReplies?: string[]; activity?: Message['activity']; action?: { open?: string } } }>('/chat', {
       method: 'POST',
       body: JSON.stringify({
         message: text || undefined,
@@ -191,6 +195,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
     });
     if (!sessionId) setSessionId(res.data.sessionId);
     if (res.data.mutated) emitDataChanged(); // the chat changed data: refresh the screens behind it
+    openAfterReply(res.data.action?.open);
     setMessages((prev) => prev.map((m) => (m.id === pendingId ? {
       ...m,
       content: res.data.reply,
@@ -226,6 +231,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
         } else if (frame.t === 'done') {
           if (!sessionId) setSessionId(frame.sessionId);
           if (frame.mutated) emitDataChanged();
+          openAfterReply(frame.action?.open);
           // Keep the live-streamed steps if the terminal frame omits `activity`.
           setMessages((prev) => prev.map((m) => (m.id === pendingId ? {
             ...m,

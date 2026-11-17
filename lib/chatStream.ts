@@ -65,6 +65,8 @@ export type ChatStreamFrame =
       visualBlocks?: unknown[];
       quickReplies?: string[];
       activity?: ActivityStep[];
+      /** A screen to open after this reply (the one-time setup questions: savings, goals). */
+      action?: { open?: string };
     }
   | { t: 'error'; message: string };
 
