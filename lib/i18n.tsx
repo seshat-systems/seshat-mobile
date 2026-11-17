@@ -5,6 +5,7 @@ import { Mode, tokens, Tokens } from './theme';
 
 import { secureGet, secureSet } from './secure';
 export type Lang = 'en' | 'ar';
+export type LangChoice = 'system' | Lang;
 
 type Strings = Record<string, string>;
 
@@ -224,6 +225,9 @@ type Ctx = {
   lang: Lang;
   setLang: (l: Lang) => void;
   applyServerLang: (l: Lang) => void;
+  /** What the person picked: follow the phone ('system') or a fixed language. */
+  langChoice: LangChoice;
+  setLangChoice: (c: LangChoice) => void;
   mode: Mode;
   setMode: (m: Mode) => void;
   t: (key: keyof typeof EN) => string;
@@ -244,6 +248,7 @@ const MODE_KEY = 'seshat.mode';
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>('en');
   const explicitRef = useRef(false);
+  const [langChoice, setLangChoiceState] = useState<LangChoice>('system');
   const [mode, setModeState] = useState<Mode>('dark');
   // Hide-numbers mode: subscribing here re-renders every useI18n consumer when it flips, so each screen's
   // formatAmount() call picks up the new state without every screen subscribing itself.
@@ -253,17 +258,30 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // First launch follows the phone's language; a choice made in the app (or on another device) overrides it from then on.
     secureGet(LANG_KEY).then((v) => {
-      if (v === 'en' || v === 'ar') { explicitRef.current = true; setLangState(v); }
-      else setLangState(systemLang());
+      if (v === 'en' || v === 'ar') { explicitRef.current = true; setLangChoiceState(v); setLangState(v); }
+      else { systemChosenRef.current = v === 'system'; setLangState(systemLang()); }
     });
     secureGet(MODE_KEY).then((v) => { if (v === 'dark' || v === 'light') setModeState(v); });
   }, []);
 
   // The account's saved language comes from the server. English is also the server's default for people who never chose, so it must not
   // override a phone set to Arabic; Arabic from the server is always a real choice. Once the person has chosen here, the server wins.
-  const applyServerLang = (l: Lang) => { if (explicitRef.current || l === 'ar') setLang(l); };
+  // Choosing "System" means the phone decides, so the server's saved language is ignored too.
+  const systemChosenRef = useRef(false);
+  const applyServerLang = (l: Lang) => { if (systemChosenRef.current) return; if (explicitRef.current || l === 'ar') setLang(l); };
+  const setLangChoice = (c: LangChoice) => {
+    if (c === 'system') {
+      systemChosenRef.current = true;
+      explicitRef.current = false;
+      setLangChoiceState('system');
+      setLangState(systemLang());
+      secureSet(LANG_KEY, 'system').catch(() => {});
+    } else setLang(c);
+  };
   const setLang = (l: Lang) => {
     explicitRef.current = true;
+    systemChosenRef.current = false;
+    setLangChoiceState(l);
     setLangState(l);
     secureSet(LANG_KEY, l).catch(() => {});
     // RN's I18nManager.forceRTL changes the entire app's flex direction.
@@ -282,13 +300,15 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       lang,
       setLang,
       applyServerLang,
+      langChoice,
+      setLangChoice,
       mode,
       setMode,
       t: (key) => strings[key as string] ?? EN[key as string] ?? String(key),
       dir: lang === 'ar' ? 'rtl' : 'ltr',
       tok: tokens(mode),
     };
-  }, [lang, mode, numbersHidden]);
+  }, [lang, langChoice, mode, numbersHidden]);
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }

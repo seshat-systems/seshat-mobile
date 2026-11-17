@@ -52,7 +52,7 @@ export default function ProfileScreen() {
   const router = useRouter();
   const [wa, setWa] = useState<{ configured: boolean; linked: boolean } | null>(null);
   useEffect(() => { apiFetch<{ data: { configured: boolean; linked: boolean } }>('/me/whatsapp').then((r) => setWa(r.data)).catch(() => {}); }, []);
-  const { tok, lang, t, mode, setMode, setLang, applyServerLang } = useI18n();
+  const { tok, lang, t, mode, setMode, langChoice, setLangChoice, applyServerLang } = useI18n();
   const { refresh, profile: appProfile, bumpVersion, openWorkspaceSheet } = useAppData();
   const inOrg = useInOrg();
   const ws = useWorkspace();
@@ -623,10 +623,11 @@ export default function ProfileScreen() {
                 onLeft={() => setMode('light')}
                 onRight={() => setMode('dark')}
               />
-              <LangToggle
-                lang={lang}
-                onChange={(l) => setLang(l)}
-              />
+            </View>
+            <View style={{ marginTop: 12, flexDirection: lang === 'ar' ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: 8 }}>
+              <RPill active={langChoice === 'system'} onPress={() => setLangChoice('system')}>{lang === 'ar' ? 'لغة الهاتف' : 'System'}</RPill>
+              <RPill active={langChoice === 'en'} onPress={() => setLangChoice('en')}>English</RPill>
+              <RPill active={langChoice === 'ar'} onPress={() => setLangChoice('ar')}>العربية</RPill>
             </View>
           </RCard>
         </View>
@@ -1111,26 +1112,6 @@ function ToggleHalf({
         color: active ? tok.void : tok.bone,
         fontFamily: fontBody(lang, 'semibold'), fontSize: 12,
       }}>{label}</Text>
-    </Pressable>
-  );
-}
-
-function LangToggle({ lang, onChange }: { lang: 'en' | 'ar'; onChange: (l: 'en' | 'ar') => void }) {
-  const { tok } = useI18n();
-  return (
-    <Pressable
-      onPress={() => onChange(lang === 'ar' ? 'en' : 'ar')}
-      style={({ pressed }) => ({
-        flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
-        paddingHorizontal: 14, paddingVertical: 10,
-        backgroundColor: tok.elevated, borderRadius: 10,
-        opacity: pressed ? 0.85 : 1,
-      })}
-    >
-      <Globe size={14} color={tok.gold} strokeWidth={1.6} />
-      <Text style={{
-        color: tok.bone, fontFamily: fontMono('medium'), fontSize: 12, letterSpacing: 1.2,
-      }}>{lang === 'ar' ? 'العربية' : 'EN'}</Text>
     </Pressable>
   );
 }
