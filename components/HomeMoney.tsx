@@ -165,6 +165,9 @@ export function TodayNeeds({ extra = [], trailing = null, hidden = false, onCoun
     else if (r.screen === 'debts') router.push('/debts' as never);
     else if (r.screen === 'review') router.push('/review' as never);
     else if (r.screen === 'goals') router.push('/goals' as never);
+    // Budget rows that used to be plain information: a category over its cap opens the budgets, the month/day ones ask Seshat.
+    else if (r.id.startsWith('cap-')) router.push('/budgets' as never);
+    else router.push({ pathname: '/seshat/[id]', params: { id: 'new', text: ar ? 'كيف حال ميزانيتي؟ وماذا أفعل؟' : 'How is my budget doing, and what should I do?' } } as never);
   };
   // The one-time question about savings: "Yes" opens the form to add them, "No" ends it. Either way it is not asked again.
   const answerAsk = (kind: 'ask_savings' | 'ask_goals', answer: 'yes' | 'no') => {
@@ -179,7 +182,7 @@ export function TodayNeeds({ extra = [], trailing = null, hidden = false, onCoun
     ? ({ gam3ya: 'افتح', reminders: 'افتح', debts: 'افتح', review: 'راجِع', goals: 'عدّل', savings: 'افتح', home: '' } as Record<string, string>)[r.screen]
     : ({ gam3ya: 'Open', reminders: 'Open', debts: 'Open', review: 'Review', goals: 'Adjust', savings: 'Open', home: '' } as Record<string, string>)[r.screen]);
   const CARD_W = 262;
-  const cardStyle = { width: CARD_W, minHeight: 168, borderRadius: 22, borderWidth: 1, borderColor: tok.borderHi, backgroundColor: tok.surface, padding: 16, justifyContent: 'space-between' as const };
+  const cardStyle = { width: CARD_W, minHeight: 168, borderRadius: 22, borderWidth: 1, borderColor: tok.borderHi, backgroundColor: tok.surface, padding: 16, gap: 14, justifyContent: 'space-between' as const };
   const titleStyle = { fontFamily: fontBody(lang, 'semibold'), fontSize: 16, lineHeight: 22, color: tok.bone, textAlign: (ar ? 'right' : 'left') as 'right' | 'left' };
   const bodyStyle = { marginTop: 4, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 20, color: tok.muted, textAlign: (ar ? 'right' : 'left') as 'right' | 'left' };
   const Btn = ({ label, onPress, primary = true }: { label: string; onPress: () => void; primary?: boolean }) => (
@@ -216,7 +219,7 @@ export function TodayNeeds({ extra = [], trailing = null, hidden = false, onCoun
         ) : (
           <View key={r.id} style={cardStyle}>
             <View><Text style={titleStyle} numberOfLines={3}>{r.title}</Text><Text style={bodyStyle} numberOfLines={3}>{r.body}</Text></View>
-            {r.screen !== 'home' ? <Btn label={verb(r)} onPress={() => go(r)} /> : <View style={{ height: 44 }} />}
+            <Btn label={r.screen !== 'home' ? verb(r) : r.id.startsWith('cap-') ? (ar ? 'افتح الميزانية' : 'Open budget') : (ar ? 'اسأل سيشات' : 'Ask Seshat')} onPress={() => go(r)} />
           </View>
         ))}
         {trailing}
