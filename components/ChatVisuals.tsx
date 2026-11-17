@@ -97,8 +97,8 @@ function TransactionsBlockView({ items }: { items: VisualTransaction[] }) {
     }}>
       <View style={{ flexDirection: rowDir, alignItems: 'center', gap: 6, paddingHorizontal: 14, paddingTop: 11, paddingBottom: 9 }}>
         <View style={{ width: 5, height: 5, borderRadius: 3, backgroundColor: tok.gold }} />
-        <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.6, color: tok.gold, textTransform: 'uppercase' }}>
-          {lang === 'ar' ? `سُجّلت · ${items.length}` : `Logged · ${items.length}`}
+        <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.gold }}>
+          {lang === 'ar' ? (items.length > 1 ? `سُجّلت ${items.length} معاملات` : 'سُجّلت') : (items.length > 1 ? `Recorded ${items.length} entries` : 'Recorded')}
         </Text>
       </View>
       {items.map((t) => (
@@ -110,11 +110,11 @@ function TransactionsBlockView({ items }: { items: VisualTransaction[] }) {
             <Text numberOfLines={1} style={{ fontFamily: fontBody(lang), fontSize: 16, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>
               {t.category}
             </Text>
-            <Text numberOfLines={1} style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted, marginTop: 2, letterSpacing: 0.3, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+            <Text numberOfLines={1} style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, marginTop: 2, textAlign: lang === 'ar' ? 'right' : 'left' }}>
               {t.description ? `${t.description} · ${t.date}` : t.date}
             </Text>
           </View>
-          <RAmount value={t.kind === 'expense' ? -t.amount : t.amount} currency={t.currency} size={15} sign decimals={0} weight="medium" />
+          <RAmount value={t.kind === 'expense' ? -t.amount : t.amount} currency={t.currency} size={17} sign decimals={0} weight="medium" />
         </View>
       ))}
     </View>

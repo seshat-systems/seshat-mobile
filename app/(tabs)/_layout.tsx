@@ -14,6 +14,7 @@ import { apiFetch, newIdempotencyKey } from '../../lib/api';
 import { fontMono } from '../../lib/fonts';
 import * as Haptics from 'expo-haptics';
 import { RFAB, RecordingBanner } from '../../components/shell';
+import { SuccessPop } from '../../components/Motion';
 import { ReleaseNotesGate } from '../../components/ReleaseNotesGate';
 import { TermsGate } from '../../components/TermsGate';
 import { AddTransactionSheet, type AddTxPayload, type AddTxPrefill } from '../../components/AddTransactionSheet';
@@ -55,6 +56,7 @@ export default function TabsLayout() {
   const [optionsOpen, setOptionsOpen] = useState(false);
   const [sheetPrefill, setSheetPrefill] = useState<AddTxPrefill | undefined>(undefined);
   const [toast, setToast] = useState<string | null>(null);
+  const [pop, setPop] = useState(0);   // bumped each time something was saved: plays the check
   const [tourOpen, setTourOpen] = useState(false);
 
   // Widget buttons (seshat://add?mode=...) land here via app/add.tsx.
@@ -118,9 +120,10 @@ export default function TabsLayout() {
       const cat = categories.find((c) => c._id === p.categoryId);
       const catName = lang === 'ar' && cat?.nameAr ? cat.nameAr : (cat?.nameEn ?? '');
       const msg = lang === 'ar'
-        ? `تم رصده. ${fmtNum(p.amount)} ج.م · ${catName}`
-        : `Detected. ${fmtNum(p.amount)} ${p.currency} · ${catName}`;
+        ? `تم الحفظ. ${fmtNum(p.amount)} ج.م · ${catName}`
+        : `Saved. ${fmtNum(p.amount)} ${p.currency} · ${catName}`;
       setToast(msg);
+      setPop((n) => n + 1);
       setSheetOpen(false);
       setTimeout(() => setToast(null), 2800);
     } catch (err) {
@@ -170,6 +173,8 @@ export default function TabsLayout() {
         <Tabs
           screenOptions={{
             headerShown: false,
+            // Tabs cross-fade instead of cutting (Android; on iPhone the native tab bar does its own).
+            animation: 'fade',
             tabBarStyle: {
               backgroundColor: tok.navBg,
               borderTopWidth: StyleSheet.hairlineWidth,
@@ -287,6 +292,7 @@ export default function TabsLayout() {
       <RecordingBanner visible={voiceRecording} />
 
       <RToast visible={!!toast}>{toast ?? ''}</RToast>
+      <SuccessPop pop={pop} color={tok.gold} ink={tok.void} />
 
       <AddOptionsSheet
         visible={optionsOpen}

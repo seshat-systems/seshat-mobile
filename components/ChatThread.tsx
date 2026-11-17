@@ -1,5 +1,5 @@
 import { pressFeel } from './press';
-import { Rise } from './Motion';
+import { Rise, SuccessPop } from './Motion';
 import { router } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -71,6 +71,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
   const [title, setTitle] = useState<string>(lang === 'ar' ? 'محادثة جديدة' : 'New chat');
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
+  const [pop, setPop] = useState(0);   // bumped when Seshat recorded something: plays the check
   const [uploading, setUploading] = useState(false);
   const [inputFocused, setInputFocused] = useState(false);
   // When set, the composer is editing a prior user message: on the next normal
@@ -197,6 +198,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
     });
     if (!sessionId) setSessionId(res.data.sessionId);
     if (res.data.mutated) emitDataChanged(); // the chat changed data: refresh the screens behind it
+    if ((res.data.createdTransactionIds?.length ?? 0) > 0) setPop((n) => n + 1);
     openAfterReply(res.data.action?.open);
     setMessages((prev) => prev.map((m) => (m.id === pendingId ? {
       ...m,
@@ -233,6 +235,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
         } else if (frame.t === 'done') {
           if (!sessionId) setSessionId(frame.sessionId);
           if (frame.mutated) emitDataChanged();
+          if ((frame.createdTransactionIds?.length ?? 0) > 0) setPop((n) => n + 1);
           openAfterReply(frame.action?.open);
           // Keep the live-streamed steps if the terminal frame omits `activity`.
           setMessages((prev) => prev.map((m) => (m.id === pendingId ? {
@@ -555,6 +558,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
 
   return (
     <ScreenScaffold>
+      <SuccessPop pop={pop} color={tok.gold} ink={tok.void} />
       <KeyboardAvoidingView
         behavior="padding"
         style={{ flex: 1 }}

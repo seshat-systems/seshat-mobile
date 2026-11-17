@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Animated, AccessibilityInfo, Easing, Text, type TextProps, type ViewStyle, type StyleProp } from 'react-native';
+import * as Haptics from 'expo-haptics';
+import { Check } from 'lucide-react-native';
 import { DURATION, EASE } from '../lib/motion';
 
 /**
@@ -82,4 +84,34 @@ export function CountUp({ value, format, delay = 0, ...text }: { value: number; 
     return () => { a.stop(); v.removeListener(id); };
   }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
   return <Text {...text}>{format(shown)}</Text>;
+}
+
+/**
+ * A gold check that pops in the middle of the screen, then fades: the moment something was saved. Bump `pop` (any new
+ * number) to play it; a success haptic goes with it. Skipped with reduce motion (the haptic still plays).
+ */
+export function SuccessPop({ pop, color, ink }: { pop: number; color: string; ink: string }) {
+  const scale = useRef(new Animated.Value(0)).current;
+  const opacity = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    if (!pop) return;
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+    if (reduce) return;
+    scale.setValue(0.4); opacity.setValue(1);
+    const a = Animated.sequence([
+      Animated.spring(scale, { toValue: 1, friction: 5, tension: 160, useNativeDriver: true }),
+      Animated.delay(420),
+      Animated.timing(opacity, { toValue: 0, duration: DURATION.base, useNativeDriver: true }),
+    ]);
+    a.start();
+    return () => a.stop();
+  }, [pop]); // eslint-disable-line react-hooks/exhaustive-deps
+  if (!pop) return null;
+  return (
+    <Animated.View pointerEvents="none" style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, alignItems: 'center', justifyContent: 'center', opacity, zIndex: 300 }}>
+      <Animated.View style={{ width: 88, height: 88, borderRadius: 44, backgroundColor: color, alignItems: 'center', justifyContent: 'center', transform: [{ scale }] }}>
+        <Check size={44} color={ink} strokeWidth={3} />
+      </Animated.View>
+    </Animated.View>
+  );
 }
