@@ -49,7 +49,7 @@ export default function TabsLayout() {
   }, [segments.join('/')]); // eslint-disable-line react-hooks/exhaustive-deps
   // A viewer cannot add anything, and neither a viewer nor a child can use the chat (it reads and writes the whole workspace).
   // Home has the "Tell Seshat…" input and Seshat's own tab is the chat, so the + button only stays where there is no input.
-  const hideFab = currentTab === 'seshat' || currentTab === 'index' || currentTab === 'dashboard' || currentTab === '(tabs)' || !ws.canWrite;
+  const hideFab = currentTab === 'seshat' || currentTab === 'index' || currentTab === 'dashboard' || currentTab === 'profile' || currentTab === '(tabs)' || !ws.canWrite;
   const hideChat = ws.isViewer || ws.isChild;
 
   const [sheetOpen, setSheetOpen] = useState(false);

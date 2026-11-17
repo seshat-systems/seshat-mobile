@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { ReleaseNotesModal } from '../../components/ReleaseNotesModal';
 import { useAppLock, setAppLockEnabled, lockSupport } from '../../lib/appLock';
 import { View, Text, ScrollView, TextInput, Pressable, StyleSheet, Alert, Linking, Image, ActivityIndicator, Platform, Switch } from 'react-native';
-import { ScrollView as ScreenScroll } from '../../components/Scroll';
 import { FrostedHeader } from '../../components/FrostedHeader';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -24,6 +23,7 @@ import { ImageViewer } from '../../components/ImageViewer';
 import { Skeleton } from '../../components/Skeleton';
 import { SetSalarySheet } from '../../components/SalaryBanner';
 import { SetMonthStartSheet } from '../../components/MonthStartSheet';
+import { ManageGrid } from '../../components/ManageGrid';
 import { WorkspaceCard } from '../../components/WorkspaceSwitcher';
 import * as Updates from 'expo-updates';
 import Constants from 'expo-constants';
@@ -48,10 +48,14 @@ type Profile = {
   referralCode?: string;
 };
 
+// The list clips under the header (it does not slide beneath it), so rows never collide with the title.
+const ScreenScroll = ScrollView;
+
 export default function ProfileScreen() {
   const router = useRouter();
   const [wa, setWa] = useState<{ configured: boolean; linked: boolean } | null>(null);
   useEffect(() => { apiFetch<{ data: { configured: boolean; linked: boolean } }>('/me/whatsapp').then((r) => setWa(r.data)).catch(() => {}); }, []);
+  const [editingName, setEditingName] = useState(false);
   const { tok, lang, t, modeChoice, setModeChoice, langChoice, setLangChoice, applyServerLang } = useI18n();
   const { refresh, profile: appProfile, bumpVersion, openWorkspaceSheet } = useAppData();
   const inOrg = useInOrg();
@@ -324,29 +328,46 @@ export default function ProfileScreen() {
                   </Pressable>
                 </View>
                 <View style={{ flex: 1 }}>
-                  <TextInput
-                    value={displayName}
-                    onChangeText={setDisplayName}
-                    placeholder={t('namePlaceholder')}
-                    placeholderTextColor={tok.muted}
-                    style={{
-                      fontFamily: fontHead(lang),
-                      fontSize: 20, color: tok.bone, letterSpacing: -0.4, padding: 0,
+                  {editingName ? (
+                    <>
+                      <TextInput
+                        value={displayName}
+                        onChangeText={setDisplayName}
+                        placeholder={t('namePlaceholder')}
+                        placeholderTextColor={tok.muted}
+                        autoFocus
+                        style={{
+                          fontFamily: fontHead(lang),
+                          fontSize: 20, color: tok.bone, letterSpacing: -0.4, padding: 0,
+                          textAlign: lang === 'ar' ? 'right' : 'left',
+                        }}
+                      />
+                      <Text style={{ marginTop: 10, fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+                        {lang === 'ar' ? 'الاسم بالعربي (للترحيب)' : 'Arabic name (used for greetings in Arabic)'}
+                      </Text>
+                      <TextInput
+                        value={displayNameAr}
+                        onChangeText={setDisplayNameAr}
+                        placeholder={lang === 'ar' ? 'مثال: مؤمن' : 'e.g. مؤمن'}
+                        placeholderTextColor={tok.muted}
+                        style={{
+                          fontFamily: fontBody(lang), fontSize: 18, color: tok.bone,
+                          padding: 0, marginTop: 4, textAlign: 'right', writingDirection: 'rtl',
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <Text numberOfLines={1} style={{
+                      fontFamily: fontHead(lang), fontSize: 21, color: tok.bone, letterSpacing: -0.4,
                       textAlign: lang === 'ar' ? 'right' : 'left',
-                    }}
-                  />
-                  <TextInput
-                    value={displayNameAr}
-                    onChangeText={setDisplayNameAr}
-                    placeholder={lang === 'ar' ? 'الاسم بالعربي (للترحيب)' : 'Arabic name (for greetings)'}
-                    placeholderTextColor={tok.muted}
-                    style={{
-                      fontFamily: fontBody(lang), fontSize: 14, color: tok.muted,
-                      padding: 0, marginTop: 6, textAlign: 'right', writingDirection: 'rtl',
-                    }}
-                  />
+                    }}>{(lang === 'ar' ? (displayNameAr || displayName) : displayName) || t('namePlaceholder')}</Text>
+                  )}
                   <REyebrow style={{ marginTop: 4, writingDirection: 'ltr' }}>{profile.email}</REyebrow>
                 </View>
+                <Pressable onPress={() => setEditingName((e) => !e)} accessibilityRole="button"
+                  style={({ pressed }) => ({ minHeight: 40, paddingHorizontal: 16, borderRadius: 999, justifyContent: 'center', borderWidth: 1, borderColor: tok.borderHi, opacity: pressed ? 0.7 : 1 })}>
+                  <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.bone }}>{editingName ? (lang === 'ar' ? 'تم' : 'Done') : (lang === 'ar' ? 'تعديل' : 'Edit')}</Text>
+                </Pressable>
               </>
             )}
           </View>
@@ -363,7 +384,7 @@ export default function ProfileScreen() {
         {/* Plan - Budgets / Goals / Debts navigation */}
         <View style={{ marginTop: 18 }}>
           <REyebrow style={{ paddingHorizontal: 4, marginBottom: 8, textAlign: lang === 'ar' ? 'right' : 'left' }}>
-            {lang === 'ar' ? 'الخطة' : 'Plan'}
+            {lang === 'ar' ? 'خطتك' : 'Your plan'}
           </REyebrow>
           <RCard padding={0} style={{ paddingHorizontal: 16 }}>
             <PlanRow
@@ -381,78 +402,18 @@ export default function ProfileScreen() {
                 ? (lang === 'ar' ? `يبدأ يوم ${profile?.monthStartDay}` : `Starts on day ${profile?.monthStartDay}`)
                 : (lang === 'ar' ? 'من أول الشهر' : 'From the 1st')}
               onPress={() => setMonthStartOpen(true)}
-            />
-            <PlanRow
-              icon={Wallet}
-              title={lang === 'ar' ? 'الميزانيات' : 'Budgets'}
-              hint={lang === 'ar' ? 'حد شهري لكل فئة' : 'A monthly cap per category'}
-              onPress={() => router.push('/budgets')}
-            />
-            <PlanRow
-              icon={Target}
-              title={lang === 'ar' ? 'الأهداف' : 'Goals'}
-              hint={lang === 'ar' ? 'ما الذي تدّخر له' : 'What you are saving toward'}
-              onPress={() => router.push('/goals')}
-            />
-            {!inOrg && (<>
-            <PlanRow
-              icon={Banknote}
-              title={lang === 'ar' ? 'المدخرات والاستثمارات' : 'Savings & investments'}
-              hint={lang === 'ar' ? 'ذهب وعملات وغيرها' : 'Gold, currency and more'}
-              onPress={() => router.push('/savings')}
-            />
-            <PlanRow
-              icon={Users}
-              title={lang === 'ar' ? 'الجمعيات' : 'Gam3yas'}
-              hint={lang === 'ar' ? 'ما تدفعه وموعد دورك' : 'What you pay and when you collect'}
-              onPress={() => router.push('/gam3ya')}
-            />
-            </>)}
-            <PlanRow
-              icon={CreditCard}
-              title={lang === 'ar' ? 'الديون' : 'Debts'}
-              hint={lang === 'ar' ? 'ما الذي تدين به' : 'What you still owe'}
-              onPress={() => router.push('/debts')}
-            />
-            <PlanRow
-              icon={Tags}
-              title={lang === 'ar' ? 'التصنيفات' : 'Categories'}
-              hint={lang === 'ar' ? 'افتراضية + مخصصة' : 'Defaults + your own'}
-              onPress={() => router.push('/categories')}
-            />
-            <PlanRow
-              icon={MessagesSquare}
-              title={lang === 'ar' ? 'المجتمع' : 'Community'}
-              hint={lang === 'ar' ? 'اسأل وأجب في أمور المال' : 'Ask and answer money questions'}
-              onPress={() => router.push('/community' as never)}
-            />
-            <PlanRow
-              icon={BellRing}
-              title={lang === 'ar' ? 'العادات' : 'Habits'}
-              hint={lang === 'ar' ? 'الأنماط التي رصدتها سيشات' : 'Spending patterns Seshat noticed'}
-              onPress={() => router.push('/habits')}
-            />
-            <PlanRow
-              icon={CalendarClock}
-              title={lang === 'ar' ? 'التذكيرات' : 'Reminders'}
-              hint={lang === 'ar' ? 'الفواتير التي تذكّرك بها سيشات' : 'Bills Seshat reminds you about'}
-              onPress={() => router.push('/reminders')}
-            />
-            <PlanRow
-              icon={CreditCard}
-              title={lang === 'ar' ? 'حساباتي' : 'Accounts'}
-              hint={lang === 'ar' ? 'بنك، محفظة، كاش: الأرصدة والتحويل بينها' : 'Bank, wallet, cash: balances and moving money'}
-              onPress={() => router.push('/cards')}
-            />
-            <PlanRow
-              icon={FileText}
-              title={lang === 'ar' ? 'التقرير الشهري' : 'Monthly report'}
-              hint={lang === 'ar' ? 'ملخص ذكي بالأرقام والتوصيات' : 'AI-powered breakdown of your month'}
-              onPress={() => router.push('/reports/monthly')}
               last
             />
           </RCard>
         </View>
+
+        {/* An organization has no Dashboard tab (its Home is the dashboard), so its money tools stay here as tiles. */}
+        {inOrg ? (
+          <View style={{ marginTop: 18, marginHorizontal: -16 }}>
+            <REyebrow style={{ paddingHorizontal: 20, marginBottom: 8, textAlign: lang === 'ar' ? 'right' : 'left' }}>{lang === 'ar' ? 'إدارة' : 'Manage'}</REyebrow>
+            <ManageGrid />
+          </View>
+        ) : null}
 
         </>
         )}
