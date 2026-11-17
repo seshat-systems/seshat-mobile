@@ -10,7 +10,7 @@ import { FrostedHeader } from '../../components/FrostedHeader';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
-import { Sun, Moon, Wallet, Target, CreditCard, ChevronRight, Banknote, Send, Tags, Camera, LifeBuoy, BellRing, FileText, Zap, CalendarClock, KeyRound, MessageCircle, Mail, Info, ShieldCheck, ScrollText, Copy, Check, MessagesSquare, ScanFace, Fingerprint, Sparkles, Users } from 'lucide-react-native';
+import { Wallet, Target, CreditCard, ChevronRight, Banknote, Send, Tags, Camera, LifeBuoy, BellRing, FileText, Zap, CalendarClock, KeyRound, MessageCircle, Mail, Info, ShieldCheck, ScrollText, Copy, Check, MessagesSquare, ScanFace, Fingerprint, Sparkles, Users } from 'lucide-react-native';
 import * as Clipboard from 'expo-clipboard';
 import { uploadAvatar } from '../../lib/cloudinary';
 import { apiFetchText, apiFetch, hasToken } from '../../lib/api';
@@ -52,7 +52,7 @@ export default function ProfileScreen() {
   const router = useRouter();
   const [wa, setWa] = useState<{ configured: boolean; linked: boolean } | null>(null);
   useEffect(() => { apiFetch<{ data: { configured: boolean; linked: boolean } }>('/me/whatsapp').then((r) => setWa(r.data)).catch(() => {}); }, []);
-  const { tok, lang, t, mode, setMode, langChoice, setLangChoice, applyServerLang } = useI18n();
+  const { tok, lang, t, modeChoice, setModeChoice, langChoice, setLangChoice, applyServerLang } = useI18n();
   const { refresh, profile: appProfile, bumpVersion, openWorkspaceSheet } = useAppData();
   const inOrg = useInOrg();
   const ws = useWorkspace();
@@ -607,24 +607,24 @@ export default function ProfileScreen() {
           </RCard>
         </View>
 
-        {/* Preferences — icon-only toggles for theme + language */}
+        {/* Preferences — theme and language, each following the phone unless chosen */}
         <View style={{ marginTop: 18 }}>
           <REyebrow style={{ paddingHorizontal: 4, marginBottom: 8, textAlign: lang === 'ar' ? 'right' : 'left' }}>
             {lang === 'ar' ? 'التفضيلات' : 'Preferences'}
           </REyebrow>
           <RCard padding={14}>
-            <View style={{
-              flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
-              gap: 10,
-            }}>
-              <IconToggle
-                left={{ icon: Sun, label: t('light'), active: mode === 'light' }}
-                right={{ icon: Moon, label: t('dark'), active: mode === 'dark' }}
-                onLeft={() => setMode('light')}
-                onRight={() => setMode('dark')}
-              />
+            <Text style={{ fontFamily: fontMono('medium'), fontSize: 12, letterSpacing: lang === 'ar' ? 0 : 1.4, color: tok.muted, textTransform: lang === 'ar' ? 'none' : 'uppercase', marginBottom: 8, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+              {lang === 'ar' ? 'المظهر' : 'Theme'}
+            </Text>
+            <View style={{ flexDirection: lang === 'ar' ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: 8 }}>
+              <RPill active={modeChoice === 'system'} onPress={() => setModeChoice('system')}>{lang === 'ar' ? 'مظهر الهاتف' : 'System'}</RPill>
+              <RPill active={modeChoice === 'light'} onPress={() => setModeChoice('light')}>{t('light')}</RPill>
+              <RPill active={modeChoice === 'dark'} onPress={() => setModeChoice('dark')}>{t('dark')}</RPill>
             </View>
-            <View style={{ marginTop: 12, flexDirection: lang === 'ar' ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: 8 }}>
+            <Text style={{ fontFamily: fontMono('medium'), fontSize: 12, letterSpacing: lang === 'ar' ? 0 : 1.4, color: tok.muted, textTransform: lang === 'ar' ? 'none' : 'uppercase', marginTop: 18, marginBottom: 8, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+              {t('language')}
+            </Text>
+            <View style={{ flexDirection: lang === 'ar' ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: 8 }}>
               <RPill active={langChoice === 'system'} onPress={() => setLangChoice('system')}>{lang === 'ar' ? 'لغة الهاتف' : 'System'}</RPill>
               <RPill active={langChoice === 'en'} onPress={() => setLangChoice('en')}>English</RPill>
               <RPill active={langChoice === 'ar'} onPress={() => setLangChoice('ar')}>العربية</RPill>
@@ -1069,49 +1069,5 @@ function BubbleRow() {
       }
       last
     />
-  );
-}
-
-// ─────────────────────────────────────────────────────────────
-// IconToggle — two-option pill with icons, used for theme
-// ─────────────────────────────────────────────────────────────
-function IconToggle({
-  left, right, onLeft, onRight,
-}: {
-  left: { icon: any; label: string; active: boolean };
-  right: { icon: any; label: string; active: boolean };
-  onLeft: () => void; onRight: () => void;
-}) {
-  const { tok } = useI18n();
-  return (
-    <View style={{
-      flex: 1, flexDirection: 'row', borderRadius: 10,
-      backgroundColor: tok.elevated, padding: 3, gap: 2,
-    }}>
-      <ToggleHalf {...left} onPress={onLeft} />
-      <ToggleHalf {...right} onPress={onRight} />
-    </View>
-  );
-}
-
-function ToggleHalf({
-  icon: Icon, label, active, onPress,
-}: { icon: any; label: string; active: boolean; onPress: () => void }) {
-  const { tok, lang } = useI18n();
-  return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => ({
-        flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
-        backgroundColor: active ? tok.gold : 'transparent', borderRadius: 8,
-        paddingVertical: 10, opacity: pressed ? 0.85 : 1,
-      })}
-    >
-      <Icon size={14} color={active ? tok.void : tok.bone} strokeWidth={1.6} />
-      <Text style={{
-        color: active ? tok.void : tok.bone,
-        fontFamily: fontBody(lang, 'semibold'), fontSize: 14,
-      }}>{label}</Text>
-    </Pressable>
   );
 }

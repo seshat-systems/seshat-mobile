@@ -1,11 +1,12 @@
 import { useRef, createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { isHidden, MASK, useHideNumbers, loadHideNumbers } from './privacy';
-import { I18nManager } from 'react-native';
+import { I18nManager, Appearance, Platform, useColorScheme } from 'react-native';
 import { Mode, tokens, Tokens } from './theme';
 
 import { secureGet, secureSet } from './secure';
 export type Lang = 'en' | 'ar';
 export type LangChoice = 'system' | Lang;
+export type ModeChoice = 'system' | Mode;
 
 type Strings = Record<string, string>;
 
@@ -226,7 +227,11 @@ type Ctx = {
   /** What the person picked: follow the phone ('system') or a fixed language. */
   langChoice: LangChoice;
   setLangChoice: (c: LangChoice) => void;
+  /** The theme in use now (what 'system' resolves to when the phone is set to follow it). */
   mode: Mode;
+  /** What the person picked: follow the phone ('system') or a fixed theme. */
+  modeChoice: ModeChoice;
+  setModeChoice: (c: ModeChoice) => void;
   setMode: (m: Mode) => void;
   t: (key: keyof typeof EN) => string;
   dir: 'rtl' | 'ltr';
@@ -247,7 +252,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>('en');
   const explicitRef = useRef(false);
   const [langChoice, setLangChoiceState] = useState<LangChoice>('system');
-  const [mode, setModeState] = useState<Mode>('dark');
+  // The theme follows the phone until a choice is made in Profile. Dark is the fallback when the phone does not say.
+  const [modeChoice, setModeChoiceState] = useState<ModeChoice>('system');
+  const systemScheme = useColorScheme();
+  const mode: Mode = modeChoice === 'system' ? (systemScheme === 'light' ? 'light' : 'dark') : modeChoice;
   // Hide-numbers mode: subscribing here re-renders every useI18n consumer when it flips, so each screen's
   // formatAmount() call picks up the new state without every screen subscribing itself.
   const numbersHidden = useHideNumbers();
@@ -259,7 +267,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       if (v === 'en' || v === 'ar') { explicitRef.current = true; setLangChoiceState(v); setLangState(v); }
       else { systemChosenRef.current = v === 'system'; setLangState(systemLang()); }
     });
-    secureGet(MODE_KEY).then((v) => { if (v === 'dark' || v === 'light') setModeState(v); });
+    secureGet(MODE_KEY).then((v) => { if (v === 'dark' || v === 'light' || v === 'system') setModeChoiceState(v); });
   }, []);
 
   // The account's saved language comes from the server. English is also the server's default for people who never chose, so it must not
@@ -287,10 +295,17 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     // achieve the same visual effect via `writingDirection` and per-element
     // direction props in our components.
   };
-  const setMode = (m: Mode) => {
-    setModeState(m);
-    secureSet(MODE_KEY, m).catch(() => {});
+  const setModeChoice = (c: ModeChoice) => {
+    setModeChoiceState(c);
+    secureSet(MODE_KEY, c).catch(() => {});
   };
+  const setMode = (m: Mode) => setModeChoice(m);
+  // iPhone only: native pieces (keyboard, alerts, pickers) follow the same choice; null hands control back to the phone.
+  // Not on Android, where changing the native night mode at startup recreates the activity and the app never draws.
+  useEffect(() => {
+    if (Platform.OS !== 'ios') return;
+    try { Appearance.setColorScheme((modeChoice === 'system' ? null : modeChoice) as never); } catch { /* only the app's own colours change */ }
+  }, [modeChoice]);
 
   const value = useMemo<Ctx>(() => {
     const strings = lang === 'ar' ? AR : EN;
@@ -301,12 +316,14 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       langChoice,
       setLangChoice,
       mode,
+      modeChoice,
+      setModeChoice,
       setMode,
       t: (key) => strings[key as string] ?? EN[key as string] ?? String(key),
       dir: lang === 'ar' ? 'rtl' : 'ltr',
       tok: tokens(mode),
     };
-  }, [lang, langChoice, mode, numbersHidden]);
+  }, [lang, langChoice, mode, modeChoice, numbersHidden]);
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
