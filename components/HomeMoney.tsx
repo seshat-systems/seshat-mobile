@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { ChevronRight, Landmark, CreditCard, Wallet, Banknote, Users } from 'lucide-react-native';
 import { useI18n } from '../lib/i18n';
@@ -155,23 +155,8 @@ export function TodayNeeds({ extra = [] }: { extra?: NeedsExtra[] } = {}) {
     });
     return () => { alive = false; };
   }, [dataVersion]);
-  // Several things at once are folded into one calm line ("3 things need you") and open on tap.
-  const [open, setOpen] = useState(false);
   const total = rows.length + extra.length;
   if (total === 0) return null;
-  if (total >= 2 && !open) {
-    return (
-      <Pressable onPress={() => setOpen(true)} accessibilityRole="button"
-        style={{ marginHorizontal: 16, marginTop: 6, marginBottom: 12, minHeight: 56, paddingHorizontal: 18, borderRadius: 18, borderWidth: 1, borderColor: tok.borderHi,
-          backgroundColor: tok.surface, flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 12 }}>
-        <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: tok.goldLight }} />
-        <Text style={{ flex: 1, fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
-          {ar ? `${total} أشياء تحتاجك` : `${total} things need you`}
-        </Text>
-        <ChevronRight size={16} color={tok.muted} style={{ transform: [{ scaleX: ar ? -1 : 1 }] }} />
-      </Pressable>
-    );
-  }
   const go = (r: TodayRow) => {
     if (r.screen === 'gam3ya') router.push(`/gam3ya/${r.refId}` as never);
     else if (r.screen === 'reminders') router.push('/reminders' as never);
@@ -187,41 +172,50 @@ export function TodayNeeds({ extra = [] }: { extra?: NeedsExtra[] } = {}) {
     // The next question (goals after savings) appears once this one is settled.
     else setTimeout(() => apiFetch<{ data: TodayRow[] }>('/me/today').then((r) => setRows(r.data)).catch(() => {}), 400);
   };
+  // "Needs you": a row of swipeable cards, one thing each, with one button. The button says what happens when you tap it.
+  const verb = (r: TodayRow) => (ar
+    ? ({ gam3ya: 'افتح', reminders: 'افتح', debts: 'افتح', review: 'راجِع', goals: 'عدّل', savings: 'افتح', home: '' } as Record<string, string>)[r.screen]
+    : ({ gam3ya: 'Open', reminders: 'Open', debts: 'Open', review: 'Review', goals: 'Adjust', savings: 'Open', home: '' } as Record<string, string>)[r.screen]);
+  const CARD_W = 262;
+  const cardStyle = { width: CARD_W, minHeight: 168, borderRadius: 22, borderWidth: 1, borderColor: tok.borderHi, backgroundColor: tok.surface, padding: 16, justifyContent: 'space-between' as const };
+  const titleStyle = { fontFamily: fontBody(lang, 'semibold'), fontSize: 16, lineHeight: 22, color: tok.bone, textAlign: (ar ? 'right' : 'left') as 'right' | 'left' };
+  const bodyStyle = { marginTop: 4, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 20, color: tok.muted, textAlign: (ar ? 'right' : 'left') as 'right' | 'left' };
+  const Btn = ({ label, onPress, primary = true }: { label: string; onPress: () => void; primary?: boolean }) => (
+    <Pressable onPress={onPress} accessibilityRole="button"
+      style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 18, borderRadius: 999, alignItems: 'center', justifyContent: 'center', alignSelf: ar ? 'flex-end' : 'flex-start',
+        backgroundColor: primary ? tok.gold : 'transparent', borderWidth: primary ? 0 : 1, borderColor: tok.borderHi, opacity: pressed ? 0.8 : 1 })}>
+      <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: primary ? '#14110A' : tok.bone }}>{label}</Text>
+    </Pressable>
+  );
   return (
-    <RCard accent padding={16} style={{ marginHorizontal: 16, marginTop: 6, marginBottom: 12 }}>
-      <REyebrow style={{ marginBottom: 10, textAlign: ar ? 'right' : 'left' }}>{ar ? 'يحتاجك اليوم' : 'Needs you today'}</REyebrow>
-      <View style={{ gap: 12 }}>
-        {extra.map((x, i) => (
-          <Pressable key={x.id} onPress={x.onPress}
-            style={{ gap: 2, paddingTop: i === 0 ? 0 : 12, borderTopWidth: i === 0 ? 0 : StyleSheet.hairlineWidth, borderTopColor: tok.border }}>
-            <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 8 }}>
-              <Text style={{ flex: 1, fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{x.title}</Text>
-              <ChevronRight size={15} color={tok.muted} style={{ transform: [{ scaleX: ar ? -1 : 1 }] }} />
-            </View>
-            <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{x.body}</Text>
-          </Pressable>
+    <View style={{ marginTop: 6, marginBottom: 12 }}>
+      <Text style={{ marginHorizontal: 20, marginBottom: 10, fontFamily: fontMono('medium'), fontSize: 12, letterSpacing: 1.4, color: tok.muted, textTransform: 'uppercase', textAlign: ar ? 'right' : 'left' }}>
+        {ar ? `يحتاجك · ${total}` : `Needs you · ${total}`}
+      </Text>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} snapToInterval={CARD_W + 12} decelerationRate="fast"
+        contentContainerStyle={{ paddingHorizontal: 16, gap: 12, flexDirection: ar ? 'row-reverse' : 'row' }}>
+        {extra.map((x) => (
+          <View key={x.id} style={cardStyle}>
+            <View><Text style={titleStyle} numberOfLines={3}>{x.title}</Text><Text style={bodyStyle} numberOfLines={3}>{x.body}</Text></View>
+            <Btn label={ar ? 'سجّل' : 'Log it'} onPress={x.onPress} />
+          </View>
         ))}
-        {rows.map((r, i0) => { const i = i0 + extra.length; return r.kind === 'ask_savings' || r.kind === 'ask_goals' ? (
-          <View key={r.id} style={{ gap: 8, paddingTop: i === 0 ? 0 : 12, borderTopWidth: i === 0 ? 0 : StyleSheet.hairlineWidth, borderTopColor: tok.border }}>
-            <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{r.title}</Text>
-            <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{r.body}</Text>
-            <View style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 10, marginTop: 4 }}>
-              <View style={{ flex: 1 }}><RButton full onPress={() => answerAsk(r.kind as 'ask_savings' | 'ask_goals', 'yes')}>{r.kind === 'ask_goals' ? (ar ? 'نعم، أضفه' : 'Yes, add it') : (ar ? 'نعم، أضفها' : 'Yes, add them')}</RButton></View>
-              <View style={{ flex: 1 }}><RButton full variant="ghost" onPress={() => answerAsk(r.kind as 'ask_savings' | 'ask_goals', 'no')}>{ar ? 'لا' : 'No'}</RButton></View>
+        {rows.map((r) => r.kind === 'ask_savings' || r.kind === 'ask_goals' ? (
+          <View key={r.id} style={cardStyle}>
+            <View><Text style={titleStyle} numberOfLines={3}>{r.title}</Text><Text style={bodyStyle} numberOfLines={3}>{r.body}</Text></View>
+            <View style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 8 }}>
+              <Btn label={r.kind === 'ask_goals' ? (ar ? 'أضف هدفاً' : 'Add a goal') : (ar ? 'أضف مدخراتي' : 'Add savings')} onPress={() => answerAsk(r.kind as 'ask_savings' | 'ask_goals', 'yes')} />
+              <Btn label={ar ? 'لا' : 'No'} primary={false} onPress={() => answerAsk(r.kind as 'ask_savings' | 'ask_goals', 'no')} />
             </View>
           </View>
         ) : (
-          <Pressable key={r.id} onPress={() => go(r)} disabled={r.screen === 'home'}
-            style={{ gap: 2, paddingTop: i === 0 ? 0 : 12, borderTopWidth: i === 0 ? 0 : StyleSheet.hairlineWidth, borderTopColor: tok.border }}>
-            <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 8 }}>
-              <Text style={{ flex: 1, fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{r.title}</Text>
-              {r.screen !== 'home' ? <ChevronRight size={15} color={tok.muted} style={{ transform: [{ scaleX: ar ? -1 : 1 }] }} /> : null}
-            </View>
-            <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{r.body}</Text>
-          </Pressable>
-        ); })}
-      </View>
-    </RCard>
+          <View key={r.id} style={cardStyle}>
+            <View><Text style={titleStyle} numberOfLines={3}>{r.title}</Text><Text style={bodyStyle} numberOfLines={3}>{r.body}</Text></View>
+            {r.screen !== 'home' ? <Btn label={verb(r)} onPress={() => go(r)} /> : <View style={{ height: 44 }} />}
+          </View>
+        ))}
+      </ScrollView>
+    </View>
   );
 }
 
