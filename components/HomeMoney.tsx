@@ -141,7 +141,7 @@ type TodayRow = { id: string; kind: string; title: string; body: string; screen:
  */
 export type NeedsExtra = { id: string; title: string; body: string; onPress: () => void };
 
-export function TodayNeeds({ extra = [], trailing = null }: { extra?: NeedsExtra[]; trailing?: React.ReactNode } = {}) {
+export function TodayNeeds({ extra = [], trailing = null, hidden = false, onCount }: { extra?: NeedsExtra[]; trailing?: React.ReactNode; hidden?: boolean; onCount?: (n: number) => void } = {}) {
   const { tok, lang } = useI18n();
   const { dataVersion } = useAppData();
   const router = useRouter();
@@ -157,7 +157,8 @@ export function TodayNeeds({ extra = [], trailing = null }: { extra?: NeedsExtra
   }, [dataVersion]);
   const shown = rows.filter((r) => r.kind !== 'ask_savings' && r.kind !== 'ask_goals');   // the one-time setup questions are Seshat's to ask in chat, not cards
   const total = shown.length + extra.length;
-  if (total === 0 && !trailing) return null;
+  useEffect(() => { onCount?.(total); }, [total]); // eslint-disable-line react-hooks/exhaustive-deps
+  if (hidden || (total === 0 && !trailing)) return null;
   const go = (r: TodayRow) => {
     if (r.screen === 'gam3ya') router.push(`/gam3ya/${r.refId}` as never);
     else if (r.screen === 'reminders') router.push('/reminders' as never);

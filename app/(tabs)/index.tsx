@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ScrollView, View, Text, RefreshControl, StyleSheet } from 'react-native';
+import { View, Text, RefreshControl, KeyboardAvoidingView, Platform } from 'react-native';
 import { ScrollView as ScreenScroll } from '../../components/Scroll';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { apiFetch, hasToken } from '../../lib/api';
@@ -7,23 +7,20 @@ import { useI18n } from '../../lib/i18n';
 import { useAppData, useInOrg, useWorkspace } from '../../lib/appData';
 import { ChildHome } from '../../components/ChildHome';
 import { fontBody } from '../../lib/fonts';
-import { RHomeHeader, type DashView } from '../../components/shell';
+import { RHomeHeader } from '../../components/shell';
 import { ScreenAtmosphere } from '../../components/ScreenAtmosphere';
 import { DashboardBody, type DashboardData } from '../../components/dashboards';
-import { SkeletonCard, Skeleton, SkeletonRow } from '../../components/Skeleton';
-import { RCard } from '../../components/ui';
+import { DashboardSkeleton } from '../../components/DashboardSkeleton';
 import {
   SalaryCheckInSheet, fetchSalaryCheckIn, type CheckInStatus,
 } from '../../components/SalaryCheckInBanner';
-import { CaptureShortcutBanner } from '../../components/CaptureShortcutBanner';
+import { CapturePromptLine } from '../../components/CaptureShortcutBanner';
 import { UpdateBanner } from '../../components/UpdateBanner';
 import { WidgetsAnnouncement } from '../../components/WidgetsAnnouncement';
-import { TodayCard, AccountsOverview, DailyBudgetCard, TodayNeeds, NetWorthCard } from '../../components/HomeMoney';
-import { HomeAnswer } from '../../components/HomeAnswer';
+import { TodayCard, AccountsOverview, TodayNeeds } from '../../components/HomeMoney';
+import { HomeAnswer, HomeInput } from '../../components/HomeAnswer';
 import { useRouter } from 'expo-router';
 
-import { secureGet, secureSet } from '../../lib/secure';
-const VIEW_KEY = 'seshat.dashboardView';
 
 /** A child in a family workspace gets their own small Home; everyone else the full one. */
 export default function HomeScreen() {
@@ -37,7 +34,8 @@ function FullHome() {
   const { profile, dataVersion, refresh, bumpVersion } = useAppData();
   const inOrg = useInOrg();
   const insets = useSafeAreaInsets();
-  const [view, setView] = useState<DashView>('bento');
+  const [needsCount, setNeedsCount] = useState(0);
+  const [needsOpen, setNeedsOpen] = useState(false);
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -66,18 +64,6 @@ function FullHome() {
     }
   }, [router, refresh]);
 
-  // Restore last view choice.
-  useEffect(() => {
-    secureGet(VIEW_KEY).then((v) => {
-      if (v === 'numbers' || v === 'hud' || v === 'bento') setView(v);
-    });
-  }, []);
-
-  const onViewChange = useCallback((v: DashView) => {
-    setView(v);
-    secureSet(VIEW_KEY, v).catch(() => {});
-  }, []);
-
   // Fetch dashboard on mount and when a tx was added (dataVersion bumps).
   useEffect(() => { fetchDashboard('initial'); }, [dataVersion, fetchDashboard]);
 
@@ -95,14 +81,14 @@ function FullHome() {
   const currency = profile?.currency ?? 'EGP';
 
   return (
-    <View style={{ flex: 1, backgroundColor: tok.void }}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: tok.void }}>
       <ScreenAtmosphere />
 
       {/* Transparent header in normal flow, matching the other screens: the
           dashboard scrolls in its own area below it, so there's no glass band
           and the gold atmosphere shows straight through the top. */}
       <View style={{ flex: 1, paddingTop: insets.top }}>
-        <RHomeHeader userName={userName} view={view} onViewChange={onViewChange} refreshing={refreshing} />
+        <RHomeHeader userName={userName} />
 
         {(() => {
           // SetupPrompt surfaces any still-missing required data (registry-
@@ -110,19 +96,22 @@ function FullHome() {
           // edited in Profile, so the only salary prompt here is the monthly
           // check-in (server-gated; fires once the period rolls over and a
           // salary baseline exists).
-          const banners = (
+          const needs = !inOrg ? (
+            <TodayNeeds
+              hidden={!needsOpen}
+              onCount={setNeedsCount}
+              extra={checkIn.needed ? [{
+                id: 'salary',
+                title: lang === 'ar' ? 'هل استلمت راتبك؟' : 'Did you get paid this month?',
+                body: lang === 'ar' ? 'سجّل الراتب وأنهِ الشهر، أو تخطى.' : "Log it to close the month, or skip if you didn't.",
+                onPress: () => setCheckInOpen(true),
+              }] : []}
+            />
+          ) : null;
+          const notices = (
             <>
-              {!inOrg && (
-                <TodayNeeds extra={checkIn.needed ? [{
-                  id: 'salary',
-                  title: lang === 'ar' ? 'هل استلمت راتبك؟' : 'Did you get paid this month?',
-                  body: lang === 'ar' ? 'سجّل الراتب وأنهِ الشهر، أو تخطى.' : "Log it to close the month, or skip if you didn't.",
-                  onPress: () => setCheckInOpen(true),
-                }] : []} />
-              )}
               <UpdateBanner />
               <WidgetsAnnouncement />
-              <CaptureShortcutBanner />
             </>
           );
           const refreshCtl = (
@@ -139,24 +128,33 @@ function FullHome() {
           return (
             <ScreenScroll
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingTop: 6, paddingBottom: insets.bottom + 100, flexGrow: 1 }}
+              contentContainerStyle={{ paddingTop: 6, paddingBottom: !inOrg && !isEmpty ? 96 : insets.bottom + 100, flexGrow: 1 }}
               refreshControl={refreshCtl}
             >
-              {!isEmpty && !inOrg ? <HomeAnswer data={data!} currency={currency} /> : null}
-              {banners}
+              {!inOrg ? <CapturePromptLine /> : null}
               {isEmpty ? (
                 <View style={{ flex: 1, minHeight: 400 }}><EmptyState /></View>
-              ) : (
+              ) : inOrg ? (
                 <>
                   <TodayCard data={data!} currency={currency} />
-                  {!inOrg && <DailyBudgetCard />}
-                  {inOrg ? <AccountsOverview currency={currency} /> : <NetWorthCard />}
+                  <AccountsOverview currency={currency} />
                   <DashboardBody data={data!} currency={currency} />
+                </>
+              ) : (
+                <>
+                  <HomeAnswer data={data!} currency={currency} needsCount={needsCount} onNeeds={() => setNeedsOpen((o) => !o)} after={needs} />
+                  {notices}
                 </>
               )}
             </ScreenScroll>
           );
         })()}
+        {/* The typing field stays on top of the tab bar, always visible. */}
+        {!inOrg && !loading ? (
+          <View style={{ position: 'absolute', left: 16, right: 16, bottom: 10 }}>
+            <HomeInput />
+          </View>
+        ) : null}
       </View>
 
       <SalaryCheckInSheet
@@ -165,7 +163,7 @@ function FullHome() {
         status={checkIn}
         onDone={() => { bumpVersion(); }}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -182,56 +180,5 @@ function EmptyState() {
         textAlign: 'center', lineHeight: 25,
       }}>{t('noRecordsSub')}</Text>
     </View>
-  );
-}
-
-// Loading skeleton — real card shells (glass shields) with placeholders for the
-// DATA only, so loading looks like the app, not grey blocks. Mirrors the Bento
-// layout: glow hero, income/expense tiles, a category card, recent rows.
-function DashboardSkeleton({ topPad = 0 }: { topPad?: number }) {
-  const { tok } = useI18n();
-  const SkelRow = ({ last }: { last?: boolean }) => (
-    <View style={{
-      flexDirection: 'row', alignItems: 'center', gap: 13, paddingVertical: 14,
-      borderBottomWidth: last ? 0 : StyleSheet.hairlineWidth, borderBottomColor: tok.border,
-    }}>
-      <Skeleton width={40} height={40} radius={12} />
-      <View style={{ flex: 1, gap: 7 }}>
-        <Skeleton width="65%" height={13} />
-        <Skeleton width="38%" height={9} />
-      </View>
-      <Skeleton width={56} height={14} />
-    </View>
-  );
-  return (
-    <ScreenScroll showsVerticalScrollIndicator={false}>
-      <View style={{ paddingHorizontal: 16, paddingTop: topPad, gap: 12, paddingBottom: 120 }}>
-        <RCard large glow>
-          <Skeleton width={96} height={10} />
-          <Skeleton width="52%" height={38} radius={8} style={{ marginTop: 16 }} />
-          <Skeleton width="100%" height={30} radius={6} style={{ marginTop: 22 }} />
-          <Skeleton width={130} height={9} style={{ marginTop: 14 }} />
-        </RCard>
-        <View style={{ flexDirection: 'row', gap: 12 }}>
-          {[0, 1].map((i) => (
-            <RCard key={i} padding={16} style={{ flex: 1 }}>
-              <Skeleton width={64} height={9} />
-              <Skeleton width="72%" height={22} radius={6} style={{ marginTop: 12 }} />
-              <Skeleton width={52} height={9} style={{ marginTop: 14 }} />
-            </RCard>
-          ))}
-        </View>
-        <RCard padding={16}>
-          <Skeleton width={84} height={9} />
-          <Skeleton width="48%" height={20} radius={6} style={{ marginTop: 12 }} />
-          <Skeleton width="100%" height={3} radius={2} style={{ marginTop: 16 }} />
-        </RCard>
-        <RCard style={{ paddingHorizontal: 18, paddingVertical: 4 }}>
-          <SkelRow />
-          <SkelRow />
-          <SkelRow last />
-        </RCard>
-      </View>
-    </ScreenScroll>
   );
 }

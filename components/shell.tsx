@@ -66,8 +66,8 @@ export function RViewSwitcher({ value, onChange }: { value: DashView; onChange: 
 // Workspace context is in the eyebrow. No spinning logo, no extra row.
 // ─────────────────────────────────────────────────────────────
 export function RHomeHeader({
-  userName, view, onViewChange,
-}: { userName: string; view: DashView; onViewChange: (v: DashView) => void; refreshing?: boolean }) {
+  userName, title,
+}: { userName: string; title?: string; view?: DashView; onViewChange?: (v: DashView) => void; refreshing?: boolean }) {
   const { tok, lang, t } = useI18n();
   return (
     <FrostedHeader style={{ paddingHorizontal: 20, paddingTop: 10, paddingBottom: 14 }}>
@@ -90,7 +90,7 @@ export function RHomeHeader({
               writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
             }}
           >
-            {greeting(lang, userName)}
+            {title ?? greeting(lang, userName)}
           </Text>
           <REyebrow style={{ marginTop: 7, writingDirection: lang === 'ar' ? 'rtl' : 'ltr' }}>
             {monthYear(lang)}
@@ -101,8 +101,9 @@ export function RHomeHeader({
             for any surface that wants an inline entry point. */}
         {/* Workspace / org switcher — tap to switch ledgers. Lives where the
             view switcher used to be; the view now changes by swiping the hero. */}
-        <View style={{ flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 8 }}>
+        <View style={{ flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 10 }}>
           <WorkspaceChip />
+          <NotificationBell />
         </View>
       </View>
     </FrostedHeader>
@@ -129,13 +130,13 @@ export function NotificationBell() {
           : (lang === 'ar' ? 'الإشعارات' : 'Notifications')
       }
       style={({ pressed }) => ({
-        width: 36, height: 36, borderRadius: 999,
+        width: 44, height: 44, borderRadius: 999,
         alignItems: 'center', justifyContent: 'center',
         backgroundColor: pressed ? tok.elevated : tok.shellBg,
         borderWidth: 1, borderColor: tok.shellBorder,
       })}
     >
-      <Bell size={17} color={tok.bone} strokeWidth={1.7} />
+      <Bell size={20} color={tok.bone} strokeWidth={1.7} />
       {unreadCount > 0 && (
         <View style={{
           position: 'absolute', top: -3,

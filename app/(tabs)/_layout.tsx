@@ -6,11 +6,10 @@ import { fmtNum } from '../../lib/privacy';
 import { View, Text, StyleSheet, Platform, type ColorValue, AppState } from 'react-native';
 import { Tabs, useSegments, router } from 'expo-router';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
-import { Home as HomeIcon, List, Sparkles, User, Bell } from 'lucide-react-native';
-import { useNotifications } from '../../lib/notifications';
+import { Home as HomeIcon, List, Sparkles, User, LayoutDashboard } from 'lucide-react-native';
 import { useI18n } from '../../lib/i18n';
 import { restoreBubble } from '../../lib/bubble';
-import { useAppData, useWorkspace } from '../../lib/appData';
+import { useAppData, useWorkspace, useInOrg } from '../../lib/appData';
 import { apiFetch, newIdempotencyKey } from '../../lib/api';
 import { fontMono } from '../../lib/fonts';
 import * as Haptics from 'expo-haptics';
@@ -39,6 +38,7 @@ export default function TabsLayout() {
   const segments = useSegments();
   const currentTab = segments[segments.length - 1];
   const ws = useWorkspace();
+  const inOrg = useInOrg(); // an organization's Home already is its dashboard, so it has no Dashboard tab
   // Forms the person asked for in onboarding open one after another: take the next whenever they are back on a tab.
   useEffect(() => {
     if (segments[0] !== '(tabs)') return;
@@ -48,7 +48,7 @@ export default function TabsLayout() {
   }, [segments.join('/')]); // eslint-disable-line react-hooks/exhaustive-deps
   // A viewer cannot add anything, and neither a viewer nor a child can use the chat (it reads and writes the whole workspace).
   // Home has the "Tell Seshat…" input and Seshat's own tab is the chat, so the + button only stays where there is no input.
-  const hideFab = currentTab === 'seshat' || currentTab === 'index' || currentTab === '(tabs)' || !ws.canWrite;
+  const hideFab = currentTab === 'seshat' || currentTab === 'index' || currentTab === 'dashboard' || currentTab === '(tabs)' || !ws.canWrite;
   const hideChat = ws.isViewer || ws.isChild;
 
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -137,7 +137,6 @@ export default function TabsLayout() {
 
   // Unread count for the notifications tab badge. The hook polls + refreshes,
   // so the badge stays live as notifications land and get read.
-  const { unreadCount: notifUnread } = useNotifications();
 
   return (
     <View style={{ flex: 1, backgroundColor: tok.void }}>
@@ -156,11 +155,12 @@ export default function TabsLayout() {
             <NativeTabs.Trigger.Label>{t('maat')}</NativeTabs.Trigger.Label>
             {unreadMaatTotal > 0 ? <NativeTabs.Trigger.Badge>{String(unreadMaatTotal)}</NativeTabs.Trigger.Badge> : null}
           </NativeTabs.Trigger>
-          <NativeTabs.Trigger name="notifications">
-            <NativeTabs.Trigger.Icon sf="bell" />
-            <NativeTabs.Trigger.Label>{lang === 'ar' ? 'الإشعارات' : 'Alerts'}</NativeTabs.Trigger.Label>
-            {notifUnread > 0 ? <NativeTabs.Trigger.Badge>{String(notifUnread)}</NativeTabs.Trigger.Badge> : null}
+          <NativeTabs.Trigger name="dashboard" hidden={inOrg}>
+            <NativeTabs.Trigger.Icon sf="square.grid.2x2" />
+            <NativeTabs.Trigger.Label>{lang === 'ar' ? 'لوحتي' : 'Dashboard'}</NativeTabs.Trigger.Label>
           </NativeTabs.Trigger>
+          {/* Alerts are a bell at the top of Home and Dashboard now; the screen stays reachable, just not as a tab. */}
+          <NativeTabs.Trigger name="notifications" hidden />
           <NativeTabs.Trigger name="profile">
             <NativeTabs.Trigger.Icon sf="person.crop.circle" />
             <NativeTabs.Trigger.Label>{t('profile')}</NativeTabs.Trigger.Label>
@@ -210,16 +210,18 @@ export default function TabsLayout() {
             }}
           />
           <Tabs.Screen
-            name="notifications"
+            name="dashboard"
             options={{
-              title: lang === 'ar' ? 'الإشعارات' : 'Alerts',
-              tabBarIcon: ({ color }) => <Bell size={22} color={color} strokeWidth={1.5} />,
+              href: inOrg ? null : undefined,
+              title: lang === 'ar' ? 'لوحتي' : 'Dashboard',
+              tabBarIcon: ({ color }) => <LayoutDashboard size={22} color={color} strokeWidth={1.5} />,
               tabBarLabel: ({ focused, color }) => (
-                <TabLabel focused={focused} color={color}>{lang === 'ar' ? 'الإشعارات' : 'Alerts'}</TabLabel>
+                <TabLabel focused={focused} color={color}>{lang === 'ar' ? 'لوحتي' : 'Dashboard'}</TabLabel>
               ),
-              tabBarBadge: notifUnread > 0 ? notifUnread : undefined,
             }}
           />
+          {/* Alerts are a bell at the top of Home and Dashboard now; the screen stays reachable, just not as a tab. */}
+          <Tabs.Screen name="notifications" options={{ href: null }} />
           <Tabs.Screen
             name="profile"
             options={{
