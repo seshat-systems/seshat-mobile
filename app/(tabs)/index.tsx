@@ -15,11 +15,12 @@ import {
   SalaryCheckInSheet, fetchSalaryCheckIn, type CheckInStatus,
 } from '../../components/SalaryCheckInBanner';
 import { CapturePromptLine } from '../../components/CaptureShortcutBanner';
-import { UpdateBanner } from '../../components/UpdateBanner';
+import { useAndroidUpdate } from '../../lib/androidUpdate';
 import { WidgetsAnnouncement } from '../../components/WidgetsAnnouncement';
 import { TodayCard, AccountsOverview, TodayNeeds } from '../../components/HomeMoney';
 import { HomeAnswer, HomeInput } from '../../components/HomeAnswer';
 import { useRouter } from 'expo-router';
+import { Linking } from 'react-native';
 
 
 /** A child in a family workspace gets their own small Home; everyone else the full one. */
@@ -34,6 +35,7 @@ function FullHome() {
   const { profile, dataVersion, refresh, bumpVersion } = useAppData();
   const inOrg = useInOrg();
   const insets = useSafeAreaInsets();
+  const { update, dismiss: dismissUpdate } = useAndroidUpdate();
   const [needsCount, setNeedsCount] = useState(0);
   const [needsOpen, setNeedsOpen] = useState(false);
   const [data, setData] = useState<DashboardData | null>(null);
@@ -100,17 +102,28 @@ function FullHome() {
             <TodayNeeds
               hidden={!needsOpen}
               onCount={setNeedsCount}
-              extra={checkIn.needed ? [{
-                id: 'salary',
-                title: lang === 'ar' ? 'هل استلمت راتبك؟' : 'Did you get paid this month?',
-                body: lang === 'ar' ? 'سجّل الراتب وأنهِ الشهر، أو تخطى.' : "Log it to close the month, or skip if you didn't.",
-                onPress: () => setCheckInOpen(true),
-              }] : []}
+              extra={[
+                ...(checkIn.needed ? [{
+                  id: 'salary',
+                  title: lang === 'ar' ? 'هل استلمت راتبك؟' : 'Did you get paid this month?',
+                  body: lang === 'ar' ? 'سجّل الراتب وأنهِ الشهر، أو تخطى.' : "Log it to close the month, or skip if you didn't.",
+                  onPress: () => setCheckInOpen(true),
+                }] : []),
+                // A new version is one more thing that needs you, not a banner of its own.
+                ...(update ? [{
+                  id: 'update',
+                  title: lang === 'ar' ? 'يوجد إصدار جديد من سيشات' : 'A new version of Seshat is ready',
+                  body: (lang === 'ar' ? (update.notesAr || update.notes) : update.notes) || (lang === 'ar' ? `الإصدار ${update.versionName} جاهز.` : `Version ${update.versionName} is ready.`),
+                  label: lang === 'ar' ? 'حدّث' : 'Update',
+                  onPress: () => { void Linking.openURL(update.url); },
+                  secondaryLabel: lang === 'ar' ? 'لاحقاً' : 'Later',
+                  onSecondary: dismissUpdate,
+                }] : []),
+              ]}
             />
           ) : null;
           const notices = (
             <>
-              <UpdateBanner />
               <WidgetsAnnouncement />
             </>
           );

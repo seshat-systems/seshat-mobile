@@ -139,7 +139,7 @@ type TodayRow = { id: string; kind: string; title: string; body: string; screen:
  * The few things that need you today, from one list the server builds (a gam3ya payment or payout, a bill coming up, a
  * debt falling due, questions Seshat has, being over today's budget). Not shown at all when nothing needs you.
  */
-export type NeedsExtra = { id: string; title: string; body: string; onPress: () => void };
+export type NeedsExtra = { id: string; title: string; body: string; onPress: () => void; label?: string; secondaryLabel?: string; onSecondary?: () => void };
 
 export function TodayNeeds({ extra = [], trailing = null, hidden = false, onCount }: { extra?: NeedsExtra[]; trailing?: React.ReactNode; hidden?: boolean; onCount?: (n: number) => void } = {}) {
   const { tok, lang } = useI18n();
@@ -199,7 +199,10 @@ export function TodayNeeds({ extra = [], trailing = null, hidden = false, onCoun
         {extra.map((x) => (
           <View key={x.id} style={cardStyle}>
             <View><Text style={titleStyle} numberOfLines={3}>{x.title}</Text><Text style={bodyStyle} numberOfLines={3}>{x.body}</Text></View>
-            <Btn label={ar ? 'سجّل' : 'Log it'} onPress={x.onPress} />
+            <View style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 8 }}>
+              <Btn label={x.label ?? (ar ? 'سجّل' : 'Log it')} onPress={x.onPress} />
+              {x.onSecondary ? <Btn label={x.secondaryLabel ?? (ar ? 'لاحقاً' : 'Later')} primary={false} onPress={x.onSecondary} /> : null}
+            </View>
           </View>
         ))}
         {shown.map((r) => r.kind === 'ask_savings' || r.kind === 'ask_goals' ? (

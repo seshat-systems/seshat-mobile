@@ -12,7 +12,7 @@ import { useNotifications } from '../lib/notifications';
 import { fontBody, fontHead, fontMono } from '../lib/fonts';
 import { SeshatMark } from './SeshatMark';
 import { REyebrow, RAmount } from './ui';
-import { WorkspaceChip } from './WorkspaceSwitcher';
+import { useAppData, useInOrg } from '../lib/appData';
 import { CategoryIcon, CategoryIconByKey } from './icons';
 import { iconKeyForCategory } from '../lib/categoryMap';
 import type { CatId } from '../lib/categoryMap';
@@ -69,6 +69,9 @@ export function RHomeHeader({
   userName, title,
 }: { userName: string; title?: string; view?: DashView; onViewChange?: (v: DashView) => void; refreshing?: boolean }) {
   const { tok, lang, t } = useI18n();
+  const inOrg = useInOrg();
+  const { workspaces, activeLedgerId } = useAppData();
+  const activeName = workspaces.find((w) => (activeLedgerId ? w.ledgerId === activeLedgerId : w.kind === 'personal'))?.name;
   return (
     <FrostedHeader style={{ paddingHorizontal: 20, paddingTop: 10, paddingBottom: 14 }}>
       <View style={{
@@ -81,19 +84,20 @@ export function RHomeHeader({
           <Text
             numberOfLines={1}
             adjustsFontSizeToFit
-            minimumFontScale={0.72}
+            minimumFontScale={0.75}
             style={{
               fontFamily: fontHead(lang),
-              fontSize: lang === 'ar' ? 19 : 19, color: tok.bone,
-              letterSpacing: lang === 'ar' ? 0 : -0.4,
-              lineHeight: lang === 'ar' ? 27 : 24,
+              fontSize: 24, color: tok.bone,
+              letterSpacing: lang === 'ar' ? 0 : -0.5,
+              lineHeight: lang === 'ar' ? 34 : 30,
               writingDirection: lang === 'ar' ? 'rtl' : 'ltr',
             }}
           >
             {title ?? greeting(lang, userName)}
           </Text>
+          {/* The workspace is switched from Profile; inside an organization or family its name shows here so you always know where you are. */}
           <REyebrow style={{ marginTop: 7, writingDirection: lang === 'ar' ? 'rtl' : 'ltr' }}>
-            {monthYear(lang)}
+            {inOrg && activeName ? `${activeName} · ${monthYear(lang)}` : monthYear(lang)}
           </REyebrow>
         </View>
         {/* Notifications now live in the tab bar (with the unread badge), so the
@@ -102,7 +106,6 @@ export function RHomeHeader({
         {/* Workspace / org switcher — tap to switch ledgers. Lives where the
             view switcher used to be; the view now changes by swiping the hero. */}
         <View style={{ flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 10 }}>
-          <WorkspaceChip />
           <NotificationBell />
         </View>
       </View>
