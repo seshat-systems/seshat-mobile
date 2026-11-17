@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { View, Text, ScrollView, Alert, Pressable } from 'react-native';
 import { Building2, Home } from 'lucide-react-native';
 import { ScrollView as ScreenScroll } from '../../components/Scroll';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PlanScreen } from '../../components/PlanShell';
 import { REyebrow, RButton, RField, RPill } from '../../components/ui';
@@ -32,6 +32,7 @@ const CURRENCIES = ['EGP', 'SAR', 'AED', 'USD', 'EUR', 'GBP'];
  */
 export default function NewOrgScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams<{ kind?: string }>();
   const { tok, lang } = useI18n();
   const { profile, switchLedger, refresh } = useAppData();
   const insets = useSafeAreaInsets();
@@ -39,7 +40,7 @@ export default function NewOrgScreen() {
   const [name, setName] = useState('');
   const [currency, setCurrency] = useState<string>(profile?.currency ?? 'EGP');
   const [submitting, setSubmitting] = useState(false);
-  const [kind, setKind] = useState<OrgKind>('team');
+  const [kind, setKind] = useState<OrgKind>(params.kind === 'family' ? 'family' : 'team');
   const ar = lang === 'ar';
 
   // A family starts with "<first name>'s Family" in the name field. The person can edit it; if they clear it, the default comes back.

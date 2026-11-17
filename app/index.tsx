@@ -72,7 +72,7 @@ export default function AuthRouter() {
   const [busy, setBusy] = useState(false);
   // Captured at the pickSegment step; after the onboarding tour we use it to
   // route org founders into the org-create form.
-  const [segment, setSegment] = useState<'individual' | 'org'>('individual');
+  const [segment, setSegment] = useState<'individual' | 'org' | 'family'>('individual');
 
   // Google sign-in via native OAuth clients - no proxy, no Web client.
   // expo-auth-session picks the platform-specific client at runtime and
@@ -176,10 +176,12 @@ export default function AuthRouter() {
   // into the org-create form after the tour settles.
   const pickIndividual = () => { setSegment('individual'); setView('onboard'); };
   const pickOrganization = () => { setSegment('org'); setView('onboard'); };
+  const pickFamily = () => { setSegment('family'); setView('onboard'); };
   const finishOnboarding = () => {
     goApp();
     // Defer so the tabs are mounted before we push into /orgs/new.
     if (segment === 'org') setTimeout(() => router.push('/orgs/new'), 50);
+    if (segment === 'family') setTimeout(() => router.push({ pathname: '/orgs/new', params: { kind: 'family' } }), 50);
   };
 
   const submitForgot = async () => {
@@ -473,6 +475,13 @@ export default function AuthRouter() {
             title={lang === 'ar' ? 'فرد' : 'Individual'}
             sub={lang === 'ar' ? 'لتتبع مصاريفي الشخصية فقط.' : 'Track my own money. Personal ledger only.'}
             onPress={pickIndividual}
+            tok={tok}
+            lang={lang}
+          />
+          <SegmentCard
+            title={lang === 'ar' ? 'عائلة' : 'Family'}
+            sub={lang === 'ar' ? 'ميزانية البيت مشتركة، ويمكن إضافة الأولاد.' : 'One household ledger. Kids can join.'}
+            onPress={pickFamily}
             tok={tok}
             lang={lang}
           />
