@@ -155,7 +155,8 @@ export function TodayNeeds({ extra = [], trailing = null }: { extra?: NeedsExtra
     });
     return () => { alive = false; };
   }, [dataVersion]);
-  const total = rows.length + extra.length;
+  const shown = rows.filter((r) => r.kind !== 'ask_savings' && r.kind !== 'ask_goals');   // the one-time setup questions are Seshat's to ask in chat, not cards
+  const total = shown.length + extra.length;
   if (total === 0 && !trailing) return null;
   const go = (r: TodayRow) => {
     if (r.screen === 'gam3ya') router.push(`/gam3ya/${r.refId}` as never);
@@ -200,7 +201,7 @@ export function TodayNeeds({ extra = [], trailing = null }: { extra?: NeedsExtra
             <Btn label={ar ? 'سجّل' : 'Log it'} onPress={x.onPress} />
           </View>
         ))}
-        {rows.map((r) => r.kind === 'ask_savings' || r.kind === 'ask_goals' ? (
+        {shown.map((r) => r.kind === 'ask_savings' || r.kind === 'ask_goals' ? (
           <View key={r.id} style={cardStyle}>
             <View><Text style={titleStyle} numberOfLines={3}>{r.title}</Text><Text style={bodyStyle} numberOfLines={3}>{r.body}</Text></View>
             <View style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 8 }}>

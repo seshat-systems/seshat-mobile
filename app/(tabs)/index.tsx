@@ -9,7 +9,7 @@ import { ChildHome } from '../../components/ChildHome';
 import { fontBody } from '../../lib/fonts';
 import { RHomeHeader, type DashView } from '../../components/shell';
 import { ScreenAtmosphere } from '../../components/ScreenAtmosphere';
-import { ChartCarousel, DashboardBody, type DashboardData } from '../../components/dashboards';
+import { DashboardBody, type DashboardData } from '../../components/dashboards';
 import { SkeletonCard, Skeleton, SkeletonRow } from '../../components/Skeleton';
 import { RCard } from '../../components/ui';
 import {
@@ -19,8 +19,6 @@ import { CaptureShortcutBanner } from '../../components/CaptureShortcutBanner';
 import { UpdateBanner } from '../../components/UpdateBanner';
 import { WidgetsAnnouncement } from '../../components/WidgetsAnnouncement';
 import { TodayCard, AccountsOverview, DailyBudgetCard, TodayNeeds, NetWorthCard } from '../../components/HomeMoney';
-import { SetupPrompt } from '../../components/SetupPrompt';
-import { SETUP_ITEMS } from '../../lib/setupRequirements';
 import { HomeAnswer } from '../../components/HomeAnswer';
 import { useRouter } from 'expo-router';
 
@@ -120,10 +118,8 @@ function FullHome() {
                   title: lang === 'ar' ? 'هل استلمت راتبك؟' : 'Did you get paid this month?',
                   body: lang === 'ar' ? 'سجّل الراتب وأنهِ الشهر، أو تخطى.' : "Log it to close the month, or skip if you didn't.",
                   onPress: () => setCheckInOpen(true),
-                }] : []} trailing={profile && SETUP_ITEMS.some((i) => i.isMissing(profile))
-                  ? <SetupPrompt compact profile={profile} onChanged={() => { refresh(); bumpVersion(); }} /> : null} />
+                }] : []} />
               )}
-              {inOrg && <SetupPrompt profile={profile} onChanged={() => { refresh(); bumpVersion(); }} />}
               <UpdateBanner />
               <WidgetsAnnouncement />
               <CaptureShortcutBanner />
@@ -154,10 +150,6 @@ function FullHome() {
                 <>
                   <TodayCard data={data!} currency={currency} />
                   {!inOrg && <DailyBudgetCard />}
-                  {/* The month's net number is already the headline sentence, so the big chart card sits below the daily answers. */}
-                  <View style={{ marginTop: 14 }}>
-                    <ChartCarousel data={data!} currency={currency} view={view} onViewChange={onViewChange} />
-                  </View>
                   {inOrg ? <AccountsOverview currency={currency} /> : <NetWorthCard />}
                   <DashboardBody data={data!} currency={currency} />
                 </>

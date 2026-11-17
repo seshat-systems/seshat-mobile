@@ -39,7 +39,8 @@ export default function TabsLayout() {
   const currentTab = segments[segments.length - 1];
   const ws = useWorkspace();
   // A viewer cannot add anything, and neither a viewer nor a child can use the chat (it reads and writes the whole workspace).
-  const hideFab = currentTab === 'seshat' || !ws.canWrite;
+  // Home has the "Tell Seshat…" input and Seshat's own tab is the chat, so the + button only stays where there is no input.
+  const hideFab = currentTab === 'seshat' || currentTab === 'index' || currentTab === '(tabs)' || !ws.canWrite;
   const hideChat = ws.isViewer || ws.isChild;
 
   const [sheetOpen, setSheetOpen] = useState(false);
