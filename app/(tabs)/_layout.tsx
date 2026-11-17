@@ -315,8 +315,8 @@ function TabLabel({ focused, color, children }: { focused: boolean; color: Color
         color: focused ? tok.gold : color,
         fontFamily: fontMono('regular'),
         fontSize: 12,
-        letterSpacing: lang === 'ar' ? 0 : 1.2,
-        textTransform: lang === 'ar' ? 'none' : 'uppercase',
+        letterSpacing: lang === 'ar' ? 0 : 0.4,
+        textTransform: 'none',
         marginTop: 4,
       }}
     >{children}</Text>
