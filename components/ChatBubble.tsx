@@ -127,8 +127,9 @@ function ChatBubbleInner({
   const hasBlocks = isAssistant && !!message.blocks && message.blocks.length > 0;
   const hasTxBlock = !!message.blocks?.some((b) => b.type === 'transactions');
   // The plan card leads the reply (it is the answer); everything else sits under the text.
-  const planBlocks = message.blocks?.filter((b) => b.type === 'plan');
-  const restBlocks = message.blocks?.filter((b) => b.type !== 'plan');
+  const isLead = (b: { type: string }) => b.type === 'plan' || b.type === 'budgets' || b.type === 'goals';
+  const planBlocks = message.blocks?.filter(isLead);
+  const restBlocks = message.blocks?.filter((b) => !isLead(b));
   const showBlocks = hasBlocks && !stillTyping;
 
   // Waiting on the model with nothing to show yet: no empty bubble with a blinking

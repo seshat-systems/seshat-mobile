@@ -5,6 +5,8 @@ import { useI18n, formatAmount } from '../lib/i18n';
 import { fontMono, fontBody } from '../lib/fonts';
 import { RAmount } from './ui';
 import { GrowBar } from './Motion';
+import { useRouter } from 'expo-router';
+import { Pressable } from 'react-native';
 import { CategoryIconByKey } from './icons';
 import { iconKeyForCategory } from '../lib/categoryMap';
 
@@ -38,6 +40,8 @@ export type ChartPoint = { label: string; value: number };
 export type CategorySlice = { category: string; total: number };
 export type PlanGroupBlock = { key: 'needs' | 'wants' | 'saving'; spent: number; target: number; status: 'ok' | 'ahead' | 'over' };
 export type VisualBlock =
+  | { type: 'budgets'; currency: string; rows: Array<{ name: string; nameAr: string; spent: number; cap: number; percent: number; status: 'on-track' | 'near' | 'over' }> }
+  | { type: 'goals'; currency: string; rows: Array<{ name: string; nameAr: string; saved: number; target: number; percent: number }> }
   | { type: 'plan'; period: { en: string; ar: string }; currency: string; income: number; verdict: 'on_plan' | 'ahead_of_pace' | 'over'; paceFraction: number; groups: PlanGroupBlock[] }
   | { type: 'transactions'; items: VisualTransaction[] }
   | { type: 'chart'; kind: ChartKind; title: string; unit?: string; caption?: string; series: ChartPoint[] }
@@ -61,6 +65,8 @@ export function ChatBlocks({ blocks }: { blocks?: VisualBlock[] }) {
       <View style={{ gap: 8 }}>
         {blocks.map((b, i) => {
           if (b.type === 'plan') return <PlanBlockView key={i} block={b} />;
+          if (b.type === 'budgets') return <BudgetsBlockView key={i} block={b} />;
+          if (b.type === 'goals') return <GoalsBlockView key={i} block={b} />;
           if (b.type === 'transactions') return <TransactionsBlockView key={i} items={b.items} />;
           if (b.type === 'chart') return <ChartBlockView key={i} block={b} />;
           if (b.type === 'summary') return <SummaryBlockView key={i} block={b} />;
@@ -143,6 +149,71 @@ const GROUP_LABEL = {
   wants: { en: 'Wants', ar: 'الرغبات' },
   saving: { en: 'Saving', ar: 'الادخار' },
 } as const;
+
+/** Budgets and goals as cards in the chat: the same rows as the Dashboard sections, with "See all" to the full screen. */
+function ProgressCard({ title, to, pill, children }: { title: string; to: string; pill?: { text: string; color: string }; children: React.ReactNode }) {
+  const { tok, lang } = useI18n();
+  const router = useRouter();
+  const ar = lang === 'ar';
+  return (
+    <View style={{ backgroundColor: tok.glowShellBg, borderRadius: 22, borderWidth: 1, borderColor: tok.glowShellBorder, borderTopColor: tok.glowCoreSheen, padding: 16 }}>
+      <View style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+        <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 10, flex: 1 }}>
+          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.gold }}>{title}</Text>
+          {pill ? (
+            <View style={{ paddingHorizontal: 10, minHeight: 26, borderRadius: 999, justifyContent: 'center', borderWidth: 1, borderColor: pill.color }}>
+              <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 12, color: pill.color }}>{pill.text}</Text>
+            </View>
+          ) : null}
+        </View>
+        <Pressable onPress={() => router.push(to as never)} hitSlop={10} accessibilityRole="button" style={{ minHeight: 32, justifyContent: 'center' }}>
+          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.gold }}>{ar ? 'عرض الكل ‹' : 'See all ›'}</Text>
+        </Pressable>
+      </View>
+      <View style={{ marginTop: 6 }}>{children}</View>
+    </View>
+  );
+}
+
+function BudgetsBlockView({ block }: { block: Extract<VisualBlock, { type: 'budgets' }> }) {
+  const { tok, lang } = useI18n();
+  const ar = lang === 'ar';
+  const over = block.rows.filter((r) => r.status === 'over').length;
+  const n = (v: number) => Math.round(v).toLocaleString('en-US');
+  return (
+    <ProgressCard title={ar ? 'الميزانيات' : 'Budgets'} to="/budgets"
+      pill={over > 0 ? { text: ar ? `${over} فوق السقف` : `${over} over`, color: tok.alertText } : undefined}>
+      {block.rows.slice(0, 5).map((r, i) => (
+        <View key={i} style={{ marginTop: 12 }}>
+          <View style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+            <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontBody(lang, 'medium'), fontSize: 15, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar && r.nameAr ? r.nameAr : r.name}</Text>
+            <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: r.status === 'over' ? tok.alertText : tok.muted, writingDirection: 'ltr' }}>{n(r.spent)} / {n(r.cap)}</Text>
+          </View>
+          <GrowBar fraction={Math.min(1, r.percent / 100)} color={r.status === 'over' ? tok.alertText : r.status === 'near' ? tok.warnText : tok.gold} track={tok.shellBg} rtl={ar} delay={i * 100} />
+        </View>
+      ))}
+    </ProgressCard>
+  );
+}
+
+function GoalsBlockView({ block }: { block: Extract<VisualBlock, { type: 'goals' }> }) {
+  const { tok, lang } = useI18n();
+  const ar = lang === 'ar';
+  const n = (v: number) => Math.round(v).toLocaleString('en-US');
+  return (
+    <ProgressCard title={ar ? 'الأهداف' : 'Goals'} to="/goals">
+      {block.rows.slice(0, 5).map((r, i) => (
+        <View key={i} style={{ marginTop: 12 }}>
+          <View style={{ flexDirection: ar ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+            <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontBody(lang, 'medium'), fontSize: 15, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar && r.nameAr ? r.nameAr : r.name}</Text>
+            <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, writingDirection: 'ltr' }}>{r.percent}% · {n(r.saved)} / {n(r.target)}</Text>
+          </View>
+          <GrowBar fraction={Math.min(1, r.percent / 100)} color={tok.gold} track={tok.shellBg} rtl={ar} delay={i * 100} />
+        </View>
+      ))}
+    </ProgressCard>
+  );
+}
 
 /** The monthly plan as one card: where each group stands against its allowance, a tick for where the calendar says you should be. */
 function PlanBlockView({ block }: { block: Extract<VisualBlock, { type: 'plan' }> }) {
