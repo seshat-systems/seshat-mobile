@@ -26,6 +26,8 @@ export type Message = {
   id: string;
   role: 'user' | 'assistant';
   content: string;
+  // The turn failed (no answer came back): the bubble holds the error text and the chat offers "Try again".
+  failed?: boolean;
   // When true the bubble streams content character-by-character. Tap to skip.
   typing?: boolean;
   // Transient client-only state: an attachment is uploading before its turn

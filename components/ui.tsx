@@ -3,7 +3,7 @@ import {
   View, Text, Pressable, StyleSheet, ViewStyle, TextStyle, Animated, Easing, ScrollView, ActivityIndicator, TextInput, Platform,
 } from 'react-native';
 import Svg, { Defs, LinearGradient, Stop, Rect } from 'react-native-svg';
-import { Check, X } from 'lucide-react-native';
+import { Check, Eye, EyeOff, X } from 'lucide-react-native';
 import { useI18n, formatAmount, currencyLabel } from '../lib/i18n';
 import { fontBody, fontHead, fontMono } from '../lib/fonts';
 import { radius } from '../lib/theme';
@@ -296,6 +296,8 @@ export function RField({
 }) {
   const { tok, lang, mode } = useI18n();
   const [focused, setFocused] = useState(false);
+  // Every password field (secureTextEntry) gets an eye to show what was typed.
+  const [shown, setShown] = useState(false);
   const reveal = useRevealOnFocus();
   const inputRef = useRef<TextInput>(null);
   const setRefs = (node: TextInput | null) => {
@@ -346,7 +348,7 @@ export function RField({
             onChangeText={onChange}
             placeholder={placeholder}
             placeholderTextColor={tok.muted}
-            secureTextEntry={secureTextEntry}
+            secureTextEntry={secureTextEntry && !shown}
             keyboardType={keyboardType ?? 'default'}
             autoCapitalize={autoCapitalize ?? 'none'}
             autoCorrect={false}
@@ -365,6 +367,7 @@ export function RField({
             style={{
               backgroundColor: 'transparent',
               paddingHorizontal: 16, paddingVertical: 14,
+              ...(secureTextEntry ? (lang === 'ar' ? { paddingLeft: 56 } : { paddingRight: 56 }) : null),
               // One field height everywhere (48 inside the 4px bezel = 56 outside), matching full-width buttons.
               minHeight: multiline ? (minHeight ?? 120) : 48,
               color: tok.bone,
@@ -374,6 +377,17 @@ export function RField({
               textAlign: forceLtr ? 'left' : (lang === 'ar' ? 'right' : 'left'),
             }}
           />
+          {secureTextEntry ? (
+            <Pressable
+              onPress={() => setShown((v) => !v)}
+              hitSlop={4}
+              accessibilityRole="button"
+              accessibilityLabel={shown ? (lang === 'ar' ? 'إخفاء كلمة المرور' : 'Hide password') : (lang === 'ar' ? 'إظهار كلمة المرور' : 'Show password')}
+              style={{ position: 'absolute', top: 0, bottom: 0, [lang === 'ar' ? 'left' : 'right']: 0, width: 52, alignItems: 'center', justifyContent: 'center' }}
+            >
+              {shown ? <EyeOff size={22} color={tok.muted} /> : <Eye size={22} color={tok.muted} />}
+            </Pressable>
+          ) : null}
         </View>
       </View>
     </View>

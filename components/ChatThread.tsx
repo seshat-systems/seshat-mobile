@@ -262,7 +262,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
         // Broke mid-stream — surface an error on the pending bubble.
         const raw = err instanceof Error ? err.message : String(err);
         console.warn('[chat] stream broke mid-turn:', raw);
-        patchPending({ content: friendlyChatError(raw), typing: true, pending: false });
+        patchPending({ content: friendlyChatError(raw), typing: true, pending: false, failed: true });
       } else {
         // Streaming never started (unsupported / failed handshake) — fall back
         // to the plain non-stream JSON path on the same pending bubble.
@@ -284,7 +284,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
           } : m)));
         } catch (jsonErr) {
           const raw = jsonErr instanceof Error ? jsonErr.message : String(jsonErr);
-          patchPending({ content: friendlyChatError(raw), typing: true, pending: false });
+          patchPending({ content: friendlyChatError(raw), typing: true, pending: false, failed: true });
         }
       }
     } finally {
@@ -544,11 +544,15 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
   // while streaming). Tailored to the persona: Seshat (doer) suggests actions,
   // Maat (read-only analyst) suggests reads.
   const lastMsg = messages[messages.length - 1];
+  const lastUserText = [...messages].reverse().find((m) => m.role === 'user' && m.content)?.content;
   const showFollowups = !sending && !!lastMsg && lastMsg.role === 'assistant'
-    && !!lastMsg.content && !lastMsg.pending;
+    && !!lastMsg.content && !lastMsg.pending && (!lastMsg.failed || !!lastUserText);
   // When the reply asked a question, its answer options replace the generic chips.
   const asked = lastMsg?.role === 'assistant' ? lastMsg.quickReplies : undefined;
-  const followups = asked && asked.length ? asked : persona === 'maat'
+  // After a failed turn the only sensible follow-up is to send the same words again.
+  const failedLast = lastMsg?.role === 'assistant' && lastMsg.failed;
+  const retryLabel = lang === 'ar' ? 'حاول مرة أخرى' : 'Try again';
+  const followups = failedLast ? (lastUserText ? [retryLabel] : []) : asked && asked.length ? asked : persona === 'maat'
     ? (lang === 'ar'
         ? ['قارن بالشهر الماضي', 'أكبر فئة', 'اتجاه الإنفاق']
         : ['Compare to last month', 'Biggest category', 'Spending trend'])
@@ -645,7 +649,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
                   flexWrap: 'wrap', gap: 8, marginTop: 4,
                 }}>
                   {followups.map((c, i) => (
-                    <Pressable key={c} accessibilityRole="button" onPress={() => sendText(c)}
+                    <Pressable key={c} accessibilityRole="button" onPress={() => sendText(failedLast && lastUserText ? lastUserText : c)}
                       style={({ pressed }) => ({
                         minHeight: 44, paddingHorizontal: 18, borderRadius: 999, justifyContent: 'center',
                         backgroundColor: asked && asked.length && i === 0 ? tok.gold : tok.surface,
