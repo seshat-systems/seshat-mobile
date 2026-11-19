@@ -45,7 +45,7 @@ export function SetupPrompt({
           </View>
           <Pressable onPress={() => setOpenKey(item.key)} accessibilityRole="button"
             style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 18, borderRadius: 999, alignItems: 'center', justifyContent: 'center', alignSelf: ar ? 'flex-end' : 'flex-start', backgroundColor: tok.gold, opacity: pressed ? 0.8 : 1 })}>
-            <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: '#14110A' }}>{ar ? 'ابدأ' : 'Set up'}</Text>
+            <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.void }}>{ar ? 'ابدأ' : 'Set up'}</Text>
           </Pressable>
         </View>
       ) : (

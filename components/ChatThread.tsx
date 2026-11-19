@@ -691,7 +691,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
                         backgroundColor: asked && asked.length && i === 0 ? tok.gold : tok.surface,
                         borderWidth: asked && asked.length && i === 0 ? 0 : 1, borderColor: tok.borderHi, ...pressFeel(pressed),
                       })}>
-                      <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: asked && asked.length && i === 0 ? '#14110A' : tok.bone }}>{c}</Text>
+                      <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: asked && asked.length && i === 0 ? tok.void : tok.bone }}>{c}</Text>
                     </Pressable>
                   ))}
                 </View>
