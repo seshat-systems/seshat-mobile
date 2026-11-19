@@ -72,18 +72,15 @@ export function ChatHistoryPanel({ visible, onClose, onSelect, onNew, activeId }
   if (!mounted) return null;
   const tx = slide.interpolate({ inputRange: [0, 1], outputRange: [ar ? panelW : -panelW, 0] });
   const groups = groupSessions(sessions);
-  const startBtn = (persona: Persona, label: string, sub: string, primary: boolean) => (
-    <Pressable onPress={() => { onNew(persona); onClose(); }} accessibilityRole="button"
+  const startBtn = (persona: Persona, label: string, primary: boolean) => (
+    <Pressable onPress={() => { onNew(persona); onClose(); }} accessibilityRole="button" accessibilityLabel={label}
       style={({ pressed }) => ({
-        flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 12, padding: 12, borderRadius: 18, minHeight: 60,
+        flex: 1, flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center', gap: 8, minHeight: 52, paddingHorizontal: 8, borderRadius: 16,
         backgroundColor: primary ? tok.glowShellBg : tok.surface, borderWidth: 1, borderColor: primary ? tok.glowShellBorder : tok.border, ...pressFeel(pressed),
       })}>
-      <AIAvatar size={38} persona={persona} />
-      <View style={{ flex: 1 }}>
-        <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{label}</Text>
-        <Text style={{ fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, textAlign: ar ? 'right' : 'left' }}>{sub}</Text>
-      </View>
-      <Plus size={18} color={tok.gold} />
+      <AIAvatar size={28} persona={persona} />
+      <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.bone }}>{PERSONAS[persona].name[lang]}</Text>
+      <Plus size={16} color={tok.gold} />
     </Pressable>
   );
   return (
@@ -98,9 +95,12 @@ export function ChatHistoryPanel({ visible, onClose, onSelect, onNew, activeId }
             <X size={22} color={tok.muted} />
           </Pressable>
         </View>
-        <View style={{ paddingHorizontal: 16, gap: 8 }}>
-          {startBtn('seshat', ar ? 'محادثة جديدة مع سيشات' : 'New chat with Seshat', ar ? 'تنفّذ لك' : 'Does things for you', true)}
-          {startBtn('maat', ar ? 'تحليل جديد مع ماعت' : 'New analysis with Maat', ar ? 'تقرأ فقط ولا تغيّر' : 'Reads only, changes nothing', false)}
+        <View style={{ paddingHorizontal: 16 }}>
+          <Text style={{ fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, marginBottom: 8, textAlign: ar ? 'right' : 'left' }}>{ar ? 'محادثة جديدة مع' : 'New conversation with'}</Text>
+          <View style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 8 }}>
+            {startBtn('seshat', ar ? 'سيشات' : 'Seshat', true)}
+            {startBtn('maat', ar ? 'ماعت' : 'Maat', false)}
+          </View>
         </View>
         <View style={{ margin: 16, marginBottom: 8, flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 8, minHeight: 44, paddingHorizontal: 14, borderRadius: 14, backgroundColor: tok.surface, borderWidth: 1, borderColor: tok.border }}>
           <Search size={17} color={tok.muted} />

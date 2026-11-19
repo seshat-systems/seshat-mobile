@@ -637,25 +637,27 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
             <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: lang === 'ar' ? 'right' : 'left' }}>
               {lang === 'ar' ? 'مع من تريد أن تتحدث؟' : 'Who do you want to talk to?'}
             </Text>
-            {(['seshat', 'maat'] as const).map((k) => {
-              const on = persona === k;
-              return (
-                <Pressable key={k} onPress={() => changePersona(k)} accessibilityRole="button" accessibilityState={{ selected: on }}
-                  style={({ pressed }) => ({
-                    flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 12, padding: 14, borderRadius: 20, minHeight: 64,
-                    backgroundColor: on ? tok.glowShellBg : tok.surface, borderWidth: 1, borderColor: on ? tok.gold : tok.border, ...pressFeel(pressed),
-                  })}>
-                  <AIAvatar size={42} persona={k} />
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 17, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>{PERSONAS[k].name[lang]}</Text>
-                    <Text style={{ fontFamily: fontBody(lang), fontSize: 13, lineHeight: 19, color: tok.muted, textAlign: lang === 'ar' ? 'right' : 'left' }}>
-                      {k === 'seshat' ? (lang === 'ar' ? 'تنفّذ لك: تسجّل وتضبط الميزانية وتحفظ دفاترك.' : 'Does things for you: logs, budgets, keeps your books.')
-                        : (lang === 'ar' ? 'تقرأ وتحلّل فقط ولا تغيّر شيئاً.' : 'Reads and analyses only. Changes nothing.')}
-                    </Text>
-                  </View>
-                </Pressable>
-              );
-            })}
+            {/* Two buttons in one row; what the chosen one does is said once, underneath. */}
+            <View style={{ flexDirection: lang === 'ar' ? 'row-reverse' : 'row', gap: 10 }}>
+              {(['seshat', 'maat'] as const).map((k) => {
+                const on = persona === k;
+                return (
+                  <Pressable key={k} onPress={() => changePersona(k)} accessibilityRole="button" accessibilityState={{ selected: on }}
+                    style={({ pressed }) => ({
+                      flex: 1, flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'center', gap: 10, minHeight: 56, paddingHorizontal: 12, borderRadius: 18,
+                      backgroundColor: on ? tok.glowShellBg : tok.surface, borderWidth: 1, borderColor: on ? tok.gold : tok.border, ...pressFeel(pressed),
+                    })}>
+                    <AIAvatar size={32} persona={k} />
+                    <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 17, color: tok.bone }}>{PERSONAS[k].name[lang]}</Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+            <Text style={{ fontFamily: fontBody(lang), fontSize: 14, lineHeight: 20, color: tok.muted, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+              {persona === 'seshat'
+                ? (lang === 'ar' ? 'سيشات تنفّذ لك: تسجّل وتضبط الميزانية وتحفظ دفاترك.' : 'Seshat does things for you: logs, budgets, keeps your books.')
+                : (lang === 'ar' ? 'ماعت تقرأ وتحلّل فقط ولا تغيّر شيئاً.' : 'Maat reads and analyses only. She changes nothing.')}
+            </Text>
           </View>
         ) : null}
         ListEmptyComponent={
