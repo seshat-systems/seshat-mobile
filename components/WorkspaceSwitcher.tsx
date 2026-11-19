@@ -286,7 +286,7 @@ export function WorkspaceSheet({ visible, onClose }: { visible: boolean; onClose
           <RButton
             variant="primary"
             full
-            icon={<Plus size={16} color={tok.void} />}
+            icon={<Plus size={16} color={tok.onGold} />}
             onPress={() => { onClose(); router.push('/orgs/new'); }}
           >
             {lang === 'ar' ? 'إنشاء فريق أو عائلة' : 'Create a team or family'}

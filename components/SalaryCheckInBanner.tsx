@@ -211,8 +211,8 @@ export function SalaryCheckInSheet({
             flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
             alignItems: 'center', gap: 6,
           }}>
-            <Check size={16} color={tok.void} />
-            <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.void }}>
+            <Check size={16} color={tok.onGold} />
+            <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.onGold }}>
               {saving
                 ? (lang === 'ar' ? 'جارٍ الحفظ…' : 'Saving…')
                 : (lang === 'ar' ? 'استلمته - سجّل' : 'Received - log it')}

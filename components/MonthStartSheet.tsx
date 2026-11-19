@@ -93,7 +93,7 @@ export function SetMonthStartSheet({
                 onPress={() => setDay(d)}
                 style={({ pressed }) => ({
                   width: 40, height: 40, borderRadius: 11, alignItems: 'center', justifyContent: 'center',
-                  backgroundColor: on ? tok.gold : tok.elevated,
+                  backgroundColor: on ? tok.goldSolid : tok.elevated,
                   borderWidth: 1, borderColor: on ? tok.gold : tok.border,
                   opacity: pressed ? 0.8 : 1,
                 })}

@@ -64,8 +64,8 @@ export function HomeReplies() {
             ) : null}
             {(reply?.quickReplies ?? []).map((c, i) => (
               <Pressable key={c} onPress={() => sendHome(c, open)} accessibilityRole="button"
-                style={({ pressed }) => ({ ...chip, ...(i === 0 ? { backgroundColor: tok.gold, borderColor: tok.gold } : null), ...pressFeel(pressed) })}>
-                <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: i === 0 ? tok.void : tok.bone }}>{c}</Text>
+                style={({ pressed }) => ({ ...chip, ...(i === 0 ? { backgroundColor: tok.goldSolid, borderColor: tok.goldSolid } : null), ...pressFeel(pressed) })}>
+                <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: i === 0 ? tok.onGold : tok.bone }}>{c}</Text>
               </Pressable>
             ))}
           </View>

@@ -200,7 +200,7 @@ export default function OrgProjectsScreen() {
                   disabled={!name.trim() || creating}
                   loading={creating}
                   onPress={submitCreate}
-                  icon={<Plus size={16} color={tok.void} />}
+                  icon={<Plus size={16} color={tok.onGold} />}
                 >
                   {creating
                     ? (lang === 'ar' ? 'يضيف…' : 'Adding…')
@@ -364,8 +364,8 @@ function ProjectAccessSheet({ project, orgId, onClose, onSaved }: { project: Pro
               const on = chosen.includes(m.userId);
               return (
                 <Pressable key={m.userId} onPress={() => setChosen((c) => (on ? c.filter((x) => x !== m.userId) : [...c, m.userId]))} style={{ paddingVertical: 10, flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 12 }}>
-                  <View style={{ width: 22, height: 22, borderRadius: 6, borderWidth: 1, borderColor: on ? tok.gold : tok.border, backgroundColor: on ? tok.gold : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
-                    {on ? <Text style={{ color: tok.void, fontSize: 14 }}>✓</Text> : null}
+                  <View style={{ width: 22, height: 22, borderRadius: 6, borderWidth: 1, borderColor: on ? tok.gold : tok.border, backgroundColor: on ? tok.goldSolid : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+                    {on ? <Text style={{ color: tok.onGold, fontSize: 14 }}>✓</Text> : null}
                   </View>
                   <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{m.displayName ?? m.email}</Text>
                   <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, color: tok.muted }}>{roleLabel(m.role, 'team', ar).toUpperCase()}</Text>

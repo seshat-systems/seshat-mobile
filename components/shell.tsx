@@ -146,13 +146,13 @@ export function NotificationBell() {
           position: 'absolute', top: -3,
           ...(lang === 'ar' ? { left: -3 } : { right: -3 }),
           minWidth: 16, height: 16, borderRadius: 8, paddingHorizontal: 4,
-          backgroundColor: tok.gold,
+          backgroundColor: tok.goldSolid,
           borderWidth: 1.5, borderColor: tok.void,
           alignItems: 'center', justifyContent: 'center',
         }}>
           <Text allowFontScaling={false} style={{
             fontFamily: fontMono('medium'), fontSize: 12, lineHeight: 14,
-            color: tok.void, writingDirection: 'ltr',
+            color: tok.onGold, writingDirection: 'ltr',
           }}>{badge}</Text>
         </View>
       )}
@@ -370,7 +370,7 @@ export function RFAB({
       style={({ pressed }) => ({
         position: 'absolute', bottom: bottomOffset, ...side,
         width: 56, height: 56, borderRadius: 28,
-        backgroundColor: recording ? tok.alertText : (isLiquid() ? 'transparent' : tok.gold),
+        backgroundColor: recording ? tok.alertText : (isLiquid() ? 'transparent' : tok.goldSolid),
         alignItems: 'center', justifyContent: 'center',
         transform: [{ scale: pressed || recording ? 0.95 : 1 }],
         shadowColor: recording ? tok.alertText : tok.gold,
@@ -385,8 +385,8 @@ export function RFAB({
     >
       {!recording && <LiquidBackdrop radius={28} tint={tok.gold} fallback="transparent" />}
       {recording
-        ? <Mic size={26} color={tok.void} strokeWidth={2.2} />
-        : <Plus size={26} color={tok.void} strokeWidth={2.2} />}
+        ? <Mic size={26} color={tok.onGold} strokeWidth={2.2} />
+        : <Plus size={26} color={tok.onGold} strokeWidth={2.2} />}
     </Pressable>
   );
 }

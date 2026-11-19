@@ -69,7 +69,7 @@ export default function CaptureSetupIosScreen() {
             full
             onPress={() => { void Linking.openURL('shortcuts://').catch(() => {}); }}
             style={{ marginTop: 12 }}
-            icon={<ExternalLink size={14} color={tok.void} />}
+            icon={<ExternalLink size={14} color={tok.onGold} />}
           >
             {ar ? 'فتح الاختصارات' : 'Open Shortcuts'}
           </RButton>
@@ -151,10 +151,10 @@ function StepCard({
       }}>
         <View style={{
           width: 26, height: 26, borderRadius: 13,
-          backgroundColor: tok.gold,
+          backgroundColor: tok.goldSolid,
           alignItems: 'center', justifyContent: 'center',
         }}>
-          <Text style={{ fontFamily: fontMono(), fontSize: 14, color: tok.void }}>{step}</Text>
+          <Text style={{ fontFamily: fontMono(), fontSize: 14, color: tok.onGold }}>{step}</Text>
         </View>
         <Text style={{
           flex: 1, fontFamily: fontHead(lang), fontSize: 16, color: tok.bone,

@@ -210,8 +210,8 @@ function OfflineCard({ onRetry }: { onRetry: () => void }) {
       <Text style={{ marginTop: 10, color: tok.muted, fontFamily: fontBody(lang), fontSize: 16, textAlign: 'center', lineHeight: 25 }}>
         {ar ? 'بياناتك بأمان. تحقق من اتصالك ثم حاول مرة أخرى.' : 'Your data is safe. Check your connection and try again.'}
       </Text>
-      <Pressable onPress={onRetry} accessibilityRole="button" style={{ marginTop: 22, height: 48, paddingHorizontal: 28, borderRadius: 24, backgroundColor: tok.gold, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ color: tok.void, fontFamily: fontBody(lang, 'medium'), fontSize: 16 }}>{ar ? 'حاول مرة أخرى' : 'Try again'}</Text>
+      <Pressable onPress={onRetry} accessibilityRole="button" style={{ marginTop: 22, height: 48, paddingHorizontal: 28, borderRadius: 24, backgroundColor: tok.goldSolid, alignItems: 'center', justifyContent: 'center' }}>
+        <Text style={{ color: tok.onGold, fontFamily: fontBody(lang, 'medium'), fontSize: 16 }}>{ar ? 'حاول مرة أخرى' : 'Try again'}</Text>
       </Pressable>
     </View>
   );

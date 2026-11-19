@@ -104,7 +104,7 @@ export default function QuestionScreen() {
 
   const VoteBtn = ({ n, on, onPress, disabled }: { n: number; on: boolean; onPress: () => void; disabled?: boolean }) => (
     <Pressable onPress={onPress} disabled={disabled} hitSlop={8} style={{ alignItems: 'center', gap: 2, minWidth: 40, opacity: disabled ? 0.55 : 1 }}>
-      <View style={{ width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? tok.gold : tok.glowShellBg, borderWidth: 1, borderColor: tok.glowShellBorder }}>
+      <View style={{ width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? tok.goldSolid : tok.glowShellBg, borderWidth: 1, borderColor: tok.glowShellBorder }}>
         <ChevronUp size={18} color={on ? tok.void : tok.gold} strokeWidth={2.4} />
       </View>
       <Text style={{ fontFamily: fontMono('regular'), fontSize: 14, color: tok.muted }}>{n}</Text>

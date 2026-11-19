@@ -178,7 +178,7 @@ export default function TabsLayout() {
               paddingBottom: 8,
             },
             tabBarActiveTintColor: tok.gold,
-            tabBarBadgeStyle: { backgroundColor: tok.gold, color: tok.void },
+            tabBarBadgeStyle: { backgroundColor: tok.goldSolid, color: tok.onGold },
             tabBarInactiveTintColor: tok.muted,
           }}
         >

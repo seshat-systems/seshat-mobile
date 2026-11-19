@@ -54,9 +54,9 @@ export function AIAvatar({ size = 40, persona = 'seshat', thinking = false }: { 
   return (
     <View style={{
       width: size, height: size, borderRadius: size / 2, alignItems: 'center', justifyContent: 'center',
-      backgroundColor: maat ? tok.elevated : tok.gold, borderWidth: maat ? 1 : 0, borderColor: tok.borderHi,
+      backgroundColor: maat ? tok.elevated : tok.goldSolid, borderWidth: maat ? 1 : 0, borderColor: tok.borderHi,
     }}>
-      <AIMark size={size * 0.54} persona={persona} thinking={thinking} color={maat ? tok.gold : tok.void} />
+      <AIMark size={size * 0.54} persona={persona} thinking={thinking} color={maat ? tok.gold : tok.onGold} />
     </View>
   );
 }

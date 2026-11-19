@@ -44,8 +44,8 @@ export function SetupPrompt({
             <Text style={{ marginTop: 4, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 20, textAlign: ar ? 'right' : 'left' }} numberOfLines={3}>{item.subtitle(lang)}</Text>
           </View>
           <Pressable onPress={() => setOpenKey(item.key)} accessibilityRole="button"
-            style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 18, borderRadius: 999, alignItems: 'center', justifyContent: 'center', alignSelf: ar ? 'flex-end' : 'flex-start', backgroundColor: tok.gold, opacity: pressed ? 0.8 : 1 })}>
-            <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.void }}>{ar ? 'ابدأ' : 'Set up'}</Text>
+            style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 18, borderRadius: 999, alignItems: 'center', justifyContent: 'center', alignSelf: ar ? 'flex-end' : 'flex-start', backgroundColor: tok.goldSolid, opacity: pressed ? 0.8 : 1 })}>
+            <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.onGold }}>{ar ? 'ابدأ' : 'Set up'}</Text>
           </Pressable>
         </View>
       ) : (

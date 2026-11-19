@@ -493,8 +493,8 @@ export default function MonthlyReportScreen() {
                 flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
                 alignItems: 'center', gap: 8,
               }}>
-                <Download size={16} color={tok.void} />
-                <Text style={{ fontFamily: fontBody(lang), fontSize: 16, color: tok.void }}>
+                <Download size={16} color={tok.onGold} />
+                <Text style={{ fontFamily: fontBody(lang), fontSize: 16, color: tok.onGold }}>
                   {exporting
                     ? (lang === 'ar' ? 'جاري إنشاء PDF…' : 'Building PDF…')
                     : (lang === 'ar' ? 'مشاركة كـ PDF' : 'Share as PDF')}

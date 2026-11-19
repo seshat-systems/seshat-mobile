@@ -265,8 +265,8 @@ export function OnboardingTour({
                     return (
                       <Pressable key={k} onPress={() => setHave((h) => ({ ...h, [k]: !h[k] }))}
                         style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 12, padding: 16, borderRadius: 16, borderWidth: 1, borderColor: on ? tok.gold : tok.border, backgroundColor: on ? 'rgba(201,168,76,0.10)' : 'transparent' }}>
-                        <View style={{ width: 22, height: 22, borderRadius: 6, borderWidth: 1.5, borderColor: on ? tok.gold : tok.border, backgroundColor: on ? tok.gold : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
-                          {on ? <Check size={14} color={tok.void} strokeWidth={3} /> : null}
+                        <View style={{ width: 22, height: 22, borderRadius: 6, borderWidth: 1.5, borderColor: on ? tok.gold : tok.border, backgroundColor: on ? tok.goldSolid : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
+                          {on ? <Check size={14} color={tok.onGold} strokeWidth={3} /> : null}
                         </View>
                         <Text style={{ flex: 1, fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{label}</Text>
                       </Pressable>
@@ -464,20 +464,20 @@ function CTA({ label, onPress, loading, icon = 'arrow' }: {
         flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 10,
         paddingVertical: 11, paddingHorizontal: 12,
         paddingLeft: ar ? 12 : 22, paddingRight: ar ? 22 : 12,
-        borderRadius: 999, backgroundColor: tok.gold,
+        borderRadius: 999, backgroundColor: tok.goldSolid,
         opacity: pressed || loading ? 0.9 : 1, minWidth: 180, justifyContent: 'center',
         shadowColor: tok.gold, shadowOpacity: 0.4, shadowRadius: 16, shadowOffset: { width: 0, height: 8 },
       })}
     >
       <Text style={{
         fontFamily: fontMono('medium'), fontSize: 14, letterSpacing: 1, textTransform: ar ? 'none' : 'uppercase',
-        color: tok.void,
+        color: tok.onGold,
       }}>{label}</Text>
       <View style={{
         width: 28, height: 28, borderRadius: 14, alignItems: 'center', justifyContent: 'center',
-        backgroundColor: 'rgba(13,13,13,0.16)',
+        backgroundColor: 'rgba(255,255,255,0.22)',
       }}>
-        <Icon size={14} color={tok.void} strokeWidth={2.2} style={{ transform: [{ scaleX: ar && icon === 'arrow' ? -1 : 1 }] }} />
+        <Icon size={14} color={tok.onGold} strokeWidth={2.2} style={{ transform: [{ scaleX: ar && icon === 'arrow' ? -1 : 1 }] }} />
       </View>
     </Pressable>
   );
@@ -497,7 +497,7 @@ function DayGrid({ value, onSelect }: { value: number; onSelect: (d: number) => 
             onPress={() => onSelect(d)}
             style={({ pressed }) => ({
               width: 38, height: 38, borderRadius: 11, alignItems: 'center', justifyContent: 'center',
-              backgroundColor: on ? tok.gold : 'rgba(255,255,255,0.03)',
+              backgroundColor: on ? tok.goldSolid : 'rgba(255,255,255,0.03)',
               borderWidth: 1, borderColor: on ? tok.gold : tok.border,
               opacity: pressed ? 0.8 : 1,
             })}

@@ -688,10 +688,10 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
                     <Pressable key={c} accessibilityRole="button" onPress={() => sendText(failedLast && lastUserText ? lastUserText : c)}
                       style={({ pressed }) => ({
                         minHeight: 44, paddingHorizontal: 18, borderRadius: 999, justifyContent: 'center',
-                        backgroundColor: asked && asked.length && i === 0 ? tok.gold : tok.surface,
+                        backgroundColor: asked && asked.length && i === 0 ? tok.goldSolid : tok.surface,
                         borderWidth: asked && asked.length && i === 0 ? 0 : 1, borderColor: tok.borderHi, ...pressFeel(pressed),
                       })}>
-                      <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: asked && asked.length && i === 0 ? tok.void : tok.bone }}>{c}</Text>
+                      <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: asked && asked.length && i === 0 ? tok.onGold : tok.bone }}>{c}</Text>
                     </Pressable>
                   ))}
                 </View>
@@ -793,7 +793,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
             onPress={stopStreaming}
             accessibilityLabel={lang === 'ar' ? 'إيقاف' : 'Stop'}
             style={({ pressed }) => ({
-              backgroundColor: tok.gold,
+              backgroundColor: tok.goldSolid,
               width: 46, height: 46, borderRadius: 23,
               alignItems: 'center', justifyContent: 'center',
               opacity: pressed ? 0.85 : 1,
@@ -801,14 +801,14 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
               shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 3,
             })}
           >
-            <Square size={16} color={tok.void} fill={tok.void} />
+            <Square size={16} color={tok.onGold} fill={tok.onGold} />
           </Pressable>
         ) : (
           <Pressable
             onPress={() => sendText()}
             disabled={!input.trim()}
             style={({ pressed }) => ({
-              backgroundColor: input.trim() ? tok.gold : tok.elevated,
+              backgroundColor: input.trim() ? tok.goldSolid : tok.elevated,
               width: 46, height: 46, borderRadius: 23,
               alignItems: 'center', justifyContent: 'center',
               opacity: pressed ? 0.85 : 1,
@@ -818,7 +818,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
               } : {}),
             })}
           >
-            <ArrowUp size={18} color={input.trim() ? tok.void : tok.muted} />
+            <ArrowUp size={18} color={input.trim() ? tok.onGold : tok.muted} />
           </Pressable>
         )}
       </FrostedFooter>

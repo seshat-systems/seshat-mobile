@@ -355,7 +355,7 @@ export function TxFiltersSheet({ visible, onClose, initial, categories, onApply,
 
         {/* Apply */}
         <View style={{ paddingHorizontal: 18, paddingTop: 8 }}>
-          <RButton full onPress={apply} icon={<Check size={16} color={tok.void} />}>
+          <RButton full onPress={apply} icon={<Check size={16} color={tok.onGold} />}>
             {lang === 'ar' ? 'تطبيق' : 'Apply'}
           </RButton>
         </View>

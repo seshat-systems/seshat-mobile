@@ -317,14 +317,14 @@ export default function ProfileScreen() {
                     style={{
                       position: 'absolute', bottom: -2, right: -2,
                       width: 22, height: 22, borderRadius: 11,
-                      backgroundColor: tok.gold,
+                      backgroundColor: tok.goldSolid,
                       borderWidth: 2, borderColor: tok.surface,
                       alignItems: 'center', justifyContent: 'center',
                     }}
                   >
                     {uploadingAvatar
-                      ? <ActivityIndicator size="small" color={tok.void} />
-                      : <Camera size={11} color={tok.void} strokeWidth={2.2} />}
+                      ? <ActivityIndicator size="small" color={tok.onGold} />
+                      : <Camera size={11} color={tok.onGold} strokeWidth={2.2} />}
                   </Pressable>
                 </View>
                 <View style={{ flex: 1 }}>

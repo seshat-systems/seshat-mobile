@@ -709,7 +709,7 @@ function SegmentCard({
       style={({ pressed }) => ({
         borderRadius: 14,
         paddingVertical: 16, paddingHorizontal: 16,
-        backgroundColor: highlight ? tok.gold : tok.surface,
+        backgroundColor: highlight ? tok.goldSolid : tok.surface,
         borderWidth: 1, borderColor: highlight ? tok.gold : tok.border,
         opacity: pressed ? 0.85 : 1,
       })}

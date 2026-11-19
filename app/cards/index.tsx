@@ -70,7 +70,7 @@ export default function CardsScreen() {
             <RAmount value={totalBalance} currency={currency} size={32} decimals={0} />
             <View style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 10, marginTop: 16 }}>
               <View style={{ flex: 1 }}>
-                <RButton full icon={<ArrowLeftRight size={16} color={tok.void} />} onPress={() => setMoving(true)}>
+                <RButton full icon={<ArrowLeftRight size={16} color={tok.onGold} />} onPress={() => setMoving(true)}>
                   {ar ? 'نقل مبلغ' : 'Move money'}
                 </RButton>
               </View>

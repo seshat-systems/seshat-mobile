@@ -229,7 +229,7 @@ export function RPill({
         {
           flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
           alignItems: 'center', gap: 6,
-          backgroundColor: active ? tok.gold : 'transparent',
+          backgroundColor: active ? tok.goldSolid : 'transparent',
           borderColor: active ? 'transparent' : tok.border,
           borderWidth: active ? 0 : 1,
           borderRadius: 999,
@@ -442,7 +442,7 @@ export function RSegmented<T extends string>({
             key={o.value}
             onPress={() => onChange(o.value)}
             style={({ pressed }) => ({
-              backgroundColor: a ? tok.gold : 'transparent',
+              backgroundColor: a ? tok.goldSolid : 'transparent',
               borderRadius: 8,
               paddingHorizontal: 16,
               paddingVertical: 8,
@@ -533,10 +533,10 @@ export function RCheckbox({ checked, onChange, children, disabled }: {
     >
       <View style={{
         width: 24, height: 24, borderRadius: 7, borderWidth: 1.5,
-        borderColor: checked ? tok.gold : tok.borderHi, backgroundColor: checked ? tok.gold : 'transparent',
+        borderColor: checked ? tok.gold : tok.borderHi, backgroundColor: checked ? tok.goldSolid : 'transparent',
         alignItems: 'center', justifyContent: 'center',
       }}>
-        {checked ? <Check size={16} color={tok.void} strokeWidth={3} /> : null}
+        {checked ? <Check size={16} color={tok.onGold} strokeWidth={3} /> : null}
       </View>
       <View style={{ flex: 1 }}>
         {typeof children === 'string'
@@ -575,9 +575,8 @@ export function RButton({
     gap: 8,
     alignSelf: full ? 'stretch' : 'flex-start',
   };
-  // fg defaults to the on-gold colour (tok.void): near-black on bright gold in
-  // dark mode, near-white on deep gold in light mode — correct in both.
-  let bg = tok.gold, fg: string = tok.void, border: ViewStyle = {};
+  // Solid gold with white text and icons, in both themes (goldSolid is deep enough in dark mode for white to read).
+  let bg = tok.goldSolid, fg: string = tok.onGold, border: ViewStyle = {};
   if (variant === 'secondary') { bg = 'transparent'; fg = tok.bone; border = { borderWidth: 1, borderColor: tok.borderHi }; }
   if (variant === 'ghost') { bg = 'transparent'; fg = tok.muted; }
   // 'destructive' = quiet ghost (e.g. Sign out). 'danger' = filled red pill for

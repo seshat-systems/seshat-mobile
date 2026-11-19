@@ -165,7 +165,7 @@ function ChatBubbleInner({
     <Pressable onPress={stillTyping ? () => onSkipTyping(message.id) : () => setActionsOpen((o) => !o)} style={{ alignSelf: message.pending ? 'stretch' : anchor, maxWidth: '100%' }}>
       <View
         style={{
-          backgroundColor: isAssistant ? tok.coreBg : tok.gold,
+          backgroundColor: isAssistant ? tok.coreBg : tok.goldSolid,
           borderRadius: BUBBLE_RADIUS,
           ...tailCorner,
           paddingHorizontal: 14, paddingVertical: 12,
@@ -221,10 +221,10 @@ function ChatBubbleInner({
             flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
             alignItems: 'center', gap: 8,
           }}>
-            {message.uploading && <ActivityIndicator size="small" color={tok.void} />}
+            {message.uploading && <ActivityIndicator size="small" color={tok.onGold} />}
             <Text style={{
               flexShrink: 1,
-              color: isAssistant ? tok.bone : tok.void,
+              color: isAssistant ? tok.bone : tok.onGold,
               fontFamily: fontBody(lang), fontSize: 16, lineHeight: 25,
               textAlign: lang === 'ar' ? 'right' : 'left',
               writingDirection: lang === 'ar' ? 'rtl' : 'ltr',

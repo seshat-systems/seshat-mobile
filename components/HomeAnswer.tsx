@@ -161,8 +161,8 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
 
       <View style={{ flexDirection: ar ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: 10, marginTop: 16 }}>
         <Pressable onPress={() => ask(why)} accessibilityRole="button"
-          style={({ pressed }) => ({ ...chip, backgroundColor: tok.gold, ...pressFeel(pressed) })}>
-          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.void }}>{ar ? 'اشرح لي السبب' : 'Show me why'}</Text>
+          style={({ pressed }) => ({ ...chip, backgroundColor: tok.goldSolid, ...pressFeel(pressed) })}>
+          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.onGold }}>{ar ? 'اشرح لي السبب' : 'Show me why'}</Text>
         </Pressable>
         <Pressable onPress={() => router.push('/plan' as never)} accessibilityRole="button"
           style={({ pressed }) => ({ ...chip, backgroundColor: tok.surface, borderWidth: 1, borderColor: tok.borderHi, ...pressFeel(pressed) })}>
@@ -227,8 +227,8 @@ export function HomeIntro() {
         <View style={{ flexDirection: ar ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: 10, marginTop: 16 }}>
           {chips.map((c) => (
             <Pressable key={c.label} onPress={c.run} accessibilityRole="button"
-              style={({ pressed }) => ({ ...chip, ...(c.primary ? { backgroundColor: tok.gold, borderColor: tok.gold } : null), ...pressFeel(pressed) })}>
-              <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: c.primary ? tok.void : tok.bone }}>{c.label}</Text>
+              style={({ pressed }) => ({ ...chip, ...(c.primary ? { backgroundColor: tok.goldSolid, borderColor: tok.goldSolid } : null), ...pressFeel(pressed) })}>
+              <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: c.primary ? tok.onGold : tok.bone }}>{c.label}</Text>
             </Pressable>
           ))}
         </View>
@@ -265,8 +265,8 @@ export function HomeInput() {
       />
       <Pressable onPress={text.trim() ? submit : () => router.push({ pathname: '/seshat/[id]', params: { id: 'new' } } as never)}
         accessibilityRole="button" accessibilityLabel={text.trim() ? 'Send' : 'Talk to Seshat'}
-        style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: tok.gold, alignItems: 'center', justifyContent: 'center' }}>
-        {text.trim() ? <ArrowUp size={20} color={tok.void} /> : <Mic size={20} color={tok.void} />}
+        style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: tok.goldSolid, alignItems: 'center', justifyContent: 'center' }}>
+        {text.trim() ? <ArrowUp size={20} color={tok.onGold} /> : <Mic size={20} color={tok.onGold} />}
       </Pressable>
     </View>
   );

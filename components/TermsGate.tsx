@@ -73,8 +73,8 @@ export function TermsGate() {
               {link('/privacy', ar ? 'سياسة الخصوصية' : 'Privacy Policy')}
             </View>
             <Pressable onPress={() => setChecked((v) => !v)} style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'flex-start', gap: 12, marginTop: 18 }}>
-              <View style={{ width: 24, height: 24, borderRadius: 7, borderWidth: 1.5, borderColor: checked ? tok.gold : tok.border, backgroundColor: checked ? tok.gold : 'transparent', alignItems: 'center', justifyContent: 'center', marginTop: 1 }}>
-                {checked ? <Check size={16} color={tok.void} strokeWidth={3} /> : null}
+              <View style={{ width: 24, height: 24, borderRadius: 7, borderWidth: 1.5, borderColor: checked ? tok.gold : tok.border, backgroundColor: checked ? tok.goldSolid : 'transparent', alignItems: 'center', justifyContent: 'center', marginTop: 1 }}>
+                {checked ? <Check size={16} color={tok.onGold} strokeWidth={3} /> : null}
               </View>
               <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 16, lineHeight: 22, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>
                 {ar ? 'قرأت شروط الاستخدام وسياسة الخصوصية وأوافق عليهما' : 'I have read and agree to the Terms of Use and the Privacy Policy'}

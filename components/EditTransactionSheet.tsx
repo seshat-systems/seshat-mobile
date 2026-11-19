@@ -157,7 +157,7 @@ export function EditTransactionSheet({ visible, editing, categories, onClose, on
                   onPress={() => setCategoryId(c._id)}
                   style={{
                     paddingVertical: 8, paddingHorizontal: 12, borderRadius: 999,
-                    backgroundColor: active ? tok.gold : tok.elevated,
+                    backgroundColor: active ? tok.goldSolid : tok.elevated,
                     flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 6,
                   }}
                 >
@@ -188,7 +188,7 @@ export function EditTransactionSheet({ visible, editing, categories, onClose, on
                   <Pressable
                     key={c.id}
                     onPress={() => setCardId(active ? '' : c.id)}
-                    style={{ paddingVertical: 8, paddingHorizontal: 12, borderRadius: 999, backgroundColor: active ? tok.gold : tok.elevated }}
+                    style={{ paddingVertical: 8, paddingHorizontal: 12, borderRadius: 999, backgroundColor: active ? tok.goldSolid : tok.elevated }}
                   >
                     <Text style={{ fontFamily: fontBody(lang, active ? 'semibold' : 'medium'), fontSize: 14, color: active ? tok.void : tok.bone }}>{c.name}</Text>
                   </Pressable>

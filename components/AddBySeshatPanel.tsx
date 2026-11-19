@@ -322,7 +322,7 @@ export function AddBySeshatPanel({
           onPress={handleSaveAll}
           disabled={!canSave}
           style={({ pressed }) => ({
-            backgroundColor: canSave ? tok.gold : tok.surface,
+            backgroundColor: canSave ? tok.goldSolid : tok.surface,
             borderRadius: r.card, paddingVertical: 14,
             alignItems: 'center',
             flexDirection: 'row', justifyContent: 'center', gap: 8,
@@ -332,9 +332,9 @@ export function AddBySeshatPanel({
         >
           {saving ? (
             <>
-              <ActivityIndicator size="small" color={tok.void} />
+              <ActivityIndicator size="small" color={tok.onGold} />
               <Text style={{
-                color: tok.void, fontFamily: fontHead(lang),
+                color: tok.onGold, fontFamily: fontHead(lang),
                 fontSize: 16, letterSpacing: 0.4,
               }}>
                 {lang === 'ar'
@@ -344,7 +344,7 @@ export function AddBySeshatPanel({
             </>
           ) : (
             <>
-              {canSave && <Check size={16} color={tok.void} strokeWidth={2.4} />}
+              {canSave && <Check size={16} color={tok.onGold} strokeWidth={2.4} />}
               <Text style={{
                 color: canSave ? tok.void : tok.muted,
                 fontFamily: fontHead(lang),

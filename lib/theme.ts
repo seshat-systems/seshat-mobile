@@ -9,6 +9,10 @@ export type Tokens = {
   gold: string;
   goldLight: string;
   goldDeep: string;
+  /** The gold for SOLID surfaces (buttons, the Seshat disc): deep enough that white text and icons read on it. */
+  goldSolid: string;
+  /** Text and icons on a solid gold surface: white, in both themes. */
+  onGold: string;
   bone: string;
   muted: string;
   ghost: string;
@@ -99,6 +103,8 @@ const DARK: Tokens = {
   gold: '#C9A84C',
   goldLight: '#E8C97A',
   goldDeep: '#8B6B14',
+  goldSolid: '#9A7A22',
+  onGold: '#FFFFFF',
   bone: '#E8E8E0',
   muted: '#888880',
   ghost: '#3A3A3A',
@@ -134,6 +140,8 @@ const LIGHT: Tokens = {
   gold: '#8B6B14',
   goldLight: '#A88830',
   goldDeep: '#5E4708',
+  goldSolid: '#8B6B14',
+  onGold: '#FFFFFF',
   bone: '#1A1A1A',
   muted: '#6E6E66',
   ghost: '#C8C5BC',

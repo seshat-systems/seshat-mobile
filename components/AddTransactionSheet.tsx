@@ -715,7 +715,7 @@ export function AddTransactionSheet({ visible, onClose, onSave, categories, defa
                 >
                   <View style={{
                     width: 40, height: 40, borderRadius: 12,
-                    backgroundColor: a ? tok.gold : tok.surface,
+                    backgroundColor: a ? tok.goldSolid : tok.surface,
                     borderWidth: 1, borderColor: a ? tok.gold : tok.border,
                     alignItems: 'center', justifyContent: 'center',
                   }}>

@@ -285,7 +285,7 @@ function AddCategorySheet({
                     onPress={() => setIconKey(k)}
                     style={{
                       width: 44, height: 44, borderRadius: 12,
-                      backgroundColor: active ? tok.gold : tok.elevated,
+                      backgroundColor: active ? tok.goldSolid : tok.elevated,
                       alignItems: 'center', justifyContent: 'center',
                       borderWidth: 1,
                       borderColor: active ? tok.gold : tok.border,

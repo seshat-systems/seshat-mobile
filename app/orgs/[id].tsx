@@ -412,7 +412,7 @@ export default function OrgDetailScreen() {
               {manage && (
                 <RButton
                   full
-                  icon={<UserPlus size={16} color={tok.void} />}
+                  icon={<UserPlus size={16} color={tok.onGold} />}
                   onPress={() => router.push({ pathname: '/orgs/invite', params: { id } })}
                 >
                   {kind === 'family' ? (ar ? 'دعوة فرد من العائلة' : 'Invite someone') : (lang === 'ar' ? 'دعوة عضو' : 'Invite member')}

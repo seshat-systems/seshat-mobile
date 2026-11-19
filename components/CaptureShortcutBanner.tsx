@@ -121,8 +121,8 @@ export function CapturePromptLine() {
       </Text>
       <View style={{ flexDirection: ar ? 'row-reverse' : 'row', gap: 10, marginTop: 12 }}>
         <Pressable onPress={allow} accessibilityRole="button"
-          style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 18, borderRadius: 999, alignItems: 'center', justifyContent: 'center', backgroundColor: tok.gold, ...pressFeel(pressed) })}>
-          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.void }}>{ar ? 'نعم، فعّل' : 'Yes, set it up'}</Text>
+          style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 18, borderRadius: 999, alignItems: 'center', justifyContent: 'center', backgroundColor: tok.goldSolid, ...pressFeel(pressed) })}>
+          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.onGold }}>{ar ? 'نعم، فعّل' : 'Yes, set it up'}</Text>
         </Pressable>
         <Pressable onPress={later} accessibilityRole="button"
           style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 18, borderRadius: 999, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: tok.borderHi, ...pressFeel(pressed) })}>

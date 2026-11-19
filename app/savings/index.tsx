@@ -100,7 +100,7 @@ export default function SavingsScreen() {
                   <Text style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 16, color: tok.bone, textAlign: ar ? 'right' : 'left' }}>{ar ? 'تنبيه أسبوعي عند تغيّر مدخراتك' : 'Weekly alert when your savings move'}</Text>
                   <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, marginTop: 2, textAlign: ar ? 'right' : 'left' }}>{ar ? 'عند تغيّر القيمة ٥٪ أو أكثر' : 'When the total moves 5% or more'}</Text>
                 </View>
-                <View style={{ width: 46, height: 26, borderRadius: 13, backgroundColor: alerts ? tok.gold : tok.elevated, padding: 3, alignItems: alerts ? 'flex-end' : 'flex-start' }}>
+                <View style={{ width: 46, height: 26, borderRadius: 13, backgroundColor: alerts ? tok.goldSolid : tok.elevated, padding: 3, alignItems: alerts ? 'flex-end' : 'flex-start' }}>
                   <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: alerts ? tok.void : tok.muted }} />
                 </View>
               </Pressable>

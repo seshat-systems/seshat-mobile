@@ -185,7 +185,7 @@ function EmptyState({
         variant="primary"
         style={{ alignSelf: 'center' }}
         onPress={onCreate}
-        icon={<Plus size={16} color={tok.void} strokeWidth={2.4} />}
+        icon={<Plus size={16} color={tok.onGold} strokeWidth={2.4} />}
       >
         {lang === 'ar' ? 'إنشاء فريق أو عائلة' : 'Create a team or family'}
       </RButton>

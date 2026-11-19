@@ -190,8 +190,8 @@ export function TodayNeeds({ extra = [], trailing = null, hidden = false, onCoun
   const Btn = ({ label, onPress, primary = true }: { label: string; onPress: () => void; primary?: boolean }) => (
     <Pressable onPress={onPress} accessibilityRole="button"
       style={({ pressed }) => ({ minHeight: 44, paddingHorizontal: 18, borderRadius: 999, alignItems: 'center', justifyContent: 'center', alignSelf: ar ? 'flex-end' : 'flex-start',
-        backgroundColor: primary ? tok.gold : 'transparent', borderWidth: primary ? 0 : 1, borderColor: tok.borderHi, ...pressFeel(pressed) })}>
-      <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: primary ? tok.void : tok.bone }}>{label}</Text>
+        backgroundColor: primary ? tok.goldSolid : 'transparent', borderWidth: primary ? 0 : 1, borderColor: tok.borderHi, ...pressFeel(pressed) })}>
+      <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: primary ? tok.onGold : tok.bone }}>{label}</Text>
     </Pressable>
   );
   return (
