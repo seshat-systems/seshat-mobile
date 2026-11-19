@@ -13,7 +13,7 @@ import { useAppData } from '../../lib/appData';
 import { fontBody, fontHead } from '../../lib/fonts';
 import { RCard, REyebrow, RPill, RHScroll, RAmount, RField, RChip } from '../../components/ui';
 import { ScreenScaffold } from '../../components/Screen';
-import { RTxRow, RefreshSpinner, type TxRowData } from '../../components/shell';
+import { RTxRow, type TxRowData } from '../../components/shell';
 import { SkeletonRow } from '../../components/Skeleton';
 import { EditTransactionSheet, type EditingTx } from '../../components/EditTransactionSheet';
 import type { CardSummary } from '../../lib/cards';
@@ -228,7 +228,6 @@ export default function TransactionsScreen() {
             </Text>
           </View>
         </View>
-        <RefreshSpinner refreshing={refreshing} />
       </FrostedHeader>
 
       <View style={{ paddingHorizontal: 16, flex: 1, paddingTop: 12 }}>

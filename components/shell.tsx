@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { LiquidBackdrop } from './LiquidBackdrop';
 import { cardChipName } from '../lib/cards';
 import { isLiquid } from './Glass';
-import { View, Text, Pressable, StyleSheet, ViewStyle, Animated, Easing, ActivityIndicator } from 'react-native';
+import { View, Text, Pressable, StyleSheet, ViewStyle, Animated, Easing } from 'react-native';
 import { FrostedHeader } from './FrostedHeader';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -157,18 +157,6 @@ export function NotificationBell() {
       )}
     </Pressable>
   );
-}
-
-// ─────────────────────────────────────────────────────────────
-// RefreshSpinner — small inline refresh indicator. Uses the system
-// ActivityIndicator (gold) rather than a spinning brand mark, so loading
-// reads as a native, familiar spinner. Drop it next to a screen title;
-// pass `refreshing` from state.
-// ─────────────────────────────────────────────────────────────
-export function RefreshSpinner({ refreshing, size = 22 }: { refreshing: boolean; size?: number }) {
-  const { tok } = useI18n();
-  if (!refreshing) return null;
-  return <ActivityIndicator size="small" color={tok.gold} />;
 }
 
 // ─────────────────────────────────────────────────────────────

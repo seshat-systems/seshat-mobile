@@ -7,7 +7,6 @@ import { useWorkspace } from '../lib/appData';
 import { radius, T } from '../lib/theme';
 import { fontHead } from '../lib/fonts';
 import { REyebrow } from './ui';
-import { RefreshSpinner } from './shell';
 import { ScreenScaffold } from './Screen';
 import { WorkspaceChip } from './WorkspaceSwitcher';
 import { FrostedHeader } from './FrostedHeader';
@@ -42,7 +41,6 @@ export function PlanScreen({
           }}>{title}</Text>
         </View>
         <WorkspaceChip />
-        <RefreshSpinner refreshing={!!refreshing} />
         {onAdd && canWrite && <HeaderAdd onPress={onAdd} />}
         </View>
         {subtitle && (
