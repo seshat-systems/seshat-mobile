@@ -9,7 +9,7 @@ import { Rise } from './Motion';
 import { PlanBlockView, type VisualBlock } from './ChatVisuals';
 
 export type PlanData =
-  | { ready: true; verdictText: { en: string; ar: string }; closing: { en: string; ar: string } | null; note: string;
+  | { ready: true; accepted: boolean; split: { needs: number; wants: number; saving: number }; verdictText: { en: string; ar: string }; closing: { en: string; ar: string } | null; note: string;
       actions: Array<{ kind: 'cap_category' | 'set_aside' | 'review_category'; category?: string; categoryAr?: string; spent?: number; cap?: number; saves?: number; amount?: number }>;
       block: Extract<VisualBlock, { type: 'plan' }> }
   | { ready: false; reason?: string };

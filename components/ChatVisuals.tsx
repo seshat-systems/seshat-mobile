@@ -42,7 +42,7 @@ export type PlanGroupBlock = { key: 'needs' | 'wants' | 'saving'; spent: number;
 export type VisualBlock =
   | { type: 'budgets'; currency: string; rows: Array<{ name: string; nameAr: string; spent: number; cap: number; percent: number; status: 'on-track' | 'near' | 'over' }> }
   | { type: 'goals'; currency: string; rows: Array<{ name: string; nameAr: string; saved: number; target: number; percent: number }> }
-  | { type: 'plan'; period: { en: string; ar: string }; currency: string; income: number; verdict: 'on_plan' | 'ahead_of_pace' | 'over'; paceFraction: number; groups: PlanGroupBlock[] }
+  | { type: 'plan'; period: { en: string; ar: string }; currency: string; income: number; accepted?: boolean; split?: { needs: number; wants: number; saving: number }; verdict: 'on_plan' | 'ahead_of_pace' | 'over'; paceFraction: number; groups: PlanGroupBlock[] }
   | { type: 'transactions'; items: VisualTransaction[] }
   | { type: 'chart'; kind: ChartKind; title: string; unit?: string; caption?: string; series: ChartPoint[] }
   | { type: 'summary'; period: string; currency: string; income: number; expense: number; balance: number; topCategories: CategorySlice[] };
@@ -232,7 +232,7 @@ export function PlanBlockView({ block }: { block: Extract<VisualBlock, { type: '
     <View style={{ backgroundColor: tok.glowShellBg, borderRadius: 22, borderWidth: 1, borderColor: tok.glowShellBorder, borderTopColor: tok.glowCoreSheen, padding: 16 }}>
       <View style={{ flexDirection: rowDir, justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
         <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.gold, textAlign: align }}>
-          {ar ? `خطة مقترحة · ${block.period.ar}` : `Suggested split · ${block.period.en}`}
+          {block.accepted ? (ar ? `خطة ${block.period.ar}` : `${block.period.en} plan`) : (ar ? `خطة مقترحة · ${block.period.ar}` : `Suggested split · ${block.period.en}`)} · {n(block.income)} {cur}
         </Text>
         <View style={{ paddingHorizontal: 10, minHeight: 28, borderRadius: 999, justifyContent: 'center', borderWidth: 1, borderColor: verdict.color }}>
           <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 13, color: verdict.color }}>{ar ? verdict.ar : verdict.en}</Text>
@@ -254,7 +254,9 @@ export function PlanBlockView({ block }: { block: Extract<VisualBlock, { type: '
         })}
       </View>
       <Text style={{ fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, marginTop: 12, textAlign: align }}>
-        {ar ? `اقتراح تلقائي من دخلك الشهري (${n(block.income)} ${cur}): ٥٠٪ احتياجات، ٣٠٪ رغبات، ٢٠٪ ادخار. لم تحدده أنت بعد. الخط الأبيض هو أين يجب أن تكون اليوم.` : `A starting point worked out from your monthly income (${n(block.income)} ${cur}): 50% needs, 30% wants, 20% saving. You haven't set it yet. The white tick is where you should be today.`}
+        {block.accepted
+          ? (ar ? 'الخط الأبيض هو أين يجب أن تكون اليوم.' : 'The white tick is where you should be today.')
+          : (ar ? `اقتراح تلقائي (${block.split?.needs ?? 50}٪ احتياجات، ${block.split?.wants ?? 30}٪ رغبات، ${block.split?.saving ?? 20}٪ ادخار). لم تعتمده بعد.` : `A suggestion (${block.split?.needs ?? 50}% needs, ${block.split?.wants ?? 30}% wants, ${block.split?.saving ?? 20}% saving). You haven't set it yet. Open it to use or change it.`)}
       </Text>
     </View>
   );

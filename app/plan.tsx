@@ -8,6 +8,7 @@ import { PlanScreen } from '../components/PlanShell';
 import { PlanBlockView } from '../components/ChatVisuals';
 import { usePlan, type PlanData } from '../components/PlanSection';
 import { RButton } from '../components/ui';
+import { PlanSplitEditor } from '../components/PlanSplitEditor';
 import { Skeleton } from '../components/Skeleton';
 
 type Action = Extract<PlanData, { ready: true }>['actions'][number];
@@ -61,6 +62,7 @@ export default function PlanRoute() {
         ) : (
           <>
             <PlanBlockView block={plan.block} />
+            <PlanSplitEditor income={plan.block.income} currency={plan.block.currency} split={plan.split} accepted={plan.accepted} />
             <View style={{ padding: 16, borderRadius: 22, backgroundColor: tok.surface, borderWidth: 1, borderColor: tok.border, gap: 6 }}>
               <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 17, color: tok.bone, textAlign: align }}>{ar ? plan.verdictText.ar : plan.verdictText.en}</Text>
               {plan.note ? <Text style={{ fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: tok.muted, textAlign: align }}>{plan.note}</Text> : null}
