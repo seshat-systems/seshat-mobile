@@ -60,6 +60,17 @@
         "SENTRY_DISABLE_AUTO_UPLOAD": "true"
       },
       "channel": "production"
+    },
+    "android-dev": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_BASE": "https://api-dev.seshat.site",
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true"
+      },
+      "channel": "dev"
     }
   },
   "submit": {
