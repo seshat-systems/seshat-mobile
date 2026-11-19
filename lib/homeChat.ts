@@ -9,7 +9,7 @@ import type { VisualBlock } from '../components/ChatVisuals';
  * stay in a small thread at the top of the screen. The conversation is a normal chat session on the server, so
  * "Continue in chat" simply opens that session. This module holds the thread; Home draws it (components/HomeReplies).
  */
-export type HomeTurn = { id: string; text: string; reply?: Message; failed?: boolean };
+export type HomeTurn = { id: string; text: string; reply?: Message; failed?: boolean; undone?: boolean };
 type State = { turns: HomeTurn[]; sessionId: string; sending: boolean };
 
 let state: State = { turns: [], sessionId: '', sending: false };
@@ -67,6 +67,6 @@ export async function undoHome(turnId: string): Promise<void> {
   try {
     await Promise.all(ids.map((tid) => apiFetch(`/transactions/${tid}`, { method: 'DELETE' })));
     emitDataChanged();
-    patchTurn(turnId, { reply: { ...turn.reply, content: ids.length > 1 ? 'Removed those entries.' : 'Removed.', createdTransactionIds: undefined, blocks: undefined, quickReplies: undefined } as Message });
+    patchTurn(turnId, { undone: true, reply: { ...turn.reply, content: ids.length > 1 ? 'Removed those entries.' : 'Removed.', createdTransactionIds: undefined, blocks: undefined, quickReplies: undefined } as Message });
   } catch { /* the record stays; the Undo button is still there to try again */ }
 }

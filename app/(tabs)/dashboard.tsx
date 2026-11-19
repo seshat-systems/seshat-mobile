@@ -12,6 +12,7 @@ import { ScreenAtmosphere } from '../../components/ScreenAtmosphere';
 import { DashboardBody, type DashboardData } from '../../components/dashboards';
 import { DashboardSkeleton } from '../../components/DashboardSkeleton';
 import { ToolSections } from '../../components/ToolSections';
+import { PlanSection } from '../../components/PlanSection';
 import { TodayCard, AccountsOverview, DailyBudgetCard, NetWorthCard } from '../../components/HomeMoney';
 
 /**
@@ -56,6 +57,7 @@ export default function DashboardScreen() {
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => load('refresh')} tintColor={tok.gold} colors={[tok.gold]} progressBackgroundColor={tok.surface} />}
           >
             <TodayCard data={data} currency={currency} />
+            {!inOrg && <PlanSection />}
             {!inOrg && <DailyBudgetCard />}
             {inOrg ? <AccountsOverview currency={currency} /> : <NetWorthCard />}
             <ToolSections />

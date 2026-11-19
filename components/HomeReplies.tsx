@@ -71,7 +71,7 @@ export function HomeReplies() {
           </View>
         ) : null}
 
-        {sessionId && reply && !created ? (
+        {sessionId && reply && !created && !t.undone ? (
           <Pressable onPress={() => router.push({ pathname: '/seshat/[id]', params: { id: sessionId } } as never)} accessibilityRole="button" hitSlop={8}
             style={{ alignSelf: ar ? 'flex-end' : 'flex-start', minHeight: 36, justifyContent: 'center' }}>
             <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.gold }}>{ar ? 'تابع الحديث مع سيشات ←' : 'Ask a follow-up in chat →'}</Text>
