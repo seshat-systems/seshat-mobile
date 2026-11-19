@@ -1,3 +1,4 @@
+import { HomeSkeletonBody } from './DashboardSkeleton';
 import { pressFeel } from './press';
 import { useEffect, useState, type ReactNode } from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
@@ -107,7 +108,7 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
   );
 
   // Until the plan has answered, hold the space instead of showing a sentence that then changes.
-  if (plan === null) return <View style={{ minHeight: 420 }} />;
+  if (plan === null) return <HomeSkeletonBody />;
 
   return (
     <>

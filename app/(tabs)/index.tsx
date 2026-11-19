@@ -10,7 +10,7 @@ import { fontBody } from '../../lib/fonts';
 import { RHomeHeader } from '../../components/shell';
 import { ScreenAtmosphere } from '../../components/ScreenAtmosphere';
 import { DashboardBody, type DashboardData } from '../../components/dashboards';
-import { DashboardSkeleton } from '../../components/DashboardSkeleton';
+import { HomeSkeleton } from '../../components/DashboardSkeleton';
 import {
   SalaryCheckInSheet, fetchSalaryCheckIn, type CheckInStatus,
 } from '../../components/SalaryCheckInBanner';
@@ -126,7 +126,7 @@ function FullHome() {
               progressBackgroundColor={tok.surface}
             />
           );
-          if (loading) return <DashboardSkeleton topPad={6} />;
+          if (loading) return <HomeSkeleton />;
           if (failed && !data) {
             return (
               <ScreenScroll contentContainerStyle={{ flexGrow: 1 }} refreshControl={refreshCtl}>
@@ -159,7 +159,7 @@ function FullHome() {
           );
         })()}
         {/* The typing field stays on top of the tab bar, always visible. */}
-        {!inOrg && !loading ? (
+        {!inOrg && !(failed && !data) ? (
           <View style={{ position: 'absolute', left: 16, right: 16, bottom: 10 }}>
             <HomeInput />
           </View>
