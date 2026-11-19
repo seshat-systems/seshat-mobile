@@ -58,9 +58,22 @@ let onUnauthorized: (() => void) | null = null;
 export function setUnauthorizedHandler(fn: (() => void) | null): void {
   onUnauthorized = fn;
 }
+// A screen opens with a dozen requests at once; when the token is bad they all come back 401 together. Run the
+// "go to sign-in" step once per burst, not once per request (a pile of simultaneous redirects can swallow each other).
+let unauthorizedFiring = false;
 async function handleUnauthorized(): Promise<void> {
   await clearToken();
-  if (onUnauthorized) onUnauthorized();
+  if (onUnauthorized && !unauthorizedFiring) {
+    unauthorizedFiring = true;
+    onUnauthorized();
+    setTimeout(() => { unauthorizedFiring = false; }, 3000);
+  }
+}
+
+/** True for the errors that mean "you are not signed in (any more)", as opposed to a network problem. */
+export function isSessionError(err: unknown): boolean {
+  const m = err instanceof Error ? err.message : String(err);
+  return m.startsWith('Session expired') || m === 'Not authenticated';
 }
 
 // Generates a fresh idempotency key. Use this once per "save intent" — e.g.

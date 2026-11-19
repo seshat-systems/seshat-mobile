@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { View, Text, RefreshControl, KeyboardAvoidingView, Platform, Pressable, Keyboard } from 'react-native';
 import { ScrollView as ScreenScroll } from '../../components/Scroll';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { apiFetch, hasToken } from '../../lib/api';
+import { apiFetch, hasToken, isSessionError } from '../../lib/api';
 import { useI18n } from '../../lib/i18n';
 import { useAppData, useInOrg, useWorkspace } from '../../lib/appData';
 import { ChildHome } from '../../components/ChildHome';
@@ -58,7 +58,9 @@ function FullHome() {
       if (mode === 'refresh') await refresh(); // also pull /me + /categories
     } catch (err) {
       console.warn('dashboard fetch failed', err);
-      setFailed(true);
+      // A rejected sign-in is not a connection problem: go to the sign-in screen rather than saying we cannot reach Seshat.
+      if (isSessionError(err)) router.replace('/');
+      else setFailed(true);
     } finally {
       if (mode === 'initial') setLoading(false);
       else setRefreshing(false);
