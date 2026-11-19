@@ -149,24 +149,25 @@ export default function TabsLayout() {
             <NativeTabs.Trigger.Icon sf="house" />
             <NativeTabs.Trigger.Label>{t('home')}</NativeTabs.Trigger.Label>
           </NativeTabs.Trigger>
-          <NativeTabs.Trigger name="transactions">
-            <NativeTabs.Trigger.Icon sf="list.bullet" />
-            <NativeTabs.Trigger.Label>{t('transactions')}</NativeTabs.Trigger.Label>
-          </NativeTabs.Trigger>
-          <NativeTabs.Trigger name="seshat" hidden={hideChat}>
-            <NativeTabs.Trigger.Icon sf="sparkles" />
-            <NativeTabs.Trigger.Label>{t('maat')}</NativeTabs.Trigger.Label>
-            {unreadMaatTotal > 0 ? <NativeTabs.Trigger.Badge>{String(unreadMaatTotal)}</NativeTabs.Trigger.Badge> : null}
-          </NativeTabs.Trigger>
           <NativeTabs.Trigger name="dashboard" hidden={inOrg}>
             <NativeTabs.Trigger.Icon sf="square.grid.2x2" />
             <NativeTabs.Trigger.Label>{lang === 'ar' ? 'لوحتي' : 'Dashboard'}</NativeTabs.Trigger.Label>
+          </NativeTabs.Trigger>
+          <NativeTabs.Trigger name="transactions">
+            <NativeTabs.Trigger.Icon sf="list.bullet" />
+            <NativeTabs.Trigger.Label>{t('transactions')}</NativeTabs.Trigger.Label>
           </NativeTabs.Trigger>
           {/* Alerts are a bell at the top of Home and Dashboard now; the screen stays reachable, just not as a tab. */}
           <NativeTabs.Trigger name="notifications" hidden />
           <NativeTabs.Trigger name="profile">
             <NativeTabs.Trigger.Icon sf="person.crop.circle" />
             <NativeTabs.Trigger.Label>{t('profile')}</NativeTabs.Trigger.Label>
+          </NativeTabs.Trigger>
+          {/* Seshat is its own round button at the end of the bar (iOS 26 detaches a "search"-role tab from the pill), like the AI in MoneyLoop. */}
+          <NativeTabs.Trigger name="seshat" hidden={hideChat} role="search">
+            <NativeTabs.Trigger.Icon sf="sparkles" />
+            <NativeTabs.Trigger.Label>{t('maat')}</NativeTabs.Trigger.Label>
+            {unreadMaatTotal > 0 ? <NativeTabs.Trigger.Badge>{String(unreadMaatTotal)}</NativeTabs.Trigger.Badge> : null}
           </NativeTabs.Trigger>
         </NativeTabs>
       ) : (
@@ -197,24 +198,6 @@ export default function TabsLayout() {
             }}
           />
           <Tabs.Screen
-            name="transactions"
-            options={{
-              title: t('transactions'),
-              tabBarIcon: ({ color }) => <List size={22} color={color} strokeWidth={1.5} />,
-              tabBarLabel: ({ focused, color }) => <TabLabel focused={focused} color={color}>{t('transactions')}</TabLabel>,
-            }}
-          />
-          <Tabs.Screen
-            name="seshat"
-            options={{
-              href: hideChat ? null : undefined,
-              title: t('maat'),
-              tabBarIcon: ({ color }) => <Sparkles size={22} color={color} strokeWidth={1.5} />,
-              tabBarLabel: ({ focused, color }) => <TabLabel focused={focused} color={color}>{t('maat')}</TabLabel>,
-              tabBarBadge: unreadMaatTotal > 0 ? unreadMaatTotal : undefined,
-            }}
-          />
-          <Tabs.Screen
             name="dashboard"
             options={{
               href: inOrg ? null : undefined,
@@ -225,6 +208,14 @@ export default function TabsLayout() {
               ),
             }}
           />
+          <Tabs.Screen
+            name="transactions"
+            options={{
+              title: t('transactions'),
+              tabBarIcon: ({ color }) => <List size={22} color={color} strokeWidth={1.5} />,
+              tabBarLabel: ({ focused, color }) => <TabLabel focused={focused} color={color}>{t('transactions')}</TabLabel>,
+            }}
+          />
           {/* Alerts are a bell at the top of Home and Dashboard now; the screen stays reachable, just not as a tab. */}
           <Tabs.Screen name="notifications" options={{ href: null }} />
           <Tabs.Screen
@@ -233,6 +224,21 @@ export default function TabsLayout() {
               title: t('profile'),
               tabBarIcon: ({ color }) => <User size={22} color={color} strokeWidth={1.5} />,
               tabBarLabel: ({ focused, color }) => <TabLabel focused={focused} color={color}>{t('profile')}</TabLabel>,
+            }}
+          />
+          <Tabs.Screen
+            name="seshat"
+            options={{
+              href: hideChat ? null : undefined,
+              title: t('maat'),
+              // Seshat is the round gold button at the end of the bar (on iPhone the system draws it detached from the pill).
+              tabBarIcon: ({ focused }) => (
+                <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: focused ? tok.goldLight : tok.gold, alignItems: 'center', justifyContent: 'center', marginTop: -4 }}>
+                  <Sparkles size={22} color={tok.void} strokeWidth={1.75} />
+                </View>
+              ),
+              tabBarLabel: ({ focused, color }) => <TabLabel focused={focused} color={color}>{t('maat')}</TabLabel>,
+              tabBarBadge: unreadMaatTotal > 0 ? unreadMaatTotal : undefined,
             }}
           />
         </Tabs>

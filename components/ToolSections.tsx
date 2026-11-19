@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
+import { PlanSection } from './PlanSection';
 import { useRouter } from 'expo-router';
 import { Users, CreditCard, CalendarClock, ChevronRight } from 'lucide-react-native';
 import { apiFetch, hasToken } from '../lib/api';
@@ -108,6 +109,7 @@ export function ToolSections() {
 
   return (
     <View>
+      {!inOrg ? <PlanSection /> : null}
       {bars.length > 0 ? (
         <Section title={ar ? 'الميزانيات' : 'Budgets'} to="/budgets" delay={0}>
           {bars.map((b, i) => {

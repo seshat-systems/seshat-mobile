@@ -164,6 +164,10 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
           style={({ pressed }) => ({ ...chip, backgroundColor: tok.gold, ...pressFeel(pressed) })}>
           <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: '#14110A' }}>{ar ? 'اشرح لي السبب' : 'Show me why'}</Text>
         </Pressable>
+        <Pressable onPress={() => router.push('/plan' as never)} accessibilityRole="button"
+          style={({ pressed }) => ({ ...chip, backgroundColor: tok.surface, borderWidth: 1, borderColor: tok.borderHi, ...pressFeel(pressed) })}>
+          <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.bone }}>{ar ? 'خطتك' : 'Your plan'}</Text>
+        </Pressable>
         {needsCount > 0 && onNeeds ? (
           <Pressable onPress={onNeeds} accessibilityRole="button"
             style={({ pressed }) => ({ ...chip, backgroundColor: tok.surface, borderWidth: 1, borderColor: tok.borderHi, ...pressFeel(pressed) })}>

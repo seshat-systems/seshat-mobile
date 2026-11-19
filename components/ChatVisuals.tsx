@@ -216,7 +216,7 @@ function GoalsBlockView({ block }: { block: Extract<VisualBlock, { type: 'goals'
 }
 
 /** The monthly plan as one card: where each group stands against its allowance, a tick for where the calendar says you should be. */
-function PlanBlockView({ block }: { block: Extract<VisualBlock, { type: 'plan' }> }) {
+export function PlanBlockView({ block }: { block: Extract<VisualBlock, { type: 'plan' }> }) {
   const { tok, lang } = useI18n();
   const ar = lang === 'ar';
   const rowDir = ar ? 'row-reverse' : 'row';
