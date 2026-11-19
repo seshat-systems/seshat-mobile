@@ -36,6 +36,7 @@ function FullHome() {
   const insets = useSafeAreaInsets();
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   // Monthly salary confirmation: server tells us once per month whether the
   // user owes a check-in for the current month. We keep the result here so
@@ -53,9 +54,11 @@ function FullHome() {
     try {
       const res = await apiFetch<{ data: DashboardData }>('/dashboard');
       setData(res.data);
+      setFailed(false);
       if (mode === 'refresh') await refresh(); // also pull /me + /categories
     } catch (err) {
       console.warn('dashboard fetch failed', err);
+      setFailed(true);
     } finally {
       if (mode === 'initial') setLoading(false);
       else setRefreshing(false);
@@ -124,6 +127,13 @@ function FullHome() {
             />
           );
           if (loading) return <DashboardSkeleton topPad={6} />;
+          if (failed && !data) {
+            return (
+              <ScreenScroll contentContainerStyle={{ flexGrow: 1 }} refreshControl={refreshCtl}>
+                <OfflineCard onRetry={() => fetchDashboard('initial')} />
+              </ScreenScroll>
+            );
+          }
           const isEmpty = !data || (data.current.income.count === 0 && data.current.expense.count === 0);
           return (
             <ScreenScroll
@@ -163,6 +173,25 @@ function FullHome() {
         onDone={() => { bumpVersion(); }}
       />
     </KeyboardAvoidingView>
+  );
+}
+
+/** The server did not answer: say so plainly instead of a skeleton that never ends or a false "no records". */
+function OfflineCard({ onRetry }: { onRetry: () => void }) {
+  const { tok, lang } = useI18n();
+  const ar = lang === 'ar';
+  return (
+    <View style={{ flex: 1, minHeight: 400, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40 }}>
+      <Text style={{ color: tok.bone, fontFamily: fontBody(lang, 'medium'), fontSize: 19, textAlign: 'center', lineHeight: 29 }}>
+        {ar ? 'تعذّر الوصول إلى سيشات' : "Can't reach Seshat right now"}
+      </Text>
+      <Text style={{ marginTop: 10, color: tok.muted, fontFamily: fontBody(lang), fontSize: 16, textAlign: 'center', lineHeight: 25 }}>
+        {ar ? 'بياناتك بأمان. تحقق من اتصالك ثم حاول مرة أخرى.' : 'Your data is safe. Check your connection and try again.'}
+      </Text>
+      <Pressable onPress={onRetry} accessibilityRole="button" style={{ marginTop: 22, height: 48, paddingHorizontal: 28, borderRadius: 24, backgroundColor: tok.gold, alignItems: 'center', justifyContent: 'center' }}>
+        <Text style={{ color: '#14110A', fontFamily: fontBody(lang, 'medium'), fontSize: 16 }}>{ar ? 'حاول مرة أخرى' : 'Try again'}</Text>
+      </Pressable>
+    </View>
   );
 }
 

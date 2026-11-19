@@ -78,6 +78,25 @@ export interface ApiFetchOptions extends RequestInit {
    *  was last set via setActiveLedger(). Useful for the org-creation flow
    *  where we briefly want to talk to the personal ledger context. */
   ledgerId?: string;
+  /** Give up after this long (default 30 s; AI and voice calls get 2 minutes). */
+  timeoutMs?: number;
+}
+
+/** A request that never answers must end in an error, not an endless spinner. */
+function timeoutFor(path: string, ms?: number): number {
+  return ms ?? (/^\/(chat|voice|capture|receipts?)/.test(path) ? 120_000 : 30_000);
+}
+async function fetchWithTimeout(url: string, init: RequestInit, ms: number): Promise<Response> {
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), ms);
+  try {
+    return await fetch(url, { ...init, signal: init.signal ?? ctl.signal });
+  } catch (e) {
+    if (ctl.signal.aborted) throw new Error('Request timed out');
+    throw e;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 // Active workspace ("ledger") for this session. Sent as X-Ledger-Id on
@@ -102,7 +121,7 @@ export function getActiveLedger(): string | null {
 export async function apiFetchText(path: string, options: ApiFetchOptions = {}): Promise<string> {
   const token = await getToken();
   if (!token) throw new Error('Not authenticated');
-  const { idempotencyKey, ledgerId, ...rest } = options;
+  const { idempotencyKey, ledgerId, timeoutMs, ...rest } = options;
   const headers: Record<string, string> = {
     Authorization: `Bearer ${token}`,
     ...CLIENT_HEADERS,
@@ -111,7 +130,7 @@ export async function apiFetchText(path: string, options: ApiFetchOptions = {}):
   if (idempotencyKey) headers['Idempotency-Key'] = idempotencyKey;
   const effectiveLedger = ledgerId ?? activeLedgerId;
   if (effectiveLedger) headers['X-Ledger-Id'] = effectiveLedger;
-  const res = await fetch(`${API_BASE}${path}`, { ...rest, headers });
+  const res = await fetchWithTimeout(`${API_BASE}${path}`, { ...rest, headers }, timeoutFor(path, timeoutMs));
   if (res.status === 401) {
     await handleUnauthorized();
     throw new Error('Session expired. Please sign in again.');
@@ -130,7 +149,7 @@ export async function apiFetch<T = unknown>(
     throw new Error('Not authenticated');
   }
 
-  const { idempotencyKey, ledgerId, ...rest } = options;
+  const { idempotencyKey, ledgerId, timeoutMs, ...rest } = options;
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`,
@@ -142,10 +161,7 @@ export async function apiFetch<T = unknown>(
   const effectiveLedger = ledgerId ?? activeLedgerId;
   if (effectiveLedger) headers['X-Ledger-Id'] = effectiveLedger;
 
-  const res = await fetch(`${API_BASE}${path}`, {
-    ...rest,
-    headers,
-  });
+  const res = await fetchWithTimeout(`${API_BASE}${path}`, { ...rest, headers }, timeoutFor(path, timeoutMs));
 
   // Token rejected -> clear session and route to sign-in.
   if (res.status === 401) {
