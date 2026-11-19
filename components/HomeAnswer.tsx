@@ -183,7 +183,7 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
  * Home for someone with nothing recorded yet: Seshat introduces itself instead of an empty "no records" page, says what to
  * type, and offers the first steps. The typing field below (pinned by the Home screen) is the main way in.
  */
-export function HomeIntro({ name }: { name: string }) {
+export function HomeIntro() {
   const { tok, lang } = useI18n();
   const router = useRouter();
   const ar = lang === 'ar';
@@ -200,7 +200,7 @@ export function HomeIntro({ name }: { name: string }) {
     <View style={{ paddingHorizontal: 20, paddingTop: 8, paddingBottom: 6 }}>
       <Rise>
         <Text style={{ fontFamily: fontHead(lang), fontSize: 28, lineHeight: 35, color: tok.goldLight, textAlign: align, letterSpacing: -0.3 }}>
-          {ar ? `أهلاً ${name}، أنا سيشات.` : `Hi ${name}, I'm Seshat.`}
+          {ar ? 'أهلاً، أنا سيشات.' : "Hi, I'm Seshat."}
         </Text>
         <Text style={{ marginTop: 10, fontFamily: fontBody(lang), fontSize: 17, lineHeight: 26, color: tok.muted, textAlign: align }}>
           {ar

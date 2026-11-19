@@ -16,6 +16,8 @@ import {
   SSOButton, AuthOr,
 } from '../components/auth';
 import { RCheckbox } from '../components/ui';
+import { secureSet } from '../lib/secure';
+import { LATEST_RELEASE_ID } from '../lib/releaseNotes';
 import { SeshatMark } from '../components/SeshatMark';
 import { OnboardingTour } from '../components/OnboardingTour';
 
@@ -152,7 +154,7 @@ export default function AuthRouter() {
     if (!code) { setErr('Enter the code'); return; }
     setErr(''); setBusy(true);
     const r = await registerVerifyCode(sessionId, code);
-    if (r.success) setView('completeReg');
+    if (r.success) { setPwd(''); setPwd2(''); setView('completeReg'); }
     else setErr(r.error ?? 'Invalid code');
     setBusy(false);
   };
@@ -165,6 +167,8 @@ export default function AuthRouter() {
     setErr(''); setBusy(true);
     const r = await registerComplete(sessionId, name || email.split('@')[0], pwd, referred ? refCode.trim() : undefined);
     if (r.success) {
+      // Someone who has just signed up has nothing "new" to read about: mark this release's notes as seen.
+      secureSet('release_notes_seen', LATEST_RELEASE_ID).catch(() => {});
       // After registration, ask whether this is an individual or an org
       // account before landing them in the tabs. Mirrors the web
       // questionnaire's `individual` vs `team` segmentation.
@@ -255,7 +259,8 @@ export default function AuthRouter() {
     setBusy(false);
   };
 
-  const switchView = (v: AuthView) => { setView(v); setErr(''); };
+  // A password typed on one screen must not appear on the next (sign in -> sign up showed its dots).
+  const switchView = (v: AuthView) => { setView(v); setErr(''); setPwd(''); setPwd2(''); };
 
   if (checking) {
     return <View style={{ flex: 1, backgroundColor: tok.void }} />;

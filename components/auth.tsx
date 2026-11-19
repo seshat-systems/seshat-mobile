@@ -84,7 +84,8 @@ export function AuthChrome({
         contentContainerStyle={{ paddingHorizontal: 22, paddingBottom: 24 }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        style={{ flex: 1 }}
+        // The shared scroll view lets content paint past its edge (for headers); here that would draw it under the footer.
+        style={{ flex: 1, overflow: 'hidden' }}
       >
         {children}
       </ScrollView>

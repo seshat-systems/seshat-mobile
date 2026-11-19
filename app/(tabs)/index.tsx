@@ -153,7 +153,7 @@ function FullHome() {
             >
               {notices}
               {isEmpty && !inOrg ? (
-                <HomeIntro name={userName} />
+                <HomeIntro />
               ) : isEmpty ? (
                 <View style={{ flex: 1, minHeight: 400 }}><EmptyState /></View>
               ) : inOrg ? (

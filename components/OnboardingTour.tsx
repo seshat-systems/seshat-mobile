@@ -46,6 +46,7 @@ export function OnboardingTour({
   const [step, setStep] = useState(0);
   const [name, setName] = useState(initialName ?? '');
   const [nameAr, setNameAr] = useState('');
+  const nameArRef = useRef<TextInput>(null);
   const [salary, setSalary] = useState('');
   const [monthDay, setMonthDay] = useState(1);
   const [busy, setBusy] = useState(false);
@@ -121,6 +122,7 @@ export function OnboardingTour({
         <ScrollView
           contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 24, paddingBottom: insets.bottom + 24 }}
           keyboardShouldPersistTaps="handled"
+          keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
           showsVerticalScrollIndicator={false}
         >
           <Animated.View style={[{ flex: 1 }, riseStyle]}>
@@ -145,9 +147,10 @@ export function OnboardingTour({
               >
                 <View style={{ gap: 12, marginTop: 26 }}>
                   <RField label={ar ? 'الاسم' : 'Name'} value={name} onChange={setName}
-                    placeholder={ar ? 'اسمك' : 'Your name'} autoFocus />
+                    placeholder={ar ? 'اسمك' : 'Your name'} autoFocus nextRef={nameArRef} />
                   <RField label={ar ? 'الاسم بالعربي' : 'Arabic name'} value={nameAr} onChange={setNameAr}
-                    placeholder={ar ? 'للترحيب بالعربية' : 'Your name in Arabic'} />
+                    placeholder={ar ? 'للترحيب بالعربية' : 'Your name in Arabic'} inputRef={nameArRef}
+                    returnKeyType="go" onSubmitEditing={goNext} />
                 </View>
                 <Spacer />
                 <CTA label={ar ? 'متابعة' : 'Continue'} onPress={goNext} />
