@@ -251,7 +251,7 @@ export function OnboardingTour({
 
             {scene === 'have' && (
               <SceneBody
-                narration={ar ? 'هل لديك شيء من هذه بالفعل؟ اختر ما ينطبق وسنفتح لك نموذجه بعد قليل.' : 'Do you already have any of these? Pick what applies and we will open its form in a moment.'}
+                narration={ar ? 'هل لديك شيء من هذه بالفعل؟ اختر ما ينطبق وسنجهّز كل واحد في الخطوات التالية.' : 'Do you already have any of these? Pick what applies and we will set each one up in the next steps.'}
                 l1={ar ? 'ماذا' : 'What you'} l2={ar ? 'لديك؟' : 'have'}
               >
                 <View style={{ marginTop: 22, gap: 12 }}>

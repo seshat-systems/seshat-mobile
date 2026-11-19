@@ -1,4 +1,3 @@
-import { takeNextOnboardingForm } from '../../lib/onboardingForms';
 import { trackEvent } from '../../lib/track';
 import { useOfflineSync, enqueue, isNetworkError } from '../../lib/offlineQueue';
 import { useCallback, useEffect, useState } from 'react';
@@ -40,13 +39,6 @@ export default function TabsLayout() {
   const currentTab = segments[segments.length - 1];
   const ws = useWorkspace();
   const inOrg = useInOrg(); // an organization's Home already is its dashboard, so it has no Dashboard tab
-  // Forms the person asked for in onboarding open one after another: take the next whenever they are back on a tab.
-  useEffect(() => {
-    if (segments[0] !== '(tabs)') return;
-    const next = takeNextOnboardingForm();
-    if (!next) return;
-    setTimeout(() => router.push(next as never), 600);
-  }, [segments.join('/')]); // eslint-disable-line react-hooks/exhaustive-deps
   // A viewer cannot add anything, and neither a viewer nor a child can use the chat (it reads and writes the whole workspace).
   // Home has the "Tell Seshat…" input and Seshat's own tab is the chat, so the + button only stays where there is no input.
   const hideFab = currentTab === 'seshat' || currentTab === 'index' || currentTab === 'dashboard' || currentTab === 'profile' || currentTab === '(tabs)' || !ws.canWrite;

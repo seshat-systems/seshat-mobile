@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Text, Pressable, Platform, Linking, TextInput } from 'react-native';
 import { SITE_URL } from '../lib/brand';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams, useFocusEffect } from 'expo-router';
+import { takeNextOnboardingForm } from '../lib/onboardingForms';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import { hasToken } from '../lib/api';
@@ -185,12 +186,25 @@ export default function AuthRouter() {
   const pickIndividual = () => { setSegment('individual'); setView('onboard'); };
   const pickOrganization = () => { setSegment('org'); setView('onboard'); };
   const pickFamily = () => { setSegment('family'); setView('onboard'); };
-  const finishOnboarding = () => {
+  // The forms ticked under "What you have" (savings, goals, gam3ya, debts) are the last steps of the onboarding: one screen
+  // after another BEFORE the app opens, so nobody lands in the tabs with forms popping up. Backing out of one skips it.
+  const formsStarted = useRef(false);
+  const enterApp = () => {
     goApp();
     // Defer so the tabs are mounted before we push into /orgs/new.
     if (segment === 'org') setTimeout(() => router.push('/orgs/new'), 50);
     if (segment === 'family') setTimeout(() => router.push({ pathname: '/orgs/new', params: { kind: 'family' } }), 50);
   };
+  const nextOnboardingStep = () => {
+    const next = takeNextOnboardingForm();
+    if (next) router.push(next as never);
+    else { formsStarted.current = false; enterApp(); }
+  };
+  const finishOnboarding = () => { formsStarted.current = true; nextOnboardingStep(); };
+  // Back on this screen after a form: on to the next one, or into the app.
+  useFocusEffect(useCallback(() => {
+    if (formsStarted.current) nextOnboardingStep();
+  }, [])); // eslint-disable-line react-hooks/exhaustive-deps
 
   const submitForgot = async () => {
     if (!email.includes('@')) { setErr('Enter a valid email'); return; }
