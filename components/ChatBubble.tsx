@@ -1,6 +1,6 @@
 import { Rise } from './Motion';
 import { memo, useEffect, useRef, useState, type ReactNode } from 'react';
-import { View, Text, Pressable, Animated, ActivityIndicator, Image } from 'react-native';
+import { View, Text, Pressable, Animated, ActivityIndicator, Image, Platform } from 'react-native';
 import { Mic, Copy, Check, RefreshCw, Pencil, Trash2 } from 'lucide-react-native';
 import * as Clipboard from 'expo-clipboard';
 import { useI18n } from '../lib/i18n';
@@ -172,10 +172,12 @@ function ChatBubbleInner({
                 borderWidth: 1, borderColor: tok.shellBorder,
                 borderTopColor: tok.coreSheen,
               }
-            : {
+            // A soft shadow under your own bubble. Android draws a shadow under a bubble with an uneven corner (the tail) as a
+            // gray rectangle, so it only gets one on iPhone, where the shadow follows the bubble's shape.
+            : Platform.OS === 'ios' ? {
                 shadowColor: tok.glowShadow, shadowOpacity: 0.16,
-                shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 2,
-              }),
+                shadowRadius: 10, shadowOffset: { width: 0, height: 4 },
+              } : null),
         }}
       >
         {isAssistant && (

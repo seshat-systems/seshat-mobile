@@ -58,3 +58,15 @@ export async function sendHome(text: string, open?: (path: string) => void): Pro
     set({ sending: false });
   }
 }
+
+/** Takes back what a Home turn recorded (the transactions it created), then says so on the turn. */
+export async function undoHome(turnId: string): Promise<void> {
+  const turn = state.turns.find((t) => t.id === turnId);
+  const ids = turn?.reply?.createdTransactionIds ?? [];
+  if (!turn || !turn.reply || ids.length === 0) return;
+  try {
+    await Promise.all(ids.map((tid) => apiFetch(`/transactions/${tid}`, { method: 'DELETE' })));
+    emitDataChanged();
+    patchTurn(turnId, { reply: { ...turn.reply, content: ids.length > 1 ? 'Removed those entries.' : 'Removed.', createdTransactionIds: undefined, blocks: undefined, quickReplies: undefined } as Message });
+  } catch { /* the record stays; the Undo button is still there to try again */ }
+}

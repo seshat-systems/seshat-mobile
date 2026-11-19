@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import { X } from 'lucide-react-native';
 import { useI18n } from '../lib/i18n';
 import { fontBody, fontMono } from '../lib/fonts';
-import { clearHomeChat, sendHome, useHomeChat } from '../lib/homeChat';
+import { clearHomeChat, sendHome, undoHome, useHomeChat } from '../lib/homeChat';
 import { ChatBubble, TypingDots } from './ChatBubble';
 import { Rise } from './Motion';
 import { pressFeel } from './press';
@@ -47,6 +47,13 @@ export function HomeReplies() {
           <View style={{ flexDirection: ar ? 'row-reverse' : 'row' }}>
             <Pressable onPress={() => sendHome(last.text, open)} accessibilityRole="button" style={({ pressed }) => ({ ...chip, ...pressFeel(pressed) })}>
               <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.bone }}>{ar ? 'حاول مرة أخرى' : 'Try again'}</Text>
+            </Pressable>
+          </View>
+        ) : null}
+        {!sending && (last.reply?.createdTransactionIds?.length ?? 0) > 0 ? (
+          <View style={{ flexDirection: ar ? 'row-reverse' : 'row' }}>
+            <Pressable onPress={() => undoHome(last.id)} accessibilityRole="button" style={({ pressed }) => ({ ...chip, ...pressFeel(pressed) })}>
+              <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: tok.bone }}>{ar ? 'تراجع' : 'Undo'}</Text>
             </Pressable>
           </View>
         ) : null}

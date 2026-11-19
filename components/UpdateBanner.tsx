@@ -20,30 +20,30 @@ export function UpdateBanner() {
       onPress={() => { void Linking.openURL(update.url); }}
       style={({ pressed }) => ({ opacity: pressed ? 0.9 : 1 })}
     >
-      <RCard accent padding={14} style={{ marginHorizontal: 16, marginTop: 6, marginBottom: 12 }}>
-        <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 12 }}>
+      <RCard accent padding={10} style={{ marginHorizontal: 16, marginTop: 4, marginBottom: 8 }}>
+        <View style={{ flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', gap: 10 }}>
           <View style={{
-            width: 36, height: 36, borderRadius: 10, backgroundColor: tok.elevated,
+            width: 30, height: 30, borderRadius: 9, backgroundColor: tok.elevated,
             alignItems: 'center', justifyContent: 'center',
           }}>
-            <Download size={18} color={tok.gold} />
+            <Download size={16} color={tok.gold} />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={{
-              color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 16,
+              color: tok.bone, fontFamily: fontBody(lang, 'semibold'), fontSize: 14,
               textAlign: ar ? 'right' : 'left',
             }}>
               {ar ? 'يوجد إصدار جديد من سيشات' : 'Get the latest version of Seshat'}
             </Text>
-            <Text style={{
-              marginTop: 3, color: tok.muted, fontFamily: fontBody(lang), fontSize: 14,
+            <Text numberOfLines={2} style={{
+              marginTop: 2, color: tok.muted, fontFamily: fontBody(lang), fontSize: 12.5, lineHeight: 17,
               textAlign: ar ? 'right' : 'left',
             }}>
               {notes || (ar ? `الإصدار ${update.versionName} جاهز. اضغط للتحميل والتثبيت.` : `Version ${update.versionName} is ready. Tap to download and install.`)}
             </Text>
           </View>
           <Pressable onPress={dismiss} hitSlop={10} accessibilityLabel={ar ? 'إغلاق' : 'Dismiss'}>
-            <X size={16} color={tok.muted} />
+            <X size={15} color={tok.muted} />
           </Pressable>
         </View>
       </RCard>
