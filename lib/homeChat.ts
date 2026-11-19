@@ -39,7 +39,7 @@ export async function sendHome(text: string, open?: (path: string) => void): Pro
   try {
     const res = await apiFetch<{ data: ChatReply }>('/chat', {
       method: 'POST',
-      body: JSON.stringify({ message: q, sessionId: state.sessionId || undefined, persona: 'seshat' }),
+      body: JSON.stringify({ message: q, sessionId: state.sessionId || undefined, persona: 'seshat', quick: true }),
     });
     const d = res.data;
     set({ sessionId: d.sessionId || state.sessionId });
@@ -69,4 +69,11 @@ export async function undoHome(turnId: string): Promise<void> {
     emitDataChanged();
     patchTurn(turnId, { undone: true, reply: { ...turn.reply, content: ids.length > 1 ? 'Removed those entries.' : 'Removed.', createdTransactionIds: undefined, blocks: undefined, quickReplies: undefined } as Message });
   } catch { /* the record stays; the Undo button is still there to try again */ }
+}
+
+/** "Ask a follow-up in chat": the quick command becomes a normal conversation in the history, then the app opens it. */
+export async function revealHomeSession(): Promise<string> {
+  const id = state.sessionId;
+  if (id) await apiFetch(`/chat/sessions/${id}`, { method: 'PATCH', body: JSON.stringify({ quick: false }) }).catch(() => {});
+  return id;
 }

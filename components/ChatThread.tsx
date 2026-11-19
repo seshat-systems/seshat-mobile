@@ -11,7 +11,8 @@ import { HeaderBack } from './HeaderButtons';
 import { LiquidBackdrop } from './LiquidBackdrop';
 import { isLiquid } from './Glass';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowUp, ImagePlus, Square } from 'lucide-react-native';
+import { ArrowUp, ImagePlus, Square, PanelLeft } from 'lucide-react-native';
+import { AIMark, AIAvatar } from './AIMark';
 import * as ImagePicker from 'expo-image-picker';
 import { apiFetch, hasToken } from '../lib/api';
 import { streamChat, friendlyChatError } from '../lib/chatStream';
@@ -26,7 +27,6 @@ import { uploadReceipt } from '../lib/cloudinary';
 import { ChatBubble, TypingDots, RecordingMicIcon, type Message } from './ChatBubble';
 import { type VisualBlock } from './ChatVisuals';
 import { ImageViewer } from './ImageViewer';
-import PersonaSwitch from './PersonaSwitch';
 import { getPersona, loadPersona, setActivePersona, PERSONAS, type Persona } from '../lib/persona';
 
 export type ChatThreadProps = {
@@ -38,6 +38,11 @@ export type ChatThreadProps = {
   persona?: string | null;
   /** The header's leading button (back in the app, close in the floating panel). */
   onBack: () => void;
+  /** 'history' turns the leading button into the conversation-history button (the Seshat tab); default is back. */
+  leading?: 'back' | 'history';
+  onHistory?: () => void;
+  /** Room under the composer for a tab bar that floats over the screen (iPhone's native bar). */
+  bottomInset?: number;
   /** Called whenever the thread has a session id, so a host can reopen the same chat later. */
   onSessionChange?: (id: string) => void;
 };
@@ -49,7 +54,7 @@ export type ChatThreadProps = {
  * Auto-creation happens server-side: the first POST /chat without a sessionId creates
  * one. With no sessionId the view opens a fresh chat with Seshat's opening message.
  */
-export function ChatThread({ sessionId: sessionIdProp, text, persona: personaProp, onBack, onSessionChange }: ChatThreadProps) {
+export function ChatThread({ sessionId: sessionIdProp, text, persona: personaProp, onBack, leading = 'back', onHistory, bottomInset = 0, onSessionChange }: ChatThreadProps) {
   const { tok, lang, t } = useI18n();
   const insets = useSafeAreaInsets();
   const initialId = typeof sessionIdProp === 'string' && sessionIdProp !== 'new' ? sessionIdProp : null;
@@ -574,7 +579,13 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
         alignItems: 'center', gap: 10,
         paddingHorizontal: 14, paddingVertical: 10,
       }}>
-        <HeaderBack onPress={onBack} />
+        {leading === 'history' ? (
+          <Pressable onPress={onHistory} hitSlop={10} accessibilityRole="button" accessibilityLabel={lang === 'ar' ? 'المحادثات' : 'Conversations'}
+            style={({ pressed }) => ({ width: 44, height: 44, borderRadius: radius.btn, backgroundColor: isLiquid() ? 'transparent' : (pressed ? tok.elevated : tok.surface), alignItems: 'center', justifyContent: 'center' })}>
+            <LiquidBackdrop radius={radius.btn} fallback="transparent" />
+            <PanelLeft size={20} color={tok.bone} style={{ transform: [{ scaleX: lang === 'ar' ? -1 : 1 }] }} />
+          </Pressable>
+        ) : <HeaderBack onPress={onBack} />}
         <View style={{ flex: 1 }}>
           <Text
             numberOfLines={1}
@@ -586,21 +597,17 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
             {title}
           </Text>
         </View>
-        {/* Persona: chosen only while the chat is empty. A thread's persona is fixed on the server for its
-            life, so once there are messages a switch would change the label but not who answers — show a
-            plain badge instead. */}
-        {messages.some((m) => m.role === 'user') ? (
-          <View style={{
-            paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999,
-            backgroundColor: 'rgba(201,168,76,0.08)', borderWidth: 1, borderColor: 'rgba(201,168,76,0.18)',
-          }}>
-            <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2, color: tok.gold, textTransform: 'uppercase' }}>
-              {PERSONAS[persona].name[lang]}
-            </Text>
-          </View>
-        ) : (
-          <PersonaSwitch value={persona} onChange={changePersona} size="sm" />
-        )}
+        {/* Who this conversation is with. It is chosen when the conversation starts (the cards below) and fixed for its life. */}
+        <View style={{
+          flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 8,
+          paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999,
+          backgroundColor: 'rgba(201,168,76,0.08)', borderWidth: 1, borderColor: 'rgba(201,168,76,0.18)',
+        }}>
+          <AIMark size={16} persona={persona} />
+          <Text style={{ fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.2, color: tok.gold, textTransform: 'uppercase' }}>
+            {PERSONAS[persona].name[lang]}
+          </Text>
+        </View>
       </FrostedHeader>
 
       <ScreenFlatList
@@ -618,12 +625,39 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
               onDelete={handleDelete}
               onEdit={handleEdit}
               busy={sending}
+              persona={persona}
             />
           </Rise>
         )}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 120 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 120 + bottomInset }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
+        ListHeaderComponent={!initialId && !messages.some((m) => m.role === 'user') ? (
+          <View style={{ gap: 10, paddingBottom: 14 }}>
+            <Text style={{ fontFamily: fontBody(lang), fontSize: 14, color: tok.muted, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+              {lang === 'ar' ? 'مع من تريد أن تتحدث؟' : 'Who do you want to talk to?'}
+            </Text>
+            {(['seshat', 'maat'] as const).map((k) => {
+              const on = persona === k;
+              return (
+                <Pressable key={k} onPress={() => changePersona(k)} accessibilityRole="button" accessibilityState={{ selected: on }}
+                  style={({ pressed }) => ({
+                    flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 12, padding: 14, borderRadius: 20, minHeight: 64,
+                    backgroundColor: on ? tok.glowShellBg : tok.surface, borderWidth: 1, borderColor: on ? tok.gold : tok.border, ...pressFeel(pressed),
+                  })}>
+                  <AIAvatar size={42} persona={k} />
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 17, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>{PERSONAS[k].name[lang]}</Text>
+                    <Text style={{ fontFamily: fontBody(lang), fontSize: 13, lineHeight: 19, color: tok.muted, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+                      {k === 'seshat' ? (lang === 'ar' ? 'تنفّذ لك: تسجّل وتضبط الميزانية وتحفظ دفاترك.' : 'Does things for you: logs, budgets, keeps your books.')
+                        : (lang === 'ar' ? 'تقرأ وتحلّل فقط ولا تغيّر شيئاً.' : 'Reads and analyses only. Changes nothing.')}
+                    </Text>
+                  </View>
+                </Pressable>
+              );
+            })}
+          </View>
+        ) : null}
         ListEmptyComponent={
           opening ? null : <View style={{ alignItems: 'center', paddingTop: 60 }}>
             <Text style={{
@@ -694,7 +728,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
 
       <FrostedFooter style={{
         flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
-        paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 12),
+        paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 12) + bottomInset,
         alignItems: 'flex-end', gap: 8,
       }}>
         <View style={{

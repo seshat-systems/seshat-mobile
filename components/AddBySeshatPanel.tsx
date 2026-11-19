@@ -1,3 +1,4 @@
+import { AIMark } from './AIMark';
 import { useEffect, useMemo, useState } from 'react';
 import { View, Text, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
 import { ScrollView } from './Scroll';
@@ -201,7 +202,7 @@ export function AddBySeshatPanel({
         <View style={{
           flexDirection: 'row', alignItems: 'center', gap: 6,
         }}>
-          <Sparkles size={12} color={tok.gold} />
+          <AIMark size={15} />
           <Text style={{
             color: tok.gold, fontFamily: fontMono('regular'),
             fontSize: 12, letterSpacing: 1.6, textTransform: 'uppercase',

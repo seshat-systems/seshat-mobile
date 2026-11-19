@@ -1,3 +1,4 @@
+import { AIMark } from './AIMark';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   View, Text, Pressable, ScrollView, StyleSheet, Animated, Easing,
@@ -617,7 +618,7 @@ export function AddTransactionSheet({ visible, onClose, onSave, categories, defa
                 })}
                 accessibilityLabel="Talk to Seshat"
               >
-                <Sparkles size={18} color={tok.gold} />
+                <AIMark size={22} />
               </Pressable>
             )}
             {!seshatMode && (
@@ -942,7 +943,7 @@ export function AddTransactionSheet({ visible, onClose, onSave, categories, defa
                       {lang === 'ar' ? 'دع سيشات تسجلها كلها' : 'Let Seshat log them all'}
                     </Text>
                   </View>
-                  <Sparkles size={14} color={tok.gold} />
+                  <AIMark size={17} />
                 </Pressable>
               )}
             </View>

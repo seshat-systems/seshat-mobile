@@ -1,3 +1,4 @@
+import { SeshatIcon } from './AIMark';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { LiquidBackdrop } from './LiquidBackdrop';
 import { cardChipName } from '../lib/cards';
@@ -212,7 +213,7 @@ export type TxRowData = {
 export function sourceInfo(source: TxRowData['source'], channel: TxRowData['captureChannel'], lang: 'en' | 'ar'): { label: string; Icon: typeof Pencil } {
   const ar = lang === 'ar';
   switch (source) {
-    case 'seshat': return { label: ar ? 'محادثة سيشات' : 'Seshat chat', Icon: Sparkles };
+    case 'seshat': return { label: ar ? 'محادثة سيشات' : 'Seshat chat', Icon: SeshatIcon };
     case 'voice': return { label: ar ? 'بالصوت' : 'Voice', Icon: Mic };
     case 'bot': return { label: ar ? 'تيليجرام' : 'Telegram', Icon: Send };
     case 'notification': return { label: channel === 'push' ? (ar ? 'إشعار البنك' : 'Bank notification') : (ar ? 'رسالة البنك' : 'Bank SMS'), Icon: Landmark };

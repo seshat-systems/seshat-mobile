@@ -1,3 +1,4 @@
+import { SeshatIcon } from './AIMark';
 import { memo, useEffect, useRef } from 'react';
 import { View, Text, Animated, ActivityIndicator } from 'react-native';
 import { Sparkles, Scale, Search, ArrowRightLeft, Check, AlertCircle } from 'lucide-react-native';
@@ -20,7 +21,7 @@ import type { ActivityStep, ActivityKind } from '../lib/chatStream';
 function iconFor(step: ActivityStep): ComponentType<LucideProps> {
   switch (step.kind) {
     case 'think':
-      return Sparkles;
+      return SeshatIcon;
     case 'handoff':
       return ArrowRightLeft;
     case 'result':

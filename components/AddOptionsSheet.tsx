@@ -1,3 +1,4 @@
+import { AIMark } from './AIMark';
 import { useEffect, useRef } from 'react';
 import { View, Text, Pressable, Modal, Animated, Easing, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -100,7 +101,7 @@ export function AddOptionsSheet({ visible, onClose, onPickManual, onPickReceipt 
           />
 
           <OptionRow
-            icon={<Sparkles size={20} color={tok.gold} strokeWidth={1.6} />}
+            icon={<AIMark size={24} />}
             title={lang === 'ar' ? 'إضافة يدوية أو بالذكاء' : 'Add manually or with AI'}
             subtitle={lang === 'ar'
               ? 'أدخل الرقم، أو املي عليّ، أو اكتب جملة عادية.'

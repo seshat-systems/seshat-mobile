@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import { X } from 'lucide-react-native';
 import { useI18n } from '../lib/i18n';
 import { fontBody } from '../lib/fonts';
-import { clearHomeChat, sendHome, undoHome, useHomeChat } from '../lib/homeChat';
+import { clearHomeChat, revealHomeSession, sendHome, undoHome, useHomeChat } from '../lib/homeChat';
 import { TypingDots } from './ChatBubble';
 import { ChatBlocks } from './ChatVisuals';
 import { Rise } from './Motion';
@@ -72,7 +72,7 @@ export function HomeReplies() {
         ) : null}
 
         {sessionId && reply && !created && !t.undone ? (
-          <Pressable onPress={() => router.push({ pathname: '/seshat/[id]', params: { id: sessionId } } as never)} accessibilityRole="button" hitSlop={8}
+          <Pressable onPress={async () => { const id = await revealHomeSession(); router.push({ pathname: '/seshat/[id]', params: { id } } as never); }} accessibilityRole="button" hitSlop={8}
             style={{ alignSelf: ar ? 'flex-end' : 'flex-start', minHeight: 36, justifyContent: 'center' }}>
             <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 14, color: tok.gold }}>{ar ? 'تابع الحديث مع سيشات ←' : 'Ask a follow-up in chat →'}</Text>
           </Pressable>

@@ -1,6 +1,7 @@
 import { Rise } from './Motion';
 import { memo, useEffect, useRef, useState, type ReactNode } from 'react';
 import { View, Text, Pressable, Animated, ActivityIndicator, Image, Platform } from 'react-native';
+import { AIMark } from './AIMark';
 import { Mic, Copy, Check, RefreshCw, Pencil, Trash2 } from 'lucide-react-native';
 import * as Clipboard from 'expo-clipboard';
 import { useI18n } from '../lib/i18n';
@@ -56,9 +57,10 @@ const BUBBLE_RADIUS = 18;
 const TAIL = 5;
 
 function ChatBubbleInner({
-  message, onSkipTyping, onPressImage, onRegenerate, onDelete, onEdit, busy,
+  message, onSkipTyping, onPressImage, onRegenerate, onDelete, onEdit, busy, persona,
 }: {
   message: Message;
+  persona?: 'seshat' | 'maat';
   onSkipTyping: (id: string) => void;
   onPressImage?: (uri: string) => void;
   onRegenerate?: () => void;
@@ -185,12 +187,12 @@ function ChatBubbleInner({
             flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
             alignItems: 'center', gap: 6, marginBottom: 5,
           }}>
-            <View style={{ width: 5, height: 5, borderRadius: 3, backgroundColor: tok.gold }} />
+            <AIMark size={15} persona={persona ?? 'seshat'} />
             <Text style={{
               fontFamily: fontMono('regular'), fontSize: 12, letterSpacing: 1.6,
               color: tok.gold, textTransform: 'uppercase',
             }}>
-              {lang === 'ar' ? 'سيشات' : 'Seshat'}
+              {persona === 'maat' ? (lang === 'ar' ? 'ماعت' : 'Maat') : (lang === 'ar' ? 'سيشات' : 'Seshat')}
             </Text>
           </View>
         )}
@@ -323,22 +325,12 @@ function ActionButton({
 
 export const ChatBubble = memo(ChatBubbleInner);
 
-export function TypingDots() {
-  const { tok, lang } = useI18n();
+/** Seshat is working: the S with its seven stars lighting one by one, in place of the typing dots. */
+export function TypingDots({ persona }: { persona?: 'seshat' | 'maat' } = {}) {
+  const { lang } = useI18n();
   return (
-    <View style={{
-      alignSelf: lang === 'ar' ? 'flex-end' : 'flex-start',
-      backgroundColor: tok.coreBg,
-      borderRadius: BUBBLE_RADIUS,
-      ...(lang === 'ar' ? { borderBottomRightRadius: TAIL } : { borderBottomLeftRadius: TAIL }),
-      paddingHorizontal: 16, paddingVertical: 16,
-      borderWidth: 1, borderColor: tok.shellBorder, borderTopColor: tok.coreSheen,
-      flexDirection: 'row', alignItems: 'center', gap: 6,
-      marginBottom: 10,
-    }}>
-      <Dot delay={0} />
-      <Dot delay={180} />
-      <Dot delay={360} />
+    <View style={{ alignSelf: lang === 'ar' ? 'flex-end' : 'flex-start', paddingHorizontal: 10, paddingVertical: 8, marginBottom: 10 }}>
+      <AIMark size={30} persona={persona ?? 'seshat'} thinking />
     </View>
   );
 }

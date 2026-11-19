@@ -5,7 +5,8 @@ import { fmtNum } from '../../lib/privacy';
 import { View, Text, StyleSheet, Platform, type ColorValue, AppState } from 'react-native';
 import { Tabs, useSegments, router } from 'expo-router';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
-import { Home as HomeIcon, List, Sparkles, User, LayoutDashboard } from 'lucide-react-native';
+import { Home as HomeIcon, List, User, LayoutDashboard } from 'lucide-react-native';
+import { AIAvatar } from '../../components/AIMark';
 import { useI18n } from '../../lib/i18n';
 import { restoreBubble } from '../../lib/bubble';
 import { useAppData, useWorkspace, useInOrg } from '../../lib/appData';
@@ -157,7 +158,7 @@ export default function TabsLayout() {
           </NativeTabs.Trigger>
           {/* Seshat is its own round button at the end of the bar (iOS 26 detaches a "search"-role tab from the pill), like the AI in MoneyLoop. */}
           <NativeTabs.Trigger name="seshat" hidden={hideChat} role="search">
-            <NativeTabs.Trigger.Icon sf="sparkles" />
+            <NativeTabs.Trigger.Icon src={require('../../assets/ai/ai-tab.png')} renderingMode="template" />
             <NativeTabs.Trigger.Label>{t('maat')}</NativeTabs.Trigger.Label>
             {unreadMaatTotal > 0 ? <NativeTabs.Trigger.Badge>{String(unreadMaatTotal)}</NativeTabs.Trigger.Badge> : null}
           </NativeTabs.Trigger>
@@ -224,11 +225,7 @@ export default function TabsLayout() {
               href: hideChat ? null : undefined,
               title: t('maat'),
               // Seshat is the round gold button at the end of the bar (on iPhone the system draws it detached from the pill).
-              tabBarIcon: ({ focused }) => (
-                <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: focused ? tok.goldLight : tok.gold, alignItems: 'center', justifyContent: 'center', marginTop: -4 }}>
-                  <Sparkles size={22} color={tok.void} strokeWidth={1.75} />
-                </View>
-              ),
+              tabBarIcon: ({ focused }) => <View style={{ marginTop: -4, opacity: focused ? 1 : 0.92 }}><AIAvatar size={40} /></View>,
               tabBarLabel: ({ focused, color }) => <TabLabel focused={focused} color={color}>{t('maat')}</TabLabel>,
               tabBarBadge: unreadMaatTotal > 0 ? unreadMaatTotal : undefined,
             }}
