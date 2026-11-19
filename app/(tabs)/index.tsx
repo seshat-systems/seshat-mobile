@@ -37,10 +37,10 @@ function FullHome() {
   const inOrg = useInOrg();
   const insets = useSafeAreaInsets();
   const [data, setData] = useState<DashboardData | null>(null);
-  const scrollRef = useRef<{ scrollTo: (o: { y: number; animated?: boolean }) => void } | null>(null);
+  const scrollRef = useRef<{ scrollToEnd: (o?: { animated?: boolean }) => void } | null>(null);
   const { turns: homeTurns } = useHomeChat();
-  // A new question or answer goes to the top, where the thread is drawn.
-  useEffect(() => { if (homeTurns.length > 0) scrollRef.current?.scrollTo({ y: 0, animated: true }); }, [homeTurns.length]);
+  // A command's answer sits under the Home content, just above the field: bring it into view when it arrives.
+  useEffect(() => { if (homeTurns.length > 0) { const id = setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 150); return () => clearTimeout(id); } }, [homeTurns.length]);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -97,7 +97,9 @@ function FullHome() {
     const b = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide', () => setKbOpen(false));
     return () => { a.remove(); b.remove(); };
   }, []);
-  const inputBottom = Platform.OS === 'ios' && !kbOpen ? insets.bottom + 58 : 10;
+  // Inside the native tabs the bottom inset already includes the floating bar (about 83pt on a notched iPhone), so the field
+  // only needs a small gap above it, like the composer in the Claude app.
+  const inputBottom = Platform.OS === 'ios' && !kbOpen ? insets.bottom + 10 : 10;
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: tok.void }}>
@@ -161,7 +163,6 @@ function FullHome() {
               refreshControl={refreshCtl}
             >
               {notices}
-              {!inOrg ? <HomeReplies /> : null}
               {isEmpty && !inOrg ? (
                 <HomeIntro />
               ) : isEmpty ? (
@@ -177,6 +178,7 @@ function FullHome() {
                   <HomeAnswer data={data!} currency={currency} after={needs} />
                 </>
               )}
+              {!inOrg ? <HomeReplies /> : null}
             </ScreenScroll>
           );
         })()}

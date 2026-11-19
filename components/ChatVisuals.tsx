@@ -222,9 +222,9 @@ export function PlanBlockView({ block }: { block: Extract<VisualBlock, { type: '
   const rowDir = ar ? 'row-reverse' : 'row';
   const align: 'right' | 'left' = ar ? 'right' : 'left';
   const verdict = ({
-    on_plan: { en: 'On plan', ar: 'على الخطة', color: tok.posText },
+    on_plan: { en: 'On track', ar: 'على المسار', color: tok.posText },
     ahead_of_pace: { en: 'Ahead of pace', ar: 'أسرع من المعتاد', color: tok.warnText },
-    over: { en: 'Over plan', ar: 'فوق الخطة', color: tok.alertText },
+    over: { en: 'Over', ar: 'تجاوزت', color: tok.alertText },
   } as const)[block.verdict] ?? { en: '', ar: '', color: tok.muted };
   const n = (v: number) => Math.round(v).toLocaleString('en-US');
   const cur = block.currency;
@@ -232,7 +232,7 @@ export function PlanBlockView({ block }: { block: Extract<VisualBlock, { type: '
     <View style={{ backgroundColor: tok.glowShellBg, borderRadius: 22, borderWidth: 1, borderColor: tok.glowShellBorder, borderTopColor: tok.glowCoreSheen, padding: 16 }}>
       <View style={{ flexDirection: rowDir, justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
         <Text numberOfLines={1} style={{ flex: 1, fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.gold, textAlign: align }}>
-          {ar ? `خطة ${block.period.ar}` : `${block.period.en} plan`} · {n(block.income)} {cur}
+          {ar ? `خطة مقترحة · ${block.period.ar}` : `Suggested split · ${block.period.en}`}
         </Text>
         <View style={{ paddingHorizontal: 10, minHeight: 28, borderRadius: 999, justifyContent: 'center', borderWidth: 1, borderColor: verdict.color }}>
           <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 13, color: verdict.color }}>{ar ? verdict.ar : verdict.en}</Text>
@@ -254,7 +254,7 @@ export function PlanBlockView({ block }: { block: Extract<VisualBlock, { type: '
         })}
       </View>
       <Text style={{ fontFamily: fontBody(lang), fontSize: 13, color: tok.muted, marginTop: 12, textAlign: align }}>
-        {ar ? 'الخط الأبيض هو أين يجب أن تكون اليوم.' : 'The white tick is where you should be today.'}
+        {ar ? `اقتراح تلقائي من دخلك الشهري (${n(block.income)} ${cur}): ٥٠٪ احتياجات، ٣٠٪ رغبات، ٢٠٪ ادخار. لم تحدده أنت بعد. الخط الأبيض هو أين يجب أن تكون اليوم.` : `A starting point worked out from your monthly income (${n(block.income)} ${cur}): 50% needs, 30% wants, 20% saving. You haven't set it yet. The white tick is where you should be today.`}
       </Text>
     </View>
   );

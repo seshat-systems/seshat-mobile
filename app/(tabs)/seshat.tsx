@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { View, Platform } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChatThread } from '../../components/ChatThread';
 import { ChatHistoryPanel } from '../../components/ChatHistoryPanel';
 import type { Persona } from '../../lib/persona';
@@ -11,7 +10,6 @@ import type { Persona } from '../../lib/persona';
  * past conversations in a panel from the side (button only, no swipe).
  */
 export default function SeshatTab() {
-  const insets = useSafeAreaInsets();
   const [sessionId, setSessionId] = useState<string | null>(null); // the conversation the history opened (null = a new one)
   const [activeId, setActiveId] = useState<string | null>(null); // whatever is on screen now, for the panel's highlight
   const [persona, setPersona] = useState<Persona>('seshat');
@@ -28,8 +26,8 @@ export default function SeshatTab() {
         leading="history"
         onHistory={() => setPanel(true)}
         onBack={() => setPanel(true)}
-        // iPhone's tab bar floats over the screen: keep the composer clear of it.
-        bottomInset={Platform.OS === 'ios' ? insets.bottom + 58 : 0}
+        // iPhone's tab bar floats over the screen and the inset already includes it: only a small gap above it.
+        bottomInset={Platform.OS === 'ios' ? 10 : 0}
         onSessionChange={setActiveId}
       />
       <ChatHistoryPanel visible={panel} onClose={() => setPanel(false)} onSelect={openSession} onNew={openNew} activeId={activeId} />

@@ -3,7 +3,7 @@ import { Rise, SuccessPop } from './Motion';
 import { router } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  View, Text, FlatList, TextInput, Pressable, KeyboardAvoidingView, Platform, StyleSheet, Alert, ActivityIndicator,
+  View, Text, FlatList, TextInput, Pressable, KeyboardAvoidingView, Keyboard, Platform, StyleSheet, Alert, ActivityIndicator,
 } from 'react-native';
 import { FlatList as ScreenFlatList } from './Scroll';
 import { FrostedHeader, FrostedFooter } from './FrostedHeader';
@@ -57,6 +57,14 @@ export type ChatThreadProps = {
 export function ChatThread({ sessionId: sessionIdProp, text, persona: personaProp, onBack, leading = 'back', onHistory, bottomInset = 0, onSessionChange }: ChatThreadProps) {
   const { tok, lang, t } = useI18n();
   const insets = useSafeAreaInsets();
+  // In the tab (bottomInset > 0) the floating tab bar sits under the composer; the keyboard covers it, so then the composer drops to the keyboard.
+  const [kbUp, setKbUp] = useState(false);
+  useEffect(() => {
+    if (!bottomInset) return;
+    const a = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow', () => setKbUp(true));
+    const b = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide', () => setKbUp(false));
+    return () => { a.remove(); b.remove(); };
+  }, [bottomInset]);
   const initialId = typeof sessionIdProp === 'string' && sessionIdProp !== 'new' ? sessionIdProp : null;
   // Persona this thread runs under. A new chat inherits the persona passed from
   // the session list (falling back to the persisted active persona); an
@@ -629,7 +637,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
             />
           </Rise>
         )}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 120 + bottomInset }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         ListHeaderComponent={!initialId && !messages.some((m) => m.role === 'user') ? (
@@ -730,7 +738,7 @@ export function ChatThread({ sessionId: sessionIdProp, text, persona: personaPro
 
       <FrostedFooter style={{
         flexDirection: lang === 'ar' ? 'row-reverse' : 'row',
-        paddingHorizontal: 16, paddingTop: 10, paddingBottom: Math.max(insets.bottom, 12) + bottomInset,
+        paddingHorizontal: 16, paddingTop: 10, paddingBottom: bottomInset ? (kbUp ? 12 : insets.bottom + bottomInset) : Math.max(insets.bottom, 12),
         alignItems: 'flex-end', gap: 8,
       }}>
         <View style={{
