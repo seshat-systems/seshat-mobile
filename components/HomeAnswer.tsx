@@ -13,6 +13,7 @@ import type { DashboardData } from './dashboards';
 import { Rise, GrowBar, CountUp } from './Motion';
 import type { DailyBudgetInfo } from './MoneySheets';
 import { requestAdd } from '../lib/pendingAdd';
+import { sendHome, useHomeChat } from '../lib/homeChat';
 
 /**
  * The top of Home: one sentence that says whether you are on track, a bar for where you are against where you should
@@ -93,7 +94,7 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
     ? (ar ? `${topName} تمثّل ${fmtNum(share)}% من مصروفاتك.` : `${topName} is ${share}% of what you spent.`)
     : '';
 
-  const ask = (q: string) => router.push({ pathname: '/seshat/[id]', params: { id: 'new', text: q } } as never);
+  const ask = (q: string) => { void sendHome(q, (p) => router.push(p as never)); };
   const why = ar
     ? (topName ? `ليش صرفت كل هذا على ${topName}؟` : 'كيف حالي هذا الشهر؟')
     : (topName ? `Why did I spend so much on ${topName}?` : 'How am I doing this month?');
@@ -188,7 +189,7 @@ export function HomeIntro() {
   const router = useRouter();
   const ar = lang === 'ar';
   const align = ar ? 'right' : 'left';
-  const ask = (q: string) => router.push({ pathname: '/seshat/[id]', params: { id: 'new', text: q } } as never);
+  const ask = (q: string) => { void sendHome(q, (p) => router.push(p as never)); };
   const chip = { minHeight: 44, paddingHorizontal: 18, borderRadius: 999, justifyContent: 'center' as const, backgroundColor: tok.surface, borderWidth: 1, borderColor: tok.borderHi };
   const chips: Array<{ label: string; run: () => void; primary?: boolean }> = [
     { label: ar ? 'جهّز شهري' : 'Set up my month', run: () => ask(ar ? 'ساعدني أجهّز شهري' : 'Help me set up my month'), primary: true },
@@ -241,9 +242,11 @@ export function HomeInput() {
   const router = useRouter();
   const ar = lang === 'ar';
   const [text, setText] = useState('');
+  // Sent from here, answered on Home (components/HomeReplies); the mic still opens the chat, which is where voice lives.
+  const { sending } = useHomeChat();
   const submit = () => {
-    const q = text.trim(); if (!q) return; setText('');
-    router.push({ pathname: '/seshat/[id]', params: { id: 'new', text: q } } as never);
+    const q = text.trim(); if (!q || sending) return; setText('');
+    void sendHome(q, (p) => router.push(p as never));
   };
   return (
     <View style={{

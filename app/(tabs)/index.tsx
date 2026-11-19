@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Text, RefreshControl, KeyboardAvoidingView, Platform, Pressable, Keyboard } from 'react-native';
 import { ScrollView as ScreenScroll } from '../../components/Scroll';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -19,6 +19,8 @@ import { UpdateBanner } from '../../components/UpdateBanner';
 import { WidgetsAnnouncement } from '../../components/WidgetsAnnouncement';
 import { TodayCard, AccountsOverview, TodayNeeds } from '../../components/HomeMoney';
 import { HomeAnswer, HomeInput, HomeIntro } from '../../components/HomeAnswer';
+import { HomeReplies } from '../../components/HomeReplies';
+import { useHomeChat } from '../../lib/homeChat';
 import { useRouter } from 'expo-router';
 
 
@@ -35,6 +37,10 @@ function FullHome() {
   const inOrg = useInOrg();
   const insets = useSafeAreaInsets();
   const [data, setData] = useState<DashboardData | null>(null);
+  const scrollRef = useRef<{ scrollTo: (o: { y: number; animated?: boolean }) => void } | null>(null);
+  const { turns: homeTurns } = useHomeChat();
+  // A new question or answer goes to the top, where the thread is drawn.
+  useEffect(() => { if (homeTurns.length > 0) scrollRef.current?.scrollTo({ y: 0, animated: true }); }, [homeTurns.length]);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -149,11 +155,13 @@ function FullHome() {
           const isEmpty = !data || (data.current.income.count === 0 && data.current.expense.count === 0);
           return (
             <ScreenScroll
+              ref={scrollRef as never}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingTop: 6, paddingBottom: !inOrg ? inputBottom + 56 + 40 : insets.bottom + 100, flexGrow: 1 }}
               refreshControl={refreshCtl}
             >
               {notices}
+              {!inOrg ? <HomeReplies /> : null}
               {isEmpty && !inOrg ? (
                 <HomeIntro />
               ) : isEmpty ? (
