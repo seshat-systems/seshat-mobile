@@ -1,8 +1,9 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import {
   View, Text, Pressable, TextInput, KeyboardAvoidingView, Platform,
-  ScrollView, StyleSheet, Keyboard,
+  ScrollView as RNScrollView, StyleSheet, Keyboard,
 } from 'react-native';
+import { ScrollView } from './Scroll';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft } from 'lucide-react-native';
 import Svg, { Path } from 'react-native-svg';
@@ -21,17 +22,13 @@ export function AuthChrome({
 }: { children: ReactNode; footer?: ReactNode; headerCta?: ReactNode }) {
   const { tok, lang, setLang } = useI18n();
   const insets = useSafeAreaInsets();
-  // With the keyboard open the scroll area shrinks to the space above the pinned footer, so the form's last
-  // field (the password) sat clipped behind it, and Android (edge-to-edge) does not scroll the focused field
-  // into view by itself. Scroll to the end when the keyboard appears so the fields stay visible.
-  const scrollRef = useRef<ScrollView>(null);
-  const keyboardUp = useRef(false);
+  // The fields scroll (and reveal themselves above the keyboard, see ./Scroll); the pinned footer only holds the main
+  // button, and gives its home-indicator padding back while the keyboard covers that strip.
+  const scrollRef = useRef<RNScrollView>(null);
+  const [keyboardUp, setKeyboardUp] = useState(false);
   useEffect(() => {
-    const show = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow', () => {
-      keyboardUp.current = true;
-      setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 60);
-    });
-    const hide = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide', () => { keyboardUp.current = false; });
+    const show = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow', () => setKeyboardUp(true));
+    const hide = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide', () => setKeyboardUp(false));
     return () => { show.remove(); hide.remove(); };
   }, []);
   return (
@@ -84,18 +81,16 @@ export function AuthChrome({
 
       <ScrollView
         ref={scrollRef}
-        contentContainerStyle={{ paddingHorizontal: 22, paddingBottom: 30 }}
+        contentContainerStyle={{ paddingHorizontal: 22, paddingBottom: 24 }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         style={{ flex: 1 }}
-        // An error line appearing above the fields pushes them down; keep the last field in view while typing.
-        onContentSizeChange={() => { if (keyboardUp.current) scrollRef.current?.scrollToEnd({ animated: true }); }}
       >
         {children}
       </ScrollView>
 
       {footer && (
-        <View style={{ paddingHorizontal: 22, paddingBottom: insets.bottom + 20 }}>
+        <View style={{ paddingHorizontal: 22, paddingTop: 8, paddingBottom: keyboardUp ? 10 : insets.bottom + 20 }}>
           {footer}
         </View>
       )}
@@ -162,6 +157,12 @@ export function AuthField(props: {
   autoComplete?: any;
   textContentType?: any;
   secondary?: ReactNode;
+  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
+  /** Return key: "next" with `nextRef` moves on; "go" with `onSubmitEditing` runs the screen's main action. */
+  returnKeyType?: 'done' | 'next' | 'go' | 'send';
+  onSubmitEditing?: () => void;
+  inputRef?: React.Ref<TextInput>;
+  nextRef?: React.RefObject<TextInput | null>;
 }) {
   return <RField {...props} style={{ marginTop: 16 }} />;
 }

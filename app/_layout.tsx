@@ -9,6 +9,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { I18nProvider, useI18n } from '../lib/i18n';
 import { AppDataProvider, useAppData } from '../lib/appData';
+import { KeyboardDoneBar } from '../components/KeyboardDoneBar';
 import { setUnauthorizedHandler } from '../lib/api';
 import { WorkspaceSheet } from '../components/WorkspaceSwitcher';
 import { AnimatedSplash, SPLASH_VOID } from '../components/AnimatedSplash';
@@ -50,6 +51,7 @@ function RootStack() {
   return (
     <>
       <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
+      <KeyboardDoneBar />
       <Stack
         screenOptions={{
           headerShown: false,

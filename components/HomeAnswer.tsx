@@ -12,6 +12,7 @@ import { fmtNum } from '../lib/privacy';
 import type { DashboardData } from './dashboards';
 import { Rise, GrowBar, CountUp } from './Motion';
 import type { DailyBudgetInfo } from './MoneySheets';
+import { requestAdd } from '../lib/pendingAdd';
 
 /**
  * The top of Home: one sentence that says whether you are on track, a bar for where you are against where you should
@@ -175,6 +176,59 @@ export function HomeAnswer({ data, currency, needsCount = 0, onNeeds, after }: {
     </View>
     {after}
     </>
+  );
+}
+
+/**
+ * Home for someone with nothing recorded yet: Seshat introduces itself instead of an empty "no records" page, says what to
+ * type, and offers the first steps. The typing field below (pinned by the Home screen) is the main way in.
+ */
+export function HomeIntro({ name }: { name: string }) {
+  const { tok, lang } = useI18n();
+  const router = useRouter();
+  const ar = lang === 'ar';
+  const align = ar ? 'right' : 'left';
+  const ask = (q: string) => router.push({ pathname: '/seshat/[id]', params: { id: 'new', text: q } } as never);
+  const chip = { minHeight: 44, paddingHorizontal: 18, borderRadius: 999, justifyContent: 'center' as const, backgroundColor: tok.surface, borderWidth: 1, borderColor: tok.borderHi };
+  const chips: Array<{ label: string; run: () => void; primary?: boolean }> = [
+    { label: ar ? 'جهّز شهري' : 'Set up my month', run: () => ask(ar ? 'ساعدني أجهّز شهري' : 'Help me set up my month'), primary: true },
+    { label: ar ? 'ماذا تستطيع أن تفعل؟' : 'What can you do?', run: () => ask(ar ? 'ماذا تستطيع أن تفعل؟' : 'What can you do?') },
+    { label: ar ? 'امسح إيصالًا' : 'Scan a receipt', run: () => requestAdd('receipt') },
+    { label: ar ? 'أضف يدويًا' : 'Add by hand', run: () => requestAdd('manual') },
+  ];
+  return (
+    <View style={{ paddingHorizontal: 20, paddingTop: 8, paddingBottom: 6 }}>
+      <Rise>
+        <Text style={{ fontFamily: fontHead(lang), fontSize: 28, lineHeight: 35, color: tok.goldLight, textAlign: align, letterSpacing: -0.3 }}>
+          {ar ? `أهلاً ${name}، أنا سيشات.` : `Hi ${name}, I'm Seshat.`}
+        </Text>
+        <Text style={{ marginTop: 10, fontFamily: fontBody(lang), fontSize: 17, lineHeight: 26, color: tok.muted, textAlign: align }}>
+          {ar
+            ? 'أخبرني بما تصرفه وما تكسبه بكلماتك، وأنا أحسب وأخبرك أين تقف.'
+            : 'Tell me what you spend and earn in your own words. I keep the count and tell you where you stand.'}
+        </Text>
+      </Rise>
+      <Rise delay={120}>
+        <View style={{ marginTop: 18, padding: 16, borderRadius: 22, borderWidth: 1, borderColor: tok.border, backgroundColor: tok.surface, gap: 10 }}>
+          <Text style={{ fontFamily: fontMono('medium'), fontSize: 12, letterSpacing: ar ? 0 : 1.2, color: tok.muted, textAlign: align, textTransform: ar ? 'none' : 'uppercase' }}>
+            {ar ? 'جرّب أن تكتب' : 'Try typing'}
+          </Text>
+          {(ar ? ['٤٥ قهوة', 'راتبي ١٢٠٠٠', 'كم أصرف اليوم؟'] : ['45 coffee', 'salary 12000', 'what can I spend today?']).map((ex) => (
+            <Text key={ex} style={{ fontFamily: fontBody(lang, 'medium'), fontSize: 17, color: tok.bone, textAlign: align, writingDirection: ar ? 'rtl' : 'ltr' }}>“{ex}”</Text>
+          ))}
+        </View>
+      </Rise>
+      <Rise delay={220}>
+        <View style={{ flexDirection: ar ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: 10, marginTop: 16 }}>
+          {chips.map((c) => (
+            <Pressable key={c.label} onPress={c.run} accessibilityRole="button"
+              style={({ pressed }) => ({ ...chip, ...(c.primary ? { backgroundColor: tok.gold, borderColor: tok.gold } : null), ...pressFeel(pressed) })}>
+              <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 15, color: c.primary ? '#14110A' : tok.bone }}>{c.label}</Text>
+            </Pressable>
+          ))}
+        </View>
+      </Rise>
+    </View>
   );
 }
 

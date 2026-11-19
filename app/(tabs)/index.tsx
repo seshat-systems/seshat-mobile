@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { View, Text, RefreshControl, KeyboardAvoidingView, Platform, Pressable } from 'react-native';
+import { View, Text, RefreshControl, KeyboardAvoidingView, Platform, Pressable, Keyboard } from 'react-native';
 import { ScrollView as ScreenScroll } from '../../components/Scroll';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { apiFetch, hasToken } from '../../lib/api';
@@ -18,7 +18,7 @@ import { CapturePromptLine } from '../../components/CaptureShortcutBanner';
 import { UpdateBanner } from '../../components/UpdateBanner';
 import { WidgetsAnnouncement } from '../../components/WidgetsAnnouncement';
 import { TodayCard, AccountsOverview, TodayNeeds } from '../../components/HomeMoney';
-import { HomeAnswer, HomeInput } from '../../components/HomeAnswer';
+import { HomeAnswer, HomeInput, HomeIntro } from '../../components/HomeAnswer';
 import { useRouter } from 'expo-router';
 
 
@@ -80,6 +80,16 @@ function FullHome() {
     (lang === 'ar' ? (profile?.displayNameAr || profile?.displayName) : profile?.displayName)
     || (lang === 'ar' ? 'ليلى' : 'there');
   const currency = profile?.currency ?? 'EGP';
+  // On iPhone the tab bar is the system's, floating over the bottom of the screen (about 74pt tall plus its gap, which is
+  // 58pt above the home-indicator inset, with room to spare). The typing field has to sit above it, not behind it.
+  // While the keyboard is up it covers the tab bar, so the field drops down onto the keyboard's edge.
+  const [kbOpen, setKbOpen] = useState(false);
+  useEffect(() => {
+    const a = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow', () => setKbOpen(true));
+    const b = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide', () => setKbOpen(false));
+    return () => { a.remove(); b.remove(); };
+  }, []);
+  const inputBottom = Platform.OS === 'ios' && !kbOpen ? insets.bottom + 58 : 10;
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: tok.void }}>
@@ -138,11 +148,13 @@ function FullHome() {
           return (
             <ScreenScroll
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingTop: 6, paddingBottom: !inOrg && !isEmpty ? 96 : insets.bottom + 100, flexGrow: 1 }}
+              contentContainerStyle={{ paddingTop: 6, paddingBottom: !inOrg ? inputBottom + 56 + 40 : insets.bottom + 100, flexGrow: 1 }}
               refreshControl={refreshCtl}
             >
               {notices}
-              {isEmpty ? (
+              {isEmpty && !inOrg ? (
+                <HomeIntro name={userName} />
+              ) : isEmpty ? (
                 <View style={{ flex: 1, minHeight: 400 }}><EmptyState /></View>
               ) : inOrg ? (
                 <>
@@ -160,7 +172,7 @@ function FullHome() {
         })()}
         {/* The typing field stays on top of the tab bar, always visible. */}
         {!inOrg && !(failed && !data) ? (
-          <View style={{ position: 'absolute', left: 16, right: 16, bottom: 10 }}>
+          <View style={{ position: 'absolute', left: 16, right: 16, bottom: inputBottom }}>
             <HomeInput />
           </View>
         ) : null}

@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
-import { View, Text, Pressable, Platform, Linking } from 'react-native';
-import { Check } from 'lucide-react-native';
+import { useEffect, useRef, useState } from 'react';
+import { View, Text, Pressable, Platform, Linking, TextInput } from 'react-native';
 import { SITE_URL } from '../lib/brand';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import * as Google from 'expo-auth-session/providers/google';
@@ -16,6 +15,7 @@ import {
   AuthChrome, AuthHero, AuthField, AuthLink, AuthBackLink, AuthError, RButton,
   SSOButton, AuthOr,
 } from '../components/auth';
+import { RCheckbox } from '../components/ui';
 import { SeshatMark } from '../components/SeshatMark';
 import { OnboardingTour } from '../components/OnboardingTour';
 
@@ -70,6 +70,10 @@ export default function AuthRouter() {
   const [sessionId, setSessionId] = useState('');
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
+  // Return key chains: each field's "Next" focuses the one after it.
+  const pwdRef = useRef<TextInput>(null);
+  const pwd2Ref = useRef<TextInput>(null);
+  const refCodeRef = useRef<TextInput>(null);
   // Captured at the pickSegment step; after the onboarding tour we use it to
   // route org founders into the org-create form.
   const [segment, setSegment] = useState<'individual' | 'org' | 'family'>('individual');
@@ -299,12 +303,12 @@ export default function AuthRouter() {
         <AuthField
           label={t('emailOrUsername')} value={email} onChange={setEmail}
           placeholder={t('emailPlaceholder')} keyboardType="email-address"
-          autoComplete="email" textContentType="username" autoFocus
+          autoComplete="email" textContentType="username" autoFocus nextRef={pwdRef}
         />
         <AuthField
           label={t('password')} value={pwd} onChange={setPwd}
           placeholder={t('passwordPlaceholder')} secureTextEntry
-          textContentType="password"
+          textContentType="password" inputRef={pwdRef} returnKeyType="go" onSubmitEditing={submitLogin}
         />
         <Pressable onPress={() => switchView('forgot')} hitSlop={10} style={{ alignSelf: lang === 'ar' ? 'flex-start' : 'flex-end', marginTop: 10 }}>
           <Text style={{ fontFamily: fontBody(lang, 'semibold'), fontSize: 16, color: tok.gold }}>{lang === 'ar' ? 'نسيتِ كلمة المرور؟' : 'Forgot your password?'}</Text>
@@ -341,6 +345,7 @@ export default function AuthRouter() {
           label={t('email')} value={email} onChange={setEmail}
           placeholder={t('emailPlaceholder')} keyboardType="email-address"
           autoComplete="email" textContentType="emailAddress" autoFocus
+          returnKeyType="go" onSubmitEditing={submitRegister}
         />
       </AuthChrome>
     );
@@ -391,22 +396,9 @@ export default function AuthRouter() {
     return (
       <AuthChrome
         footer={
-          <>
-            <Pressable onPress={() => setAgreed((v) => !v)} style={{ flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'flex-start', gap: 12, marginBottom: 14 }}>
-              <View style={{ width: 24, height: 24, borderRadius: 7, borderWidth: 1.5, borderColor: agreed ? tok.gold : tok.border, backgroundColor: agreed ? tok.gold : 'transparent', alignItems: 'center', justifyContent: 'center', marginTop: 1 }}>
-                {agreed ? <Check size={16} color={tok.void} strokeWidth={3} /> : null}
-              </View>
-              <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 14, lineHeight: 21, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>
-                {lang === 'ar' ? 'أوافق على ' : 'I agree to the '}
-                <Text onPress={() => Linking.openURL(`${SITE_URL}/terms`).catch(() => {})} style={{ color: tok.gold }}>{lang === 'ar' ? 'شروط الاستخدام' : 'Terms of Use'}</Text>
-                {lang === 'ar' ? ' و' : ' and the '}
-                <Text onPress={() => Linking.openURL(`${SITE_URL}/privacy`).catch(() => {})} style={{ color: tok.gold }}>{lang === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}</Text>
-              </Text>
-            </Pressable>
-            <RButton full onPress={submitComplete} disabled={busy || !agreed || (!!pwd2 && pwd !== pwd2)} loading={busy}>
-              {busy ? t('pleaseWait') : t('createAccount')}
-            </RButton>
-          </>
+          <RButton full onPress={submitComplete} disabled={busy || !agreed || (!!pwd2 && pwd !== pwd2)} loading={busy}>
+            {busy ? t('pleaseWait') : t('createAccount')}
+          </RButton>
         }
       >
         <AuthHero title={t('almostThere')} sub={t('registerSub')} />
@@ -414,32 +406,40 @@ export default function AuthRouter() {
         <AuthField
           label={t('username')} value={name} onChange={setName}
           placeholder={t('namePlaceholder')}
-          autoComplete="username" textContentType="username" autoFocus
+          autoComplete="username" textContentType="username" autoFocus nextRef={pwdRef}
         />
         <AuthField
           label={t('password')} value={pwd} onChange={setPwd}
           placeholder={t('passwordPlaceholder')} secureTextEntry
-          textContentType="newPassword"
+          textContentType="newPassword" inputRef={pwdRef} nextRef={pwd2Ref}
         />
         <AuthField
           label={t('confirmPassword')} value={pwd2} onChange={setPwd2}
           placeholder={lang === 'ar' ? 'إعادة الإدخال' : 'Re-enter password'}
-          secureTextEntry textContentType="newPassword"
+          secureTextEntry textContentType="newPassword" inputRef={pwd2Ref}
+          nextRef={referred ? refCodeRef : undefined}
+          returnKeyType={referred ? 'next' : 'done'}
         />
-        <Pressable onPress={() => setReferred((v) => !v)} style={{ flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 10, paddingVertical: 8 }}>
-          <View style={{ width: 20, height: 20, borderRadius: 6, borderWidth: 1.5, borderColor: referred ? tok.gold : tok.border, backgroundColor: referred ? tok.gold : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
-            {referred ? <Text style={{ color: tok.void, fontSize: 14, lineHeight: 17 }}>✓</Text> : null}
-          </View>
-          <Text style={{ flex: 1, fontFamily: fontBody(lang), fontSize: 16, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>
-            {lang === 'ar' ? 'أحالني شخص إلى سيشات' : 'Someone referred me to Seshat'}
-          </Text>
-        </Pressable>
         {referred && (
           <AuthField
             label={lang === 'ar' ? 'رمز المُحيل' : "Referrer's code"} value={refCode} onChange={(v) => setRefCode(v.toUpperCase())}
-            placeholder="ABC1234"
+            placeholder="ABC1234" autoCapitalize="characters" inputRef={refCodeRef}
           />
         )}
+        {/* Both ticks are the same control, one row each with the same gap, so nothing differs in size or spacing. */}
+        <View style={{ marginTop: 18, gap: 4 }}>
+          <RCheckbox checked={referred} onChange={setReferred}>
+            {lang === 'ar' ? 'أحالني شخص إلى سيشات' : 'Someone referred me to Seshat'}
+          </RCheckbox>
+          <RCheckbox checked={agreed} onChange={setAgreed}>
+            <Text style={{ fontFamily: fontBody(lang), fontSize: 15, lineHeight: 22, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>
+              {lang === 'ar' ? 'أوافق على ' : 'I agree to the '}
+              <Text onPress={() => Linking.openURL(`${SITE_URL}/terms`).catch(() => {})} style={{ color: tok.gold }}>{lang === 'ar' ? 'شروط الاستخدام' : 'Terms of Use'}</Text>
+              {lang === 'ar' ? ' و' : ' and the '}
+              <Text onPress={() => Linking.openURL(`${SITE_URL}/privacy`).catch(() => {})} style={{ color: tok.gold }}>{lang === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}</Text>
+            </Text>
+          </RCheckbox>
+        </View>
       </AuthChrome>
     );
   }
@@ -522,6 +522,7 @@ export default function AuthRouter() {
           label={t('email')} value={email} onChange={setEmail}
           placeholder={t('emailPlaceholder')} keyboardType="email-address"
           autoComplete="email" textContentType="emailAddress" autoFocus
+          returnKeyType="go" onSubmitEditing={submitForgot}
         />
       </AuthChrome>
     );
@@ -612,12 +613,13 @@ export default function AuthRouter() {
       <AuthField
         label={t('password')} value={pwd} onChange={setPwd}
         placeholder={t('passwordPlaceholder')} secureTextEntry
-        textContentType="newPassword" autoFocus
+        textContentType="newPassword" autoFocus nextRef={pwd2Ref}
       />
       <AuthField
         label={t('confirmPassword')} value={pwd2} onChange={setPwd2}
         placeholder={lang === 'ar' ? 'إعادة الإدخال' : 'Re-enter password'}
-        secureTextEntry textContentType="newPassword"
+        secureTextEntry textContentType="newPassword" inputRef={pwd2Ref}
+        returnKeyType="go" onSubmitEditing={submitForgotComplete}
       />
     </AuthChrome>
   );

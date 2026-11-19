@@ -92,6 +92,8 @@ export const ScrollView = forwardRef<RNScrollView, ScrollViewProps>(function Scr
         ref={ref}
         style={[VISIBLE, style]}
         keyboardShouldPersistTaps={keyboardShouldPersistTaps ?? 'handled'}
+        // Drag the page down to close the keyboard (iOS follows the finger; Android closes on the first drag).
+        keyboardDismissMode={rest.keyboardDismissMode ?? (Platform.OS === 'ios' ? 'interactive' : 'on-drag')}
         onScroll={handleScroll}
         scrollEventThrottle={rest.scrollEventThrottle ?? 16}
         {...rest}

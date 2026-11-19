@@ -3,7 +3,7 @@ import {
   View, Text, Pressable, StyleSheet, ViewStyle, TextStyle, Animated, Easing, ScrollView, ActivityIndicator, TextInput, Platform,
 } from 'react-native';
 import Svg, { Defs, LinearGradient, Stop, Rect } from 'react-native-svg';
-import { X } from 'lucide-react-native';
+import { Check, X } from 'lucide-react-native';
 import { useI18n, formatAmount, currencyLabel } from '../lib/i18n';
 import { fontBody, fontHead, fontMono } from '../lib/fonts';
 import { radius } from '../lib/theme';
@@ -265,7 +265,7 @@ export function RPill({
 export function RField({
   value, onChange, placeholder, label, secondary, secureTextEntry, keyboardType,
   autoFocus, autoComplete, textContentType, autoCapitalize, multiline, maxLength,
-  minHeight, mono, ltr, onSubmitEditing, onBlur, returnKeyType, style,
+  minHeight, mono, ltr, onSubmitEditing, onBlur, returnKeyType, style, inputRef: extRef, nextRef,
 }: {
   value: string;
   onChange: (v: string) => void;
@@ -289,11 +289,23 @@ export function RField({
   onBlur?: () => void;
   returnKeyType?: 'done' | 'next' | 'go' | 'send';
   style?: ViewStyle;
+  /** Gives the parent the underlying TextInput (to focus it from the previous field's Return key). */
+  inputRef?: React.Ref<TextInput>;
+  /** Return moves to this field (the key reads "Next"); without it Return reads "Done" and closes the keyboard. */
+  nextRef?: React.RefObject<TextInput | null>;
 }) {
   const { tok, lang, mode } = useI18n();
   const [focused, setFocused] = useState(false);
   const reveal = useRevealOnFocus();
   const inputRef = useRef<TextInput>(null);
+  const setRefs = (node: TextInput | null) => {
+    (inputRef as React.MutableRefObject<TextInput | null>).current = node;
+    if (typeof extRef === 'function') extRef(node);
+    else if (extRef) (extRef as React.MutableRefObject<TextInput | null>).current = node;
+  };
+  // Single-line fields always have a way out: "Next" when a next field is wired, otherwise "Done" (or the caller's key).
+  const submit = nextRef ? () => nextRef.current?.focus() : onSubmitEditing;
+  const rKey = multiline ? returnKeyType : (returnKeyType ?? (nextRef ? 'next' : 'done'));
   const forceLtr = ltr ?? (keyboardType === 'email-address' || keyboardType === 'number-pad' || keyboardType === 'decimal-pad' || keyboardType === 'numeric');
   return (
     <View style={style}>
@@ -329,7 +341,7 @@ export function RField({
           />
           <CardSheen />
           <TextInput
-            ref={inputRef}
+            ref={setRefs}
             value={value}
             onChangeText={onChange}
             placeholder={placeholder}
@@ -343,8 +355,10 @@ export function RField({
             textContentType={textContentType}
             multiline={multiline}
             maxLength={maxLength}
-            onSubmitEditing={onSubmitEditing}
-            returnKeyType={returnKeyType}
+            onSubmitEditing={submit}
+            returnKeyType={rKey}
+            // "Next" keeps the keyboard up while focus moves on; every other Return closes it.
+            submitBehavior={multiline ? undefined : (nextRef ? 'submit' : 'blurAndSubmit')}
             textAlignVertical={multiline ? 'top' : undefined}
             onFocus={() => { setFocused(true); reveal?.(inputRef.current); }}
             onBlur={() => { setFocused(false); onBlur?.(); }}
@@ -487,6 +501,38 @@ export function RProgress({
 // ─────────────────────────────────────────────────────────────
 // Button — primary (gold), secondary (bordered), ghost
 // ─────────────────────────────────────────────────────────────
+/**
+ * The one checkbox. 24pt box, 48pt tall row, label beside it. Every tick in the app (terms, referral, filters) uses this so
+ * they are the same size and align the same way.
+ */
+export function RCheckbox({ checked, onChange, children, disabled }: {
+  checked: boolean; onChange: (v: boolean) => void; children: ReactNode; disabled?: boolean;
+}) {
+  const { tok, lang } = useI18n();
+  return (
+    <Pressable
+      onPress={() => { hapticSelection(); onChange(!checked); }}
+      disabled={disabled}
+      accessibilityRole="checkbox"
+      accessibilityState={{ checked, disabled }}
+      style={{ flexDirection: lang === 'ar' ? 'row-reverse' : 'row', alignItems: 'center', gap: 12, minHeight: 48, paddingVertical: 4, opacity: disabled ? 0.5 : 1 }}
+    >
+      <View style={{
+        width: 24, height: 24, borderRadius: 7, borderWidth: 1.5,
+        borderColor: checked ? tok.gold : tok.borderHi, backgroundColor: checked ? tok.gold : 'transparent',
+        alignItems: 'center', justifyContent: 'center',
+      }}>
+        {checked ? <Check size={16} color={tok.void} strokeWidth={3} /> : null}
+      </View>
+      <View style={{ flex: 1 }}>
+        {typeof children === 'string'
+          ? <Text style={{ fontFamily: fontBody(lang), fontSize: 15, lineHeight: 22, color: tok.bone, textAlign: lang === 'ar' ? 'right' : 'left' }}>{children}</Text>
+          : children}
+      </View>
+    </Pressable>
+  );
+}
+
 export function RButton({
   variant = 'primary', onPress, children, full, icon, disabled, loading, style,
 }: {
